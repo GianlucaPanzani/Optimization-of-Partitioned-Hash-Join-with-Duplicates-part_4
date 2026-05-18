@@ -1,0 +1,5 @@
+executable=hashjoin_seq
+dataset-type=uniform
+join_count=2499986166
+checksum1=6185417096973469475
+checksum2=16931092769743058723

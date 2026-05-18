@@ -1,0 +1,5 @@
+executable=hashjoin_seq
+dataset-type=skewed_90_1
+join_count=173507209024
+checksum1=12347604091913951299
+checksum2=2033051395823430535

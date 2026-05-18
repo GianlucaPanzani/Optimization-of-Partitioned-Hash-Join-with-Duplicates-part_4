@@ -1,0 +1,1283 @@
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_iterator.h:1144:47: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_iterator.h:1144:47: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:229:28: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:229:28: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:422:31: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:422:31: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:358:4: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:358:4: missed: not vectorized: latch block not empty.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1919:4: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1919:4: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1872:4: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1872:4: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1870:17: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1870:17: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1867:17: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1867:17: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1922:25: missed: statement clobbers memory: std::__introsort_loop<__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int> >, long int, __gnu_cxx::__ops::_Iter_comp_iter<build_join_work_items(const PartitionedRelation&, const PartitionedRelation&, uint32_t, int)::<lambda(uint32_t, uint32_t)> > > (__cut, __last, __depth_limit_9, __comp);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1908:5: missed: not vectorized: more than one data ref in stmt: __comp = __comp;
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1908:5: missed: not vectorized: more than one data ref in stmt: __comp = __comp;
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:356:22: missed: statement clobbers memory: std::__adjust_heap<__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int> >, long int, unsigned int, __gnu_cxx::__ops::_Iter_comp_iter<build_join_work_items(const PartitionedRelation&, const PartitionedRelation&, uint32_t, int)::<lambda(uint32_t, uint32_t)> > > (__first, __parent_62, _59, _66, __comp);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_heap.h:264:25: missed: statement clobbers memory: std::__adjust_heap<__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int> >, long int, unsigned int, __gnu_cxx::__ops::_Iter_comp_iter<build_join_work_items(const PartitionedRelation&, const PartitionedRelation&, uint32_t, int)::<lambda(uint32_t, uint32_t)> > > (__first, 0, _35, _31, __comp);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/move.h:205:11: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1807:57: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1807:57: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1789:20: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1789:20: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:742:23: missed: statement clobbers memory: __builtin_memmove (_26, __first_9, _24);
+hashjoin_omp_task_wb.cpp:661:57: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:661:57: missed: not vectorized: number of iterations cannot be computed.
+hashjoin_omp_task_wb.cpp:657:13: missed: statement clobbers memory: _10 = __builtin_GOMP_single_start ();
+hashjoin_omp_task_wb.cpp:657:13: missed: statement clobbers memory: __builtin_GOMP_task (_ZL21partitioned_hash_joinRKSt6vectorI6RecordSaIS0_EES4_jRK13OmpTaskConfig._omp_fn.1, &.omp_data_o.84, 0B, 48, 8, 1, 0, 0B, 0, 0B);
+hashjoin_omp_task_wb.cpp:673:33: missed: statement clobbers memory: __builtin_GOMP_taskwait ();
+hashjoin_omp_task_wb.cpp:657:13: missed: statement clobbers memory: __builtin_GOMP_barrier ();
+hashjoin_omp_task_wb.cpp:664:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:664:25: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:335:57: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:335:57: missed: not vectorized: number of iterations cannot be computed.
+hashjoin_omp_task_wb.cpp:315:57: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:315:57: missed: not vectorized: number of iterations cannot be computed.
+hashjoin_omp_task_wb.cpp:311:13: missed: statement clobbers memory: _17 = __builtin_GOMP_single_start ();
+hashjoin_omp_task_wb.cpp:311:13: missed: statement clobbers memory: __builtin_GOMP_task (_ZL17compute_histogramRKSt6vectorI6RecordSaIS0_EEjRK13OmpTaskConfig._omp_fn.1, &.omp_data_o.125, 0B, 56, 8, 1, 0, 0B, 0, 0B);
+hashjoin_omp_task_wb.cpp:333:33: missed: statement clobbers memory: __builtin_GOMP_taskwait ();
+hashjoin_omp_task_wb.cpp:311:13: missed: statement clobbers memory: __builtin_GOMP_task (_ZL17compute_histogramRKSt6vectorI6RecordSaIS0_EEjRK13OmpTaskConfig._omp_fn.2, &.omp_data_o.129, 0B, 40, 8, 1, 0, 0B, 0, 0B);
+hashjoin_omp_task_wb.cpp:350:33: missed: statement clobbers memory: __builtin_GOMP_taskwait ();
+hashjoin_omp_task_wb.cpp:311:13: missed: statement clobbers memory: __builtin_GOMP_barrier ();
+hashjoin_omp_task_wb.cpp:318:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:338:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:338:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:338:25: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:320:56: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:320:56: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:325:55: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:326:84: missed: not vectorized: no vectype for stmt: _27 = *_49.key;
+ scalar_type: const uint64_t
+hashjoin_omp_task_wb.cpp:340:60: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:340:60: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:342:51: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:343:33: missed: not vectorized: no vectype for stmt: _21 = *_27;
+ scalar_type: value_type
+hashjoin_omp_task_wb.cpp:410:57: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:410:57: missed: not vectorized: number of iterations cannot be computed.
+hashjoin_omp_task_wb.cpp:393:57: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:393:57: missed: not vectorized: number of iterations cannot be computed.
+hashjoin_omp_task_wb.cpp:389:13: missed: statement clobbers memory: _17 = __builtin_GOMP_single_start ();
+hashjoin_omp_task_wb.cpp:389:13: missed: statement clobbers memory: __builtin_GOMP_task (_ZL19scatter_partitionedRKSt6vectorI6RecordSaIS0_EEjRKS_ImSaImEERK15HistogramResultRK13OmpTaskConfig._omp_fn.1, &.omp_data_o.153, 0B, 56, 8, 1, 0, 0B, 0, 0B);
+hashjoin_omp_task_wb.cpp:408:33: missed: statement clobbers memory: __builtin_GOMP_taskwait ();
+hashjoin_omp_task_wb.cpp:389:13: missed: statement clobbers memory: __builtin_GOMP_task (_ZL19scatter_partitionedRKSt6vectorI6RecordSaIS0_EEjRKS_ImSaImEERK15HistogramResultRK13OmpTaskConfig._omp_fn.2, &.omp_data_o.157, 0B, 64, 8, 1, 0, 0B, 0, 0B);
+hashjoin_omp_task_wb.cpp:432:33: missed: statement clobbers memory: __builtin_GOMP_taskwait ();
+hashjoin_omp_task_wb.cpp:389:13: missed: statement clobbers memory: __builtin_GOMP_barrier ();
+hashjoin_omp_task_wb.cpp:396:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:396:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:413:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:413:25: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:413:25: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:413:25: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:398:60: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:401:61: missed: not vectorized: not suitable for strided load *_30 = running_37;
+hashjoin_omp_task_wb.cpp:400:51: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:401:61: missed: not vectorized: unsupported use in stmt.
+hashjoin_omp_task_wb.cpp:68:41: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:68:41: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+hashjoin_omp_task_wb.cpp:69:25: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:69:25: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:69:25: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:69:25: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:395:25: missed: statement clobbers memory: _8 = __builtin_strlen (_7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:385:25: missed: statement clobbers memory: _32 = __builtin_memcmp (_7, name$_M_str_45, _8);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:395:25: missed: statement clobbers memory: _56 = __builtin_strlen (_21);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1647:19: missed: statement clobbers memory: std::__cxx11::basic_string<char>::_M_replace (out_22(D), 0, _57, _21, _56);
+hashjoin_omp_task_wb.cpp:415:56: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:415:56: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+hashjoin_omp_task_wb.cpp:424:58: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:426:46: missed: not vectorized: more than one data ref in stmt: *_53 = MEM[(const struct Record &)_68];
+hashjoin_omp_task_wb.cpp:420:55: optimized: loop vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:420:55: optimized:  loop versioned for vectorization because of possible aliasing
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _91 = operator new (_90);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:922:11: missed: statement clobbers memory: __builtin_memset (__first_92, 0, _234);
+hashjoin_omp_task_wb.cpp:426:46: missed: not vectorized: more than one data ref in stmt: *_53 = MEM[(const struct Record &)_68];
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (iftmp.71_113, _125);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: statement clobbers memory: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+hashjoin_omp_task_wb.cpp:53:41: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:53:41: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:54:25: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:54:25: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:395:25: missed: statement clobbers memory: _37 = __builtin_strlen (_4);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:385:25: missed: statement clobbers memory: _55 = __builtin_memcmp (_4, name$_M_str_28, name$_M_len_46);
+hashjoin_omp_task_wb.cpp:56:36: missed: statement clobbers memory: _9 = strtoull (_8, 0B, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:395:25: missed: statement clobbers memory: _4 = __builtin_strlen (__s_3(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _14 = std::__cxx11::basic_string<char>::_M_create (this_1(D), &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_26, __s_3(D), _4);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:639:28: missed: statement clobbers memory: std::__throw_logic_error ("basic_string: construction from null is not valid");
+hashjoin_omp_task_wb.cpp:133:12: missed: splitting region at control altering definition _13 = std::__cxx11::basic_string<char>::append (&D.96818, name_11(D));
+hashjoin_omp_task_wb.cpp:135:94: missed: statement clobbers memory: _9 = __cxa_allocate_exception (16);
+hashjoin_omp_task_wb.cpp:135:39: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&D.96818, "Invalid ");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: not vectorized: statement can throw an exception: _13 = std::__cxx11::basic_string<char>::append (&D.96818, name_11(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb5
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at control altering definition _24 = std::__cxx11::basic_string<char>::append (&D.96822, ": must be in [1, INT_MAX]");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:43: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.96822, _13);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: not vectorized: statement can throw an exception: _24 = std::__cxx11::basic_string<char>::append (&D.96822, ": must be in [1, INT_MAX]");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb6
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb18
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:43: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.96823, _24);
+hashjoin_omp_task_wb.cpp:135:9: missed: not vectorized: statement can throw an exception: std::runtime_error::runtime_error (_9, &D.96823);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_31, _33);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_28, _30);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_25, _27);
+hashjoin_omp_task_wb.cpp:135:94: missed: statement clobbers memory: __cxa_throw (_9, &_ZTISt13runtime_error, __dt_comp );
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_34, _36);
+hashjoin_omp_task_wb.cpp:133:12: missed: not vectorized: statement can throw an exception: resx 9
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb21
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_37, _39);
+hashjoin_omp_task_wb.cpp:133:12: missed: not vectorized: statement can throw an exception: resx 8
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb25
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_40, _42);
+hashjoin_omp_task_wb.cpp:133:12: missed: not vectorized: statement can throw an exception: resx 7
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb24
+hashjoin_omp_task_wb.cpp:135:94: missed: statement clobbers memory: __cxa_free_exception (_9);
+hashjoin_omp_task_wb.cpp:140:12: missed: splitting region at control altering definition _12 = std::__cxx11::basic_string<char>::append (&D.96837, name_10(D));
+hashjoin_omp_task_wb.cpp:142:80: missed: statement clobbers memory: _8 = __cxa_allocate_exception (16);
+hashjoin_omp_task_wb.cpp:142:39: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&D.96837, "Invalid ");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: not vectorized: statement can throw an exception: _12 = std::__cxx11::basic_string<char>::append (&D.96837, name_10(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb5
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at control altering definition _23 = std::__cxx11::basic_string<char>::append (&D.96838, ": too large");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:43: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.96838, _12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: not vectorized: statement can throw an exception: _23 = std::__cxx11::basic_string<char>::append (&D.96838, ": too large");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb6
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb18
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:43: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.96839, _23);
+hashjoin_omp_task_wb.cpp:142:9: missed: not vectorized: statement can throw an exception: std::runtime_error::runtime_error (_8, &D.96839);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_30, _32);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_27, _29);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_24, _26);
+hashjoin_omp_task_wb.cpp:142:80: missed: statement clobbers memory: __cxa_throw (_8, &_ZTISt13runtime_error, __dt_comp );
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_33, _35);
+hashjoin_omp_task_wb.cpp:140:12: missed: not vectorized: statement can throw an exception: resx 9
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb21
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_36, _38);
+hashjoin_omp_task_wb.cpp:140:12: missed: not vectorized: statement can throw an exception: resx 8
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb25
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_39, _41);
+hashjoin_omp_task_wb.cpp:140:12: missed: not vectorized: statement can throw an exception: resx 7
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb24
+hashjoin_omp_task_wb.cpp:142:80: missed: statement clobbers memory: __cxa_free_exception (_8);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _17 = std::__cxx11::basic_string<char>::_M_create (this_1(D), &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_29, __s_3(D), __n_5(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:618:28: missed: statement clobbers memory: std::__throw_logic_error ("basic_string: construction from null is not valid");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: multiple nested loops.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1933:18: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1935:12: missed: statement clobbers memory: std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::_M_erase.isra (_105);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_108, _111);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_112, _115);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_206, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_96, _99);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_100, _103);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_208, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_84, _87);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_88, _91);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_203, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_72, _75);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_76, _79);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_202, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_60, _63);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_64, _67);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_204, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_48, _51);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_52, _55);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_199, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_36, _39);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_40, _43);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_198, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_24, _27);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_28, _31);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_200, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_12, _15);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_16, _19);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (__x_196, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:84:20: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:84:20: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:62:12: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:62:12: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:659:21: missed: statement clobbers memory: std::__cxx11::basic_string<char>::_M_construct (__str_13(D), _4, 45);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:84:20: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:84:20: missed: not vectorized: number of iterations cannot be computed.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:62:12: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/charconv.h:62:12: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:659:21: missed: statement clobbers memory: std::__cxx11::basic_string<char>::_M_construct (__str_5(D), prephitmp_82, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (_9, _8);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_4, _7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1278:33: missed: statement clobbers memory: ext = std::filesystem::__cxx11::path::_M_find_extension (this_3(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:314:21: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_List (pretmp_44);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _50 = std::__cxx11::basic_string<char>::_M_create (&D.81342, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_84, _42, _46);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (pretmp_45, &D.81342.D.36767._M_local_buf, _66);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:324:38: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::_List::_List (pretmp_44);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:325:21: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::_M_split_cmpts (_6(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (pretmp_44, _33);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1276:3: missed: not vectorized: statement can throw an exception: resx 9
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_35, _38);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1276:3: missed: not vectorized: statement can throw an exception: resx 8
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_15, _18);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_9, _12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_8, _11);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_4, _7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_12, _15);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_8, _11);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_4, _7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_12, _15);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_8, _11);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_4, _7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_8, _11);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_4, _7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:54:5: missed: splitting region at control altering definition _12 = __convf_8(D) (__str_9(D), &__endptr, __base#0_10(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:80:34: missed: not vectorized: statement can throw an exception: _12 = __convf_8(D) (__str_9(D), &__endptr, __base#0_10(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:80:34: missed: splitting region at dominance boundary bb15
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:86:27: missed: not vectorized: statement can throw an exception: std::__throw_out_of_range (__name_17(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:83:31: missed: not vectorized: statement can throw an exception: std::__throw_invalid_argument (__name_17(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:83:31: missed: splitting region at dominance boundary bb12
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:105:58: missed: statement clobbers memory: __s_6 = __builtin_alloca (__n_4(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:109:25: missed: statement clobbers memory: __builtin_va_start (&__args, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:111:32: missed: statement clobbers memory: _11 = __convf_8(D) (__s_6, __n_4(D), __fmt_9(D), &__args);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ext/string_conversions.h:113:23: missed: statement clobbers memory: __builtin_va_end (&__args);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _20 = std::__cxx11::basic_string<char>::_M_create (_13(D), &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_32, __s_6, _1);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _31 = operator new (_30);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_construct.h:119:7: missed: statement clobbers memory: __builtin_memset (_31, 0, _1);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: statement clobbers memory: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:921:22: optimized: loop vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _34 = operator new (_33);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: statement clobbers memory: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _34 = operator new (_31);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:431:23: missed: statement clobbers memory: __builtin_memmove (iftmp.71_27, _16, _13);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:125:41: missed: statement clobbers memory: std::__throw_bad_array_new_length ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:395:25: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:395:25: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:395:25: missed: statement clobbers memory: _12 = __builtin_strlen (_7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _34 = std::__cxx11::basic_string<char>::_M_create (_1, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_46, _7, _12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:330:70: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::_List::_List (_2);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:331:23: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::_M_split_cmpts (this_5(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (_2, _13);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:329:7: missed: not vectorized: statement can throw an exception: resx 8
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_15, _18);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _64 = operator new (prephitmp_78);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_uninitialized.h:1117:21: missed: statement clobbers memory: __builtin_memmove (iftmp.71_35, _46, _1);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_uninitialized.h:1117:21: missed: statement clobbers memory: __builtin_memcpy (_90, __position_3, _92);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_46, _28);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1894:24: missed: statement clobbers memory: std::__throw_length_error ("vector::_M_realloc_insert");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/vector.tcc:515:30: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:239:31: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:243:24: missed: not vectorized: no vectype for stmt: _223->key = iftmp.58_221;
+ scalar_type: uint64_t
+hashjoin_omp_task_wb.cpp:239:31: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:239:31: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:239:31: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:239:31: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:256:16: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:256:16: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:223:28: missed: splitting region at control altering definition _158 = operator new (_157);
+hashjoin_omp_task_wb.cpp:228:30: missed: statement clobbers memory: std::vector<Record>::vector (out_16(D), n_17(D), &D.98151);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: not vectorized: statement can throw an exception: _158 = operator new (_157);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: missed: splitting region at dominance boundary bb7
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: missed: splitting region at dominance boundary bb17
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1287:21: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::_M_realloc_insert<const long unsigned int&> (&D.99319, D.138109, &key);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/vector.tcc:96:27: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/vector.tcc:96:27: missed: splitting region at dominance boundary bb13
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_130, _133);
+hashjoin_omp_task_wb.cpp:223:28: missed: not vectorized: statement can throw an exception: resx 16
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: splitting region at dominance boundary bb10
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: splitting region at dominance boundary bb14
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1283:6: missed: splitting region at loop 2 exit at bb15
+hashjoin_omp_task_wb.cpp:274:37: missed: splitting region at dominance boundary bb32
+hashjoin_omp_task_wb.cpp:234:9: missed: splitting region at dominance boundary bb20
+hashjoin_omp_task_wb.cpp:243:24: missed: statement clobbers memory: __builtin_memset (pretmp_236, 0, _179);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (skew_key_pool$_M_start_216, _79);
+hashjoin_omp_task_wb.cpp:153:7: missed: splitting region at dominance boundary bb38
+hashjoin_omp_task_wb.cpp:235:151: missed: statement clobbers memory: _29 = __cxa_allocate_exception (16);
+hashjoin_omp_task_wb.cpp:235:13: missed: not vectorized: statement can throw an exception: std::runtime_error::runtime_error (_29, "Unable to generate skewed dataset: no keys map to hot partitions. Increase max-key or hot partition percentage.");
+hashjoin_omp_task_wb.cpp:235:151: missed: not vectorized: statement can throw an exception: __cxa_throw (_29, &_ZTISt13runtime_error, __dt_comp );
+hashjoin_omp_task_wb.cpp:235:151: missed: statement clobbers memory: __cxa_free_exception (_29);
+hashjoin_omp_task_wb.cpp:223:28: missed: not vectorized: statement can throw an exception: resx 11
+hashjoin_omp_task_wb.cpp:235:151: missed: splitting region at dominance boundary bb45
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (skew_key_pool$_M_start_213, _83);
+hashjoin_omp_task_wb.cpp:223:28: missed: not vectorized: statement can throw an exception: resx 7
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_84, _87);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:921:22: optimized: loop vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:921:22: optimized: loop vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:921:22: optimized: loop vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:921:22: optimized: loop vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _73 = operator new (_72);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_21, _17);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: statement clobbers memory: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:518:37: optimized: loop vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:518:37: optimized:  loop versioned for vectorization because of possible aliasing
+hashjoin_omp_task_wb.cpp:364:31: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:365:18: missed: not vectorized: unsupported use in stmt.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:804:23: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::_M_fill_assign (&MEM <struct vector> [(void *)&hist_result], _138, &D.138252);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:804:23: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::_M_fill_assign (&MEM <struct vector> [(void *)&hist_result + 24B], _145, &D.138251);
+hashjoin_omp_task_wb.cpp:355:1: missed: statement clobbers memory: HistogramResult::~HistogramResult (&hist_result);
+hashjoin_omp_task_wb.cpp:510:28: missed: statement clobbers memory: __builtin_GOMP_parallel (_ZL17compute_histogramRKSt6vectorI6RecordSaIS0_EEjRK13OmpTaskConfig._omp_fn.0, &.omp_data_o.132, _147, 0);
+hashjoin_omp_task_wb.cpp:361:50: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::vector (&begin, _113, &D.138242, &D.138243);
+hashjoin_omp_task_wb.cpp:379:40: missed: not vectorized: statement can throw an exception: std::vector<Record>::vector (&data, _153, &D.138269);
+hashjoin_omp_task_wb.cpp:387:66: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::vector (&block_offsets, _161, &D.138267, &D.138268);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_168, _171);
+hashjoin_omp_task_wb.cpp:510:28: missed: not vectorized: statement can throw an exception: resx 22
+hashjoin_omp_task_wb.cpp:510:28: missed: statement clobbers memory: __builtin_GOMP_parallel (_ZL19scatter_partitionedRKSt6vectorI6RecordSaIS0_EEjRKS_ImSaImEERK15HistogramResultRK13OmpTaskConfig._omp_fn.0, &.omp_data_o.159, _163, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_164, _167);
+hashjoin_omp_task_wb.cpp:517:38: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::vector (&end, _138, &D.102224, &D.102225);
+hashjoin_omp_task_wb.cpp:527:1: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::vector (_6, &begin);
+hashjoin_omp_task_wb.cpp:527:1: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::vector (_7, &end);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (pretmp_323, _59);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_52, _55);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_48, _51);
+hashjoin_omp_task_wb.cpp:527:1: missed: statement clobbers memory: HistogramResult::~HistogramResult (&hist_result);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_60, _63);
+hashjoin_omp_task_wb.cpp:510:28: missed: not vectorized: statement can throw an exception: resx 13
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_64, _67);
+hashjoin_omp_task_wb.cpp:510:28: missed: not vectorized: statement can throw an exception: resx 12
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (pretmp_323, _71);
+hashjoin_omp_task_wb.cpp:510:28: missed: not vectorized: statement can throw an exception: resx 11
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_72, _75);
+hashjoin_omp_task_wb.cpp:510:28: missed: not vectorized: statement can throw an exception: resx 4
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_76, _79);
+hashjoin_omp_task_wb.cpp:510:28: missed: not vectorized: statement can throw an exception: resx 3
+hashjoin_omp_task_wb.cpp:527:1: missed: statement clobbers memory: HistogramResult::~HistogramResult (&hist_result);
+hashjoin_omp_task_wb.cpp:311:13: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:389:13: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:106:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:106:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:106:4: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:667:66: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:667:66: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+hashjoin_omp_task_wb.cpp:621:37: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:621:37: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1143:34: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1143:34: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:616:37: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:616:37: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1124:34: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1124:34: missed: not vectorized: control flow in loop.
+hashjoin_omp_task_wb.cpp:550:18: missed: couldn't vectorize loop
+hashjoin_omp_task_wb.cpp:550:18: missed: not vectorized: number of iterations cannot be computed.
+hashjoin_omp_task_wb.cpp:664:25: missed: splitting region at control altering definition _150 = operator new (_149);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:804:23: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::_M_fill_assign (&countR.keys_, v_225, &D.138370);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:922:11: missed: statement clobbers memory: __builtin_memset (_101, 0, _571);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:922:11: missed: statement clobbers memory: __builtin_memset (_101, 0, _574);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:922:11: missed: statement clobbers memory: __builtin_memset (_113, 0, _577);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: not vectorized: statement can throw an exception: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: not vectorized: statement can throw an exception: _150 = operator new (_149);
+hashjoin_omp_task_wb.cpp:553:19: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:553:19: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:553:19: missed: splitting region at dominance boundary bb14
+hashjoin_omp_task_wb.cpp:553:19: missed: splitting region at dominance boundary bb41
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:922:11: missed: statement clobbers memory: __builtin_memset (_150, 0, _568);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_101, _112);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: splitting region at dominance boundary bb47
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:942:18: missed: statement clobbers memory: __builtin_memset (pretmp_590, 0, _86);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:942:18: missed: splitting region at dominance boundary bb42
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:367:35: missed: splitting region at dominance boundary bb36
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:942:18: missed: statement clobbers memory: __builtin_memset (pretmp_590, 0, _166);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:942:18: missed: statement clobbers memory: __builtin_memset (_164, 0, __add_335);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:367:35: missed: splitting region at dominance boundary bb37
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:367:35: missed: splitting region at control altering definition _194 = operator new (_86);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: not vectorized: statement can throw an exception: _194 = operator new (_86);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: splitting region at dominance boundary bb39
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: splitting region at dominance boundary bb50
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:942:18: missed: statement clobbers memory: __builtin_memset (_194, 0, _86);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (pretmp_590, _133);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:115:13: missed: splitting region at dominance boundary bb10
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (prephitmp_499, prephitmp_508);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (prephitmp_501, _264);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (pretmp_583, _268);
+hashjoin_omp_task_wb.cpp:628:30: missed: splitting region at dominance boundary bb53
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: not vectorized: statement can throw an exception: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: splitting region at dominance boundary bb102
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_88, _91);
+hashjoin_omp_task_wb.cpp:664:25: missed: not vectorized: statement can throw an exception: resx 4
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_92, _95);
+hashjoin_omp_task_wb.cpp:664:25: missed: not vectorized: statement can throw an exception: resx 3
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_96, _99);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb84
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb3
+hashjoin_omp_task_wb.cpp:668:38: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:668:38: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:668:38: missed: splitting region at dominance boundary bb93
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_uninitialized.h:1091:22: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:175:4: missed: not vectorized: more than one data ref in stmt: *__cur_18 = *__first_61;
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: statement clobbers memory: _70 = operator new (prephitmp_30);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:175:4: missed: not vectorized: more than one data ref in stmt: *_2 = *__args#0_21(D);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:175:4: missed: not vectorized: more than one data ref in stmt: *__cur_18 = *__first_61;
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:175:4: missed: statement clobbers memory: __builtin_memcpy (prephitmp_93, __position_34, _92);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_52, _26);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1894:24: missed: statement clobbers memory: std::__throw_length_error ("vector::_M_realloc_insert");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/vector.tcc:515:30: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:2114:18: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:2114:18: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:385:25: missed: statement clobbers memory: _49 = __builtin_memcmp (_39, _41, _58);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:302:30: missed: statement clobbers memory: _24 = std::_Rb_tree_decrement (__y_74);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:385:25: missed: statement clobbers memory: _60 = __builtin_memcmp (prephitmp_77, prephitmp_79, prephitmp_26);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:2124:26: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:2124:26: missed: not vectorized: vectorization is not profitable.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_function.h:1183:20: missed: couldn't vectorize loop
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_function.h:1183:20: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_map.h:238:7: missed: splitting region at control altering definition _162 = operator new (96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:385:25: missed: statement clobbers memory: _83 = __builtin_memcmp (_57, _59, _204);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:2223:37: missed: statement clobbers memory: D.138630 = std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::_M_get_insert_unique_pos (_1, _35);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:385:25: missed: statement clobbers memory: _152 = __builtin_memcmp (_142, _144, _124);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: not vectorized: statement can throw an exception: _162 = operator new (96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_map.h:238:7: missed: splitting region at dominance boundary bb21
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_map.h:238:7: missed: splitting region at control altering definition _180 = std::__cxx11::basic_string<char>::_M_create (_163, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: not vectorized: statement can throw an exception: _180 = std::__cxx11::basic_string<char>::_M_create (_163, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb23
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb27
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:261:31: missed: splitting region at dominance boundary bb28
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_243, _167, _168);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:234:28: missed: splitting region at control altering definition _194 = std::__cxx11::basic_string<char>::_M_create (_170, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: not vectorized: statement can throw an exception: _194 = std::__cxx11::basic_string<char>::_M_create (_170, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb41
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_175, _177);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_map.h:238:7: missed: not vectorized: statement can throw an exception: resx 10
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb46
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:599:4: missed: statement clobbers memory: _164 = __builtin_eh_pointer (7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:599:4: missed: statement clobbers memory: __cxa_begin_catch (_164);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_328, 96);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:603:8: missed: not vectorized: statement can throw an exception: __cxa_rethrow ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:599:4: missed: statement clobbers memory: __cxa_end_catch ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_map.h:238:7: missed: not vectorized: statement can throw an exception: resx 8
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:599:4: missed: splitting region at dominance boundary bb30
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:984:17: missed: statement clobbers memory: std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::_M_erase.isra (_13);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:984:31: missed: splitting region at dominance boundary bb34
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:261:31: missed: splitting region at dominance boundary bb35
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_131, _172, _173);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:234:28: missed: splitting region at dominance boundary bb44
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1832:31: missed: statement clobbers memory: std::_Rb_tree_insert_and_rebalance (_139, _162, SR.1982_312, _12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1834:2: missed: splitting region at dominance boundary bb3
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:1101:19: missed: splitting region at dominance boundary bb48
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at control altering definition _270 = checked_positive_int (part_threads_u64.14_29, "partition thread count");
+hashjoin_omp_task_wb.cpp:712:84: missed: statement clobbers memory: _1 = omp_get_max_threads ();
+hashjoin_omp_task_wb.cpp:713:84: missed: statement clobbers memory: _3 = omp_get_max_threads ();
+hashjoin_omp_task_wb.cpp:725:43: missed: statement clobbers memory: std::__cxx11::basic_string<char>::__ct_base .constprop (&partition_schedule_name, "explicit-task");
+hashjoin_omp_task_wb.cpp:726:38: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&join_schedule_name, "explicit-task");
+hashjoin_omp_task_wb.cpp:727:37: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&dataset_type_name, "uniform");
+hashjoin_omp_task_wb.cpp:729:22: missed: statement clobbers memory: _5 = read_arg_u64 (argc_174(D), argv_175(D), D.128997, &nr);
+hashjoin_omp_task_wb.cpp:730:22: missed: statement clobbers memory: _7 = read_arg_u64 (argc_174(D), argv_175(D), D.128999, &ns);
+hashjoin_omp_task_wb.cpp:731:22: missed: statement clobbers memory: _9 = read_arg_u64 (argc_174(D), argv_175(D), D.129001, &seed);
+hashjoin_omp_task_wb.cpp:732:22: missed: statement clobbers memory: _10 = read_arg_u64 (argc_174(D), argv_175(D), D.129003, &max_key);
+hashjoin_omp_task_wb.cpp:733:22: missed: statement clobbers memory: _11 = read_arg_u64 (argc_174(D), argv_175(D), D.129005, &p);
+hashjoin_omp_task_wb.cpp:738:17: missed: statement clobbers memory: read_arg_u64 (argc_174(D), argv_175(D), D.129009, &part_threads_u64);
+hashjoin_omp_task_wb.cpp:739:17: missed: statement clobbers memory: read_arg_u64 (argc_174(D), argv_175(D), D.129010, &join_threads_u64);
+hashjoin_omp_task_wb.cpp:740:17: missed: statement clobbers memory: read_arg_u64 (argc_174(D), argv_175(D), D.129011, &partition_block_size_u64);
+hashjoin_omp_task_wb.cpp:743:17: missed: statement clobbers memory: read_arg_u64 (argc_174(D), argv_175(D), D.129012, &partition_chunk_u64);
+hashjoin_omp_task_wb.cpp:744:17: missed: statement clobbers memory: read_arg_u64 (argc_174(D), argv_175(D), D.129013, &join_chunk_u64);
+hashjoin_omp_task_wb.cpp:745:20: missed: not vectorized: statement can throw an exception: read_arg_string.isra (argc_174(D), argv_175(D), D.129014, &partition_schedule_name);
+hashjoin_omp_task_wb.cpp:746:20: missed: not vectorized: statement can throw an exception: read_arg_string.isra (argc_174(D), argv_175(D), D.129015, &join_schedule_name);
+hashjoin_omp_task_wb.cpp:747:20: missed: not vectorized: statement can throw an exception: read_arg_string.isra (argc_174(D), argv_175(D), D.129016, &dataset_type_name);
+hashjoin_omp_task_wb.cpp:751:56: missed: statement clobbers memory: has_partition_task_blocks_224 = read_arg_u64 (argc_174(D), argv_175(D), D.129017, &partition_task_blocks_u64);
+hashjoin_omp_task_wb.cpp:752:55: missed: statement clobbers memory: has_join_task_partitions_229 = read_arg_u64 (argc_174(D), argv_175(D), D.129018, &join_task_partitions_u64);
+hashjoin_omp_task_wb.cpp:753:57: missed: statement clobbers memory: has_offset_task_partitions_234 = read_arg_u64 (argc_174(D), argv_175(D), D.129019, &offset_task_partitions_u64);
+hashjoin_omp_task_wb.cpp:754:55: missed: statement clobbers memory: has_partition_task_grain_239 = read_arg_u64 (argc_174(D), argv_175(D), D.129020, &partition_task_grain_u64);
+hashjoin_omp_task_wb.cpp:755:50: missed: statement clobbers memory: has_join_task_grain_244 = read_arg_u64 (argc_174(D), argv_175(D), D.129021, &join_task_grain_u64);
+hashjoin_omp_task_wb.cpp:756:52: missed: statement clobbers memory: has_offset_task_grain_249 = read_arg_u64 (argc_174(D), argv_175(D), D.129022, &offset_task_grain_u64);
+hashjoin_omp_task_wb.cpp:793:23: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&cfg.partition_schedule_name, "explicit-task");
+hashjoin_omp_task_wb.cpp:793:23: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&cfg.join_schedule_name, "explicit-task");
+hashjoin_omp_task_wb.cpp:793:23: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&cfg.dataset_type_name, "uniform");
+hashjoin_omp_task_wb.cpp:795:53: missed: not vectorized: statement can throw an exception: _270 = checked_positive_int (part_threads_u64.14_29, "partition thread count");
+hashjoin_omp_task_wb.cpp:793:19: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:793:19: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:793:19: missed: splitting region at control altering definition _273 = checked_positive_int (join_threads_u64.15_30, "join thread count");
+hashjoin_omp_task_wb.cpp:796:48: missed: not vectorized: statement can throw an exception: _273 = checked_positive_int (join_threads_u64.15_30, "join thread count");
+hashjoin_omp_task_wb.cpp:796:48: missed: splitting region at control altering definition _276 = checked_nonnegative_int (partition_chunk_u64.16_31, "partition chunk size");
+hashjoin_omp_task_wb.cpp:797:54: missed: not vectorized: statement can throw an exception: _276 = checked_nonnegative_int (partition_chunk_u64.16_31, "partition chunk size");
+hashjoin_omp_task_wb.cpp:797:54: missed: splitting region at control altering definition _279 = checked_nonnegative_int (join_chunk_u64.17_32, "join chunk size");
+hashjoin_omp_task_wb.cpp:798:49: missed: not vectorized: statement can throw an exception: _279 = checked_nonnegative_int (join_chunk_u64.17_32, "join chunk size");
+hashjoin_omp_task_wb.cpp:798:49: missed: splitting region at control altering definition _282 = checked_positive_int (partition_task_blocks_u64.11_26, "partition task block count");
+hashjoin_omp_task_wb.cpp:799:57: missed: not vectorized: statement can throw an exception: _282 = checked_positive_int (partition_task_blocks_u64.11_26, "partition task block count");
+hashjoin_omp_task_wb.cpp:799:57: missed: splitting region at control altering definition _285 = checked_positive_int (join_task_partitions_u64.12_27, "join task partition count");
+hashjoin_omp_task_wb.cpp:800:56: missed: not vectorized: statement can throw an exception: _285 = checked_positive_int (join_task_partitions_u64.12_27, "join task partition count");
+hashjoin_omp_task_wb.cpp:800:56: missed: splitting region at control altering definition _288 = checked_positive_int (offset_task_partitions_u64.13_28, "offset task partition count");
+hashjoin_omp_task_wb.cpp:801:58: missed: not vectorized: statement can throw an exception: _288 = checked_positive_int (offset_task_partitions_u64.13_28, "offset task partition count");
+hashjoin_omp_task_wb.cpp:801:58: missed: splitting region at control altering definition rest = std::__cxx11::basic_string<char>::substr (&dataset_type_name, _1181, 18446744073709551615); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1571:17: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::_M_assign (&cfg.partition_schedule_name, &partition_schedule_name);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1571:17: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::_M_assign (&cfg.join_schedule_name, &join_schedule_name);
+hashjoin_omp_task_wb.cpp:813:31: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&dataset_cfg.type, "uniform");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1571:17: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::_M_assign (&dataset_cfg.type, &dataset_type_name);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3601:27: missed: statement clobbers memory: _1177 = std::__cxx11::basic_string<char>::compare (&dataset_type_name, "uniform");
+hashjoin_omp_task_wb.cpp:192:32: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&prefix, "skewed_");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:2688:27: missed: statement clobbers memory: _1180 = std::__cxx11::basic_string<char>::rfind (&dataset_type_name, _1179, 0, _1178);
+hashjoin_omp_task_wb.cpp:197:56: missed: not vectorized: statement can throw an exception: rest = std::__cxx11::basic_string<char>::substr (&dataset_type_name, _1181, 18446744073709551615); [return slot optimization]
+hashjoin_omp_task_wb.cpp:185:29: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:185:29: missed: splitting region at dominance boundary bb120
+hashjoin_omp_task_wb.cpp:185:29: missed: splitting region at control altering definition D.138797 = std::__cxx11::basic_string<char>::substr (&rest, 0, sep_1182); [return slot optimization]
+hashjoin_omp_task_wb.cpp:198:38: missed: statement clobbers memory: sep_1182 = std::__cxx11::basic_string<char>::find (&rest, 95, 0);
+hashjoin_omp_task_wb.cpp:204:57: missed: not vectorized: statement can throw an exception: D.138797 = std::__cxx11::basic_string<char>::substr (&rest, 0, sep_1182); [return slot optimization]
+hashjoin_omp_task_wb.cpp:204:57: missed: splitting region at dominance boundary bb124
+hashjoin_omp_task_wb.cpp:204:57: missed: splitting region at control altering definition _1184 = __gnu_cxx::__stoa<long unsigned int> (strtoul, "stoul", _1183, 0B, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3982:29: missed: not vectorized: statement can throw an exception: _1184 = __gnu_cxx::__stoa<long unsigned int> (strtoul, "stoul", _1183, 0B, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3982:29: missed: splitting region at dominance boundary bb125
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1206, _1208);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 218
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at control altering definition D.138796 = std::__cxx11::basic_string<char>::substr (&rest, _1188, 18446744073709551615); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1185, _1187);
+hashjoin_omp_task_wb.cpp:205:57: missed: not vectorized: statement can throw an exception: D.138796 = std::__cxx11::basic_string<char>::substr (&rest, _1188, 18446744073709551615); [return slot optimization]
+hashjoin_omp_task_wb.cpp:205:57: missed: splitting region at dominance boundary bb129
+hashjoin_omp_task_wb.cpp:205:57: missed: splitting region at control altering definition _1190 = __gnu_cxx::__stoa<long unsigned int> (strtoul, "stoul", _1189, 0B, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3982:29: missed: not vectorized: statement can throw an exception: _1190 = __gnu_cxx::__stoa<long unsigned int> (strtoul, "stoul", _1189, 0B, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3982:29: missed: splitting region at dominance boundary bb150
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1209, _1211);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 217
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb158
+hashjoin_omp_task_wb.cpp:213:14: missed: statement clobbers memory: _1212 = __builtin_eh_pointer (216);
+hashjoin_omp_task_wb.cpp:213:14: missed: statement clobbers memory: __cxa_begin_catch (_1212);
+hashjoin_omp_task_wb.cpp:215:5: missed: not vectorized: statement can throw an exception: __cxa_end_catch ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1213, _1215);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 215
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb151
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1216, _1218);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 214
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb130
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:285:2: missed: splitting region at dominance boundary bb121
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1191, _1193);
+hashjoin_omp_task_wb.cpp:210:33: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:210:33: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:210:33: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:210:33: missed: splitting region at dominance boundary bb138
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:285:2: missed: splitting region at dominance boundary bb139
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1772, _1201);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:285:2: missed: splitting region at dominance boundary bb140
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1950, _1204);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: splitting region at dominance boundary bb116
+hashjoin_omp_task_wb.cpp:814:5: missed: splitting region at dominance boundary bb118
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:285:2: missed: splitting region at dominance boundary bb117
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at dominance boundary bb162
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1391, _1907);
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at control altering definition _492 = std::__ostream_insert<char, std::char_traits<char> > (&cerr, _491, _490);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cerr, "Error: invalid dataset type \'", 29);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: not vectorized: statement can throw an exception: _492 = std::__ostream_insert<char, std::char_traits<char> > (&cerr, _491, _490);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at dominance boundary bb166
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at dominance boundary bb112
+hashjoin_omp_task_wb.cpp:816:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_492, "\'. Use uniform or skewed_<record_percentage>_<hot_partition_percentage>, e.g. skewed_80_5.\n");
+hashjoin_omp_task_wb.cpp:816:22: missed: splitting region at dominance boundary bb169
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at dominance boundary bb167
+hashjoin_omp_task_wb.cpp:822:20: missed: statement clobbers memory: omp_set_dynamic (0);
+hashjoin_omp_task_wb.cpp:827:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (&cerr, "Error: in this reference implementation, P must be a power of two.\n");
+hashjoin_omp_task_wb.cpp:106:25: missed: splitting region at dominance boundary bb172
+hashjoin_omp_task_wb.cpp:106:25: missed: splitting region at dominance boundary bb173
+hashjoin_omp_task_wb.cpp:106:25: missed: splitting region at control altering definition R = generate_relation (NR_299, seed.26_38, max_key.25_37, P_298, &dataset_cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:834:71: missed: not vectorized: statement can throw an exception: R = generate_relation (NR_299, seed.26_38, max_key.25_37, P_298, &dataset_cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:834:71: missed: splitting region at control altering definition S = generate_relation (NS_300, _39, max_key.25_37, P_298, &dataset_cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:835:95: missed: not vectorized: statement can throw an exception: S = generate_relation (NS_300, _39, max_key.25_37, P_298, &dataset_cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:835:95: missed: splitting region at control altering definition _304 = get_time ();
+hashjoin_omp_task_wb.cpp:837:25: missed: not vectorized: statement can throw an exception: _304 = get_time ();
+hashjoin_omp_task_wb.cpp:837:25: missed: splitting region at control altering definition _1221 = get_time ();
+hashjoin_omp_task_wb.cpp:644:25: missed: not vectorized: statement can throw an exception: _1221 = get_time ();
+hashjoin_omp_task_wb.cpp:642:16: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:642:16: missed: splitting region at dominance boundary bb179
+hashjoin_omp_task_wb.cpp:642:16: missed: splitting region at control altering definition Rpart = partition_relation (&R, P_298, &cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:645:67: missed: not vectorized: statement can throw an exception: Rpart = partition_relation (&R, P_298, &cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:645:67: missed: splitting region at dominance boundary bb181
+hashjoin_omp_task_wb.cpp:645:67: missed: splitting region at control altering definition Spart = partition_relation (&S, P_298, &cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:646:67: missed: not vectorized: statement can throw an exception: Spart = partition_relation (&S, P_298, &cfg); [return slot optimization]
+hashjoin_omp_task_wb.cpp:646:67: missed: splitting region at dominance boundary bb182
+hashjoin_omp_task_wb.cpp:646:67: missed: splitting region at control altering definition _1222 = get_time ();
+hashjoin_omp_task_wb.cpp:647:25: missed: not vectorized: statement can throw an exception: _1222 = get_time ();
+hashjoin_omp_task_wb.cpp:647:25: missed: splitting region at dominance boundary bb183
+hashjoin_omp_task_wb.cpp:647:25: missed: splitting region at control altering definition _1383 = operator new (_1382);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: not vectorized: statement can throw an exception: _1383 = operator new (_1382);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: splitting region at dominance boundary bb185
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: splitting region at control altering definition _1225 = get_time ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algobase.h:922:11: missed: statement clobbers memory: __builtin_memset (__first_1384, 0, _4728);
+hashjoin_omp_task_wb.cpp:459:49: missed: not vectorized: statement can throw an exception: std::vector<long unsigned int>::vector (&partition_work, p.9_24, &D.138861, &D.138862);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1937:25: missed: statement clobbers memory: std::__introsort_loop<__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int> >, long int, __gnu_cxx::__ops::_Iter_comp_iter<build_join_work_items(const PartitionedRelation&, const PartitionedRelation&, uint32_t, int)::<lambda(uint32_t, uint32_t)> > > (__first, __last, _1399, __comp);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1854:23: missed: statement clobbers memory: std::__insertion_sort<__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int> >, __gnu_cxx::__ops::_Iter_comp_iter<build_join_work_items(const PartitionedRelation&, const PartitionedRelation&, uint32_t, int)::<lambda(uint32_t, uint32_t)> > > (__first, __last, __comp);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_algo.h:1849:25: missed: statement clobbers memory: std::__insertion_sort<__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int> >, __gnu_cxx::__ops::_Iter_comp_iter<build_join_work_items(const PartitionedRelation&, const PartitionedRelation&, uint32_t, int)::<lambda(uint32_t, uint32_t)> > > (__first, D.138904, __comp);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (pretmp_1627, _1354);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1383, _1382);
+hashjoin_omp_task_wb.cpp:652:18: missed: not vectorized: statement can throw an exception: _1225 = get_time ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: missed: splitting region at dominance boundary bb224
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: missed: splitting region at control altering definition _1444 = operator new (_4739);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:137:48: missed: not vectorized: statement can throw an exception: _1444 = operator new (_4739);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: missed: splitting region at dominance boundary bb230
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:100:4: missed: splitting region at control altering definition _1253 = get_time ();
+hashjoin_omp_task_wb.cpp:710:5: missed: statement clobbers memory: __builtin_GOMP_parallel (_ZL21partitioned_hash_joinRKSt6vectorI6RecordSaIS0_EES4_jRK13OmpTaskConfig._omp_fn.0, &.omp_data_o.85, _1239, 0);
+hashjoin_omp_task_wb.cpp:683:18: missed: not vectorized: statement can throw an exception: _1253 = get_time ();
+hashjoin_omp_task_wb.cpp:657:13: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:657:13: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:657:13: missed: splitting region at dominance boundary bb237
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1263, _1266);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 222
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at control altering definition _307 = get_time ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1255, _1258);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1259, _1262);
+hashjoin_omp_task_wb.cpp:686:1: missed: statement clobbers memory: PartitionedRelation::~PartitionedRelation (&Spart);
+hashjoin_omp_task_wb.cpp:686:1: missed: statement clobbers memory: PartitionedRelation::~PartitionedRelation (&Rpart);
+hashjoin_omp_task_wb.cpp:839:25: missed: not vectorized: statement can throw an exception: _307 = get_time ();
+hashjoin_omp_task_wb.cpp:839:25: missed: splitting region at control altering definition D.105371 = std::filesystem::__cxx11::path::stem (&D.105370); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "executable=", 11);
+hashjoin_omp_task_wb.cpp:842:52: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::path<char*> (&D.105370, argv_175(D), 2);
+hashjoin_omp_task_wb.cpp:842:70: missed: not vectorized: statement can throw an exception: D.105371 = std::filesystem::__cxx11::path::stem (&D.105370); [return slot optimization]
+hashjoin_omp_task_wb.cpp:842:70: missed: splitting region at control altering definition _500 = std::__ostream_insert<char, std::char_traits<char> > (&cout, _499, _498);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1139:58: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .isra (&D.105372, _495, _496);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: not vectorized: statement can throw an exception: _500 = std::__ostream_insert<char, std::char_traits<char> > (&cout, _499, _498);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at dominance boundary bb265
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at control altering definition _507 = std::__ostream_insert<char, std::char_traits<char> > (&cout, _506, _505);
+hashjoin_omp_task_wb.cpp:842:85: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_500, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_501, _503);
+hashjoin_omp_task_wb.cpp:842:70: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.105371);
+hashjoin_omp_task_wb.cpp:842:52: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.105370);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "dataset-type=", 13);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: not vectorized: statement can throw an exception: _507 = std::__ostream_insert<char, std::char_traits<char> > (&cout, _506, _505);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at dominance boundary bb273
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at control altering definition _508 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _40);
+hashjoin_omp_task_wb.cpp:843:57: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_507, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "join_count=", 11);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: not vectorized: statement can throw an exception: _508 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _40);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at dominance boundary bb279
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at control altering definition _509 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _41);
+hashjoin_omp_task_wb.cpp:844:56: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_508, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "checksum1=", 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: not vectorized: statement can throw an exception: _509 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _41);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at dominance boundary bb285
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at control altering definition _510 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _42);
+hashjoin_omp_task_wb.cpp:845:54: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_509, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "checksum2=", 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: not vectorized: statement can throw an exception: _510 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _42);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at dominance boundary bb291
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at control altering definition _511 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _46);
+hashjoin_omp_task_wb.cpp:846:54: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_510, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "naive_join_count=", 17);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: not vectorized: statement can throw an exception: _511 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _46);
+hashjoin_omp_task_wb.cpp:693:16: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:693:16: missed: splitting region at dominance boundary bb305
+hashjoin_omp_task_wb.cpp:693:16: missed: splitting region at control altering definition _512 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _47);
+hashjoin_omp_task_wb.cpp:850:65: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_511, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "naive_checksum1=", 16);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: not vectorized: statement can throw an exception: _512 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _47);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at dominance boundary bb311
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at control altering definition _513 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _48);
+hashjoin_omp_task_wb.cpp:851:63: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_512, "\n");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cout, "naive_checksum2=", 16);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: not vectorized: statement can throw an exception: _513 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _48);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at dominance boundary bb317
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:171:25: missed: splitting region at dominance boundary bb320
+hashjoin_omp_task_wb.cpp:852:63: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_513, "\n");
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at control altering definition _329 = compute_throughput (total_elements_327, _1518);
+hashjoin_omp_task_wb.cpp:856:54: missed: not vectorized: statement can throw an exception: _329 = compute_throughput (total_elements_327, _1518);
+hashjoin_omp_task_wb.cpp:856:54: missed: splitting region at control altering definition _331 = compute_throughput (total_elements_327, _1254);
+hashjoin_omp_task_wb.cpp:857:54: missed: not vectorized: statement can throw an exception: _331 = compute_throughput (total_elements_327, _1254);
+hashjoin_omp_task_wb.cpp:857:54: missed: splitting region at control altering definition _333 = compute_throughput (total_elements_327, tot_time_sec_308);
+hashjoin_omp_task_wb.cpp:858:55: missed: not vectorized: statement can throw an exception: _333 = compute_throughput (total_elements_327, tot_time_sec_308);
+hashjoin_omp_task_wb.cpp:858:55: missed: splitting region at control altering definition D.107299 = std::__cxx11::to_string (_41); [return slot optimization]
+hashjoin_omp_task_wb.cpp:861:37: missed: not vectorized: statement can throw an exception: D.107299 = std::__cxx11::to_string (_41); [return slot optimization]
+hashjoin_omp_task_wb.cpp:861:37: missed: splitting region at control altering definition D.107300 = std::__cxx11::to_string (_42); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM <const struct basic_string> [(void *)&D.112635], "checksum1");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM <struct basic_string> [(void *)&D.112635 + 32B], &D.107299);
+hashjoin_omp_task_wb.cpp:862:37: missed: not vectorized: statement can throw an exception: D.107300 = std::__cxx11::to_string (_42); [return slot optimization]
+hashjoin_omp_task_wb.cpp:862:37: missed: splitting region at control altering definition D.107301 = std::__cxx11::to_string (_40); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 64B].first, "checksum2");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 64B].second, &D.107300);
+hashjoin_omp_task_wb.cpp:863:38: missed: not vectorized: statement can throw an exception: D.107301 = std::__cxx11::to_string (_40); [return slot optimization]
+hashjoin_omp_task_wb.cpp:863:38: missed: splitting region at control altering definition _1509 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 192B].second, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 128B].first, "join_count");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 128B].second, &D.107301);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (&MEM[(struct basic_string *)&D.112635 + 192B].D.36767._M_local_buf, "dataset_type", 12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: not vectorized: statement can throw an exception: _1509 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 192B].second, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb336
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1486, _1489);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 226
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb340
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:261:31: missed: splitting region at dominance boundary bb341
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_1440, _1483, _1484);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: splitting region at control altering definition D.107302 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _331); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: not vectorized: statement can throw an exception: D.107302 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _331); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at dominance boundary bb347
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at control altering definition D.107303 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _333); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 256B].first, "join_throughput");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 256B].second, &D.107302);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: not vectorized: statement can throw an exception: D.107303 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _333); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at dominance boundary bb350
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at control altering definition D.107304 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _1518); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 320B].first, "total_throughput");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 320B].second, &D.107303);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: not vectorized: statement can throw an exception: D.107304 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _1518); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at dominance boundary bb353
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at control altering definition D.107305 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _329); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 384B].first, "partition_time");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 384B].second, &D.107304);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: not vectorized: statement can throw an exception: D.107305 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _329); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at dominance boundary bb356
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at control altering definition D.107306 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _1254); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 448B].first, "partition_throughput");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 448B].second, &D.107305);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: not vectorized: statement can throw an exception: D.107306 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", _1254); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at dominance boundary bb359
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at control altering definition _1536 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 704B].first, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 512B].first, "join_time");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 512B].second, &D.107306);
+hashjoin_omp_task_wb.cpp:870:45: missed: statement clobbers memory: D.107307 = std::__cxx11::to_string (_54); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 576B].first, "partition_threads");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 576B].second, &D.107307);
+hashjoin_omp_task_wb.cpp:871:40: missed: statement clobbers memory: D.107308 = std::__cxx11::to_string (_55); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 640B].first, "join_threads");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 640B].second, &D.107308);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: not vectorized: statement can throw an exception: _1536 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 704B].first, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb364
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at control altering definition _1550 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 704B].second, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_1536, "partition_schedule", 18);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: not vectorized: statement can throw an exception: _1550 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 704B].second, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb843
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1527, _1530);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 227
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb366
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb370
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:261:31: missed: splitting region at dominance boundary bb371
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_1429, _1524, _1525);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: splitting region at control altering definition _1591 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 768B].second, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (&MEM[(struct basic_string *)&D.112635 + 768B].D.36767._M_local_buf, "join_schedule", 13);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: not vectorized: statement can throw an exception: _1591 = std::__cxx11::basic_string<char>::_M_create (&MEM[(struct pair *)&D.112635 + 768B].second, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: splitting region at dominance boundary bb377
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1568, _1571);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 228
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb381
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:261:31: missed: splitting region at dominance boundary bb382
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_50, _1565, _1566);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: splitting region at control altering definition D.107317 = std::__cxx11::to_string (_64); [return slot optimization]
+hashjoin_omp_task_wb.cpp:874:43: missed: statement clobbers memory: D.107309 = std::__cxx11::to_string (_56); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 832B].first, "partition_chunk");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 832B].second, &D.107309);
+hashjoin_omp_task_wb.cpp:875:38: missed: statement clobbers memory: D.107310 = std::__cxx11::to_string (_57); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 896B].first, "join_chunk");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 896B].second, &D.107310);
+hashjoin_omp_task_wb.cpp:876:49: missed: statement clobbers memory: D.107311 = std::__cxx11::to_string (_58); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 960B].first, "partition_task_blocks");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 960B].second, &D.107311);
+hashjoin_omp_task_wb.cpp:877:48: missed: statement clobbers memory: D.107312 = std::__cxx11::to_string (_59); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1024B].first, "join_task_partitions");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1024B].second, &D.107312);
+hashjoin_omp_task_wb.cpp:878:50: missed: statement clobbers memory: D.107313 = std::__cxx11::to_string (_60); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1088B].first, "offset_task_partitions");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1088B].second, &D.107313);
+hashjoin_omp_task_wb.cpp:879:48: missed: statement clobbers memory: D.107314 = std::__cxx11::to_string (_61); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1152B].first, "partition_task_grain");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1152B].second, &D.107314);
+hashjoin_omp_task_wb.cpp:880:43: missed: statement clobbers memory: D.107315 = std::__cxx11::to_string (_62); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1216B].first, "join_task_grain");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1216B].second, &D.107315);
+hashjoin_omp_task_wb.cpp:881:45: missed: statement clobbers memory: D.107316 = std::__cxx11::to_string (_63); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1280B].first, "offset_task_grain");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1280B].second, &D.107316);
+hashjoin_omp_task_wb.cpp:882:48: missed: not vectorized: statement can throw an exception: D.107317 = std::__cxx11::to_string (_64); [return slot optimization]
+hashjoin_omp_task_wb.cpp:882:48: missed: splitting region at control altering definition D.107318 = std::__cxx11::to_string (max_key.25_37); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1344B].first, "partition_block_size");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1344B].second, &D.107317);
+hashjoin_omp_task_wb.cpp:883:35: missed: not vectorized: statement can throw an exception: D.107318 = std::__cxx11::to_string (max_key.25_37); [return slot optimization]
+hashjoin_omp_task_wb.cpp:883:35: missed: splitting region at control altering definition D.107319 = std::__cxx11::to_string (NR_299); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1408B].first, "max_key");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1408B].second, &D.107318);
+hashjoin_omp_task_wb.cpp:884:30: missed: not vectorized: statement can throw an exception: D.107319 = std::__cxx11::to_string (NR_299); [return slot optimization]
+hashjoin_omp_task_wb.cpp:884:30: missed: splitting region at control altering definition D.107320 = std::__cxx11::to_string (NS_300); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1472B].first, "nr");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1472B].second, &D.107319);
+hashjoin_omp_task_wb.cpp:885:30: missed: not vectorized: statement can throw an exception: D.107320 = std::__cxx11::to_string (NS_300); [return slot optimization]
+hashjoin_omp_task_wb.cpp:885:30: missed: splitting region at control altering definition D.107321 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", tot_time_sec_308); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1536B].first, "ns");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1536B].second, &D.107320);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: not vectorized: statement can throw an exception: D.107321 = __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char>, char> (vsnprintf, 328, "%f", tot_time_sec_308); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at dominance boundary bb408
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:4099:20: missed: splitting region at control altering definition D.112661 = std::filesystem::__cxx11::path::stem (&D.112660); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:4: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .constprop (&MEM[(struct pair *)&D.112635 + 1600B].first, "time_sec");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_pair.h:535:35: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&MEM[(struct pair *)&D.112635 + 1600B].second, &D.107321);
+hashjoin_omp_task_wb.cpp:887:5: missed: not vectorized: statement can throw an exception: std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::map (&results_map, D.112637, &D.112648, &D.112650);
+hashjoin_omp_task_wb.cpp:887:5: missed: statement clobbers memory: std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::~pair (_359);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_590, _592);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_587, _589);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_584, _586);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_581, _583);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_578, _580);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_575, _577);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_572, _574);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_569, _571);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_566, _568);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_563, _565);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_560, _562);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_557, _559);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_554, _556);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_551, _553);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_548, _550);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_545, _547);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_542, _544);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_539, _541);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_536, _538);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_533, _535);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_530, _532);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_527, _529);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_524, _526);
+hashjoin_omp_task_wb.cpp:889:64: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::path<char*> (&D.112660, argv_175(D), 2);
+hashjoin_omp_task_wb.cpp:889:82: missed: not vectorized: statement can throw an exception: D.112661 = std::filesystem::__cxx11::path::stem (&D.112660); [return slot optimization]
+hashjoin_omp_task_wb.cpp:889:82: missed: splitting region at control altering definition _595 = std::__cxx11::basic_string<char>::insert (&D.112662, 0, "results/");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1139:58: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .isra (&D.112662, _593, _594);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: not vectorized: statement can throw an exception: _595 = std::__cxx11::basic_string<char>::insert (&D.112662, 0, "results/");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: splitting region at dominance boundary bb464
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: splitting region at control altering definition _596 = std::__cxx11::basic_string<char>::append (&D.112663, ".csv");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:46: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.112663, _595);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: not vectorized: statement can throw an exception: _596 = std::__cxx11::basic_string<char>::append (&D.112663, ".csv");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:36: missed: splitting region at dominance boundary bb651
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_705, _707);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 194
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb656
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_708, _710);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 193
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb465
+hashjoin_omp_task_wb.cpp:889:82: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.112661);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 192
+hashjoin_omp_task_wb.cpp:889:82: missed: splitting region at dominance boundary bb477
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3555:43: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&filepath, _596);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_600, _602);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_597, _599);
+hashjoin_omp_task_wb.cpp:889:82: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.112661);
+hashjoin_omp_task_wb.cpp:889:64: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.112660);
+hashjoin_omp_task_wb.cpp:890:18: missed: not vectorized: statement can throw an exception: append_to_csv (&filepath, &results_map);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_612, _614);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:984:17: missed: statement clobbers memory: std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::_M_erase.isra (_611);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_607, _610);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_603, _606);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb661
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_615, _617);
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb658
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_711, _713);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 203
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb659
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb665
+hashjoin_omp_task_wb.cpp:889:64: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.112660);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 191
+hashjoin_omp_task_wb.cpp:889:64: missed: splitting region at dominance boundary bb666
+hashjoin_omp_task_wb.cpp:889:64: missed: splitting region at dominance boundary bb410
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:984:17: missed: statement clobbers memory: std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::_M_erase.isra (_714);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 186
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_map.h:312:7: missed: splitting region at dominance boundary bb526
+hashjoin_omp_task_wb.cpp:887:5: missed: statement clobbers memory: std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::~pair (_402);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 130
+hashjoin_omp_task_wb.cpp:887:5: missed: splitting region at dominance boundary bb531
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_636, _638);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 129
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb404
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_639, _641);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 127
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb536
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb401
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_642, _644);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 125
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb541
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb398
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_645, _647);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 123
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb546
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb395
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_648, _650);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 121
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb551
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb556
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_651, _653);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 119
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb561
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_654, _656);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 117
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb566
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_657, _659);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 115
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb571
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_660, _662);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 113
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb576
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_663, _665);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 111
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb581
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_666, _668);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 109
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb586
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_669, _671);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 107
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb591
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_672, _674);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 105
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb596
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_675, _677);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 103
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb601
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_678, _680);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 101
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb606
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_681, _683);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 99
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb611
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_684, _686);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 97
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb616
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_687, _689);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 95
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb621
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_690, _692);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 93
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb626
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_693, _695);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 91
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb332
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_696, _698);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 89
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb631
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb329
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_699, _701);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 87
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb636
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb640
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_702, _704);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 85
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb641
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb325
+hashjoin_omp_task_wb.cpp:893:1: missed: statement clobbers memory: std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::~pair (_428);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 83
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb323
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb321
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb318
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb312
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb306
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb700
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb292
+hashjoin_omp_task_wb.cpp:698:35: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:700:34: missed: splitting region at dominance boundary bb286
+hashjoin_omp_task_wb.cpp:700:34: missed: splitting region at dominance boundary bb280
+hashjoin_omp_task_wb.cpp:700:34: missed: splitting region at dominance boundary bb274
+hashjoin_omp_task_wb.cpp:700:34: missed: splitting region at dominance boundary bb266
+hashjoin_omp_task_wb.cpp:700:34: missed: splitting region at dominance boundary bb511
+hashjoin_omp_task_wb.cpp:700:34: missed: splitting region at dominance boundary bb516
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_633, _635);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 73
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb518
+hashjoin_omp_task_wb.cpp:842:70: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.105371);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 72
+hashjoin_omp_task_wb.cpp:842:70: missed: splitting region at dominance boundary bb519
+hashjoin_omp_task_wb.cpp:842:70: missed: splitting region at dominance boundary bb261
+hashjoin_omp_task_wb.cpp:842:52: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&D.105370);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 71
+hashjoin_omp_task_wb.cpp:842:52: missed: splitting region at dominance boundary bb242
+hashjoin_omp_task_wb.cpp:842:52: missed: splitting region at dominance boundary bb234
+hashjoin_omp_task_wb.cpp:842:52: missed: splitting region at dominance boundary bb231
+hashjoin_omp_task_wb.cpp:678:27: optimized: basic block part vectorized using 16 byte vectors
+hashjoin_omp_task_wb.cpp:678:27: missed: splitting region at dominance boundary bb225
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_construct.h:119:7: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_construct.h:119:7: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_construct.h:119:7: missed: splitting region at dominance boundary bb248
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: not vectorized: statement can throw an exception: std::__throw_length_error ("cannot create std::vector larger than max_size()");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:1905:24: missed: splitting region at dominance boundary bb203
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1267, _1270);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 221
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at loop 5 exit at bb214
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/vector.tcc:123:21: missed: not vectorized: statement can throw an exception: std::vector<JoinWorkItem>::_M_realloc_insert<JoinWorkItem> (&work_items, D.138908, &D.138855);
+hashjoin_omp_task_wb.cpp:499:34: missed: not vectorized: vectorization is not profitable.
+hashjoin_omp_task_wb.cpp:498:84: missed: splitting region at dominance boundary bb222
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1358, _1361);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 225
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1362, _1365);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 224
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb253
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_1383, _1382);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 223
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb256
+hashjoin_omp_task_wb.cpp:686:1: missed: statement clobbers memory: PartitionedRelation::~PartitionedRelation (&Spart);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 220
+hashjoin_omp_task_wb.cpp:686:1: missed: splitting region at dominance boundary bb207
+hashjoin_omp_task_wb.cpp:686:1: missed: statement clobbers memory: PartitionedRelation::~PartitionedRelation (&Rpart);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 219
+hashjoin_omp_task_wb.cpp:686:1: missed: splitting region at dominance boundary bb209
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:175:4: missed: not vectorized: more than one data ref in stmt: *_1423 = D.138855;
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/vector.tcc:119:6: missed: splitting region at dominance boundary bb204
+hashjoin_omp_task_wb.cpp:496:41: missed: splitting region at dominance boundary bb195
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_iterator.h:1107:2: missed: splitting region at dominance boundary bb703
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_iterator.h:1121:2: missed: splitting region at dominance boundary bb668
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_iterator.h:1121:2: missed: splitting region at dominance boundary bb669
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_iterator.h:1121:2: missed: splitting region at dominance boundary bb673
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_715, _718);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 67
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb674
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb174
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_719, _722);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 66
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb679
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_vector.h:733:7: missed: splitting region at dominance boundary bb109
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_723, _725);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 65
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb104
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb102
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb100
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb98
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb96
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb94
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb497
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at dominance boundary bb498
+hashjoin_omp_task_wb.cpp:175:8: missed: splitting region at control altering definition _443 = std::operator<< <std::char_traits<char> > (&cerr, _36);
+hashjoin_omp_task_wb.cpp:802:7: missed: statement clobbers memory: _488 = __builtin_eh_filter (57);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 57
+hashjoin_omp_task_wb.cpp:802:36: missed: statement clobbers memory: _33 = __builtin_eh_pointer (57);
+hashjoin_omp_task_wb.cpp:802:36: missed: statement clobbers memory: _440 = __cxa_begin_catch (_33);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cerr, "Error: ", 7);
+hashjoin_omp_task_wb.cpp:803:47: missed: statement clobbers memory: _36 = OBJ_TYPE_REF(_35;_440->2B) (_440);
+hashjoin_omp_task_wb.cpp:803:47: missed: not vectorized: statement can throw an exception: _443 = std::operator<< <std::char_traits<char> > (&cerr, _36);
+hashjoin_omp_task_wb.cpp:803:47: missed: splitting region at dominance boundary bb480
+hashjoin_omp_task_wb.cpp:803:47: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_443, "\n");
+hashjoin_omp_task_wb.cpp:805:5: missed: statement clobbers memory: __cxa_end_catch ();
+hashjoin_omp_task_wb.cpp:805:5: missed: splitting region at dominance boundary bb505
+hashjoin_omp_task_wb.cpp:893:1: missed: statement clobbers memory: OmpTaskConfig::~OmpTaskConfig (&cfg);
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb503
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb508
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb684
+hashjoin_omp_task_wb.cpp:805:5: missed: statement clobbers memory: __cxa_end_catch ();
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 58
+hashjoin_omp_task_wb.cpp:805:5: missed: splitting region at dominance boundary bb488
+hashjoin_omp_task_wb.cpp:893:1: missed: statement clobbers memory: OmpTaskConfig::~OmpTaskConfig (&cfg);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 56
+hashjoin_omp_task_wb.cpp:893:1: missed: splitting region at dominance boundary bb492
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_627, _629);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 44
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb493
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb89
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_630, _632);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 41
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb86
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb83
+hashjoin_omp_task_wb.cpp:789:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (&cerr, "Error: offset task partition count must be greater than zero.\n");
+hashjoin_omp_task_wb.cpp:789:22: missed: splitting region at dominance boundary bb80
+hashjoin_omp_task_wb.cpp:785:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (&cerr, "Error: join task partition count must be greater than zero.\n");
+hashjoin_omp_task_wb.cpp:785:22: missed: splitting region at dominance boundary bb77
+hashjoin_omp_task_wb.cpp:781:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (&cerr, "Error: partition task block count must be greater than zero.\n");
+hashjoin_omp_task_wb.cpp:781:22: missed: splitting region at dominance boundary bb74
+hashjoin_omp_task_wb.cpp:777:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (&cerr, "Error: partition block size must be greater than zero.\n");
+hashjoin_omp_task_wb.cpp:777:22: missed: splitting region at dominance boundary bb60
+hashjoin_omp_task_wb.cpp:773:22: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (&cerr, "Error: P too large.\n");
+hashjoin_omp_task_wb.cpp:773:22: missed: splitting region at dominance boundary bb58
+hashjoin_omp_task_wb.cpp:773:22: missed: splitting region at dominance boundary bb56
+hashjoin_omp_task_wb.cpp:773:22: missed: splitting region at dominance boundary bb5
+hashjoin_omp_task_wb.cpp:773:22: missed: splitting region at control altering definition _1175 = std::operator<< <std::char_traits<char> > (&cerr, _12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cerr, "Usage:\n", 7);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&cerr, "  ", 2);
+hashjoin_omp_task_wb.cpp:102:12: missed: not vectorized: statement can throw an exception: _1175 = std::operator<< <std::char_traits<char> > (&cerr, _12);
+hashjoin_omp_task_wb.cpp:102:12: missed: splitting region at dominance boundary bb14
+hashjoin_omp_task_wb.cpp:102:12: missed: splitting region at dominance boundary bb687
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, " -nr NR -ns NS -seed SEED -max-key K -p P\n", 42);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "       [--partition-threads T] [--join-threads T]\n", 50);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "       [--partition-block-size B]\n", 34);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "       [--partition-task-blocks B] [--join-task-partitions P] [--offset-task-partitions P]\n", 91);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "       [--partition-chunk C] [--join-chunk C]\n\n", 47);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "Parameters:\n", 12);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  -nr         Number of records in relation R\n", 46);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  -ns         Number of records in relation S\n", 46);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  -seed       Deterministic seed\n", 33);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  -max-key    Keys are generated in [0, max-key)\n", 49);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  -p          Number of partitions (power of two required in this reference code)\n", 82);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --partition-threads      Number of threads for task-based partition phase\n", 76);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --join-threads           Number of threads for task-based join phase\n", 71);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --partition-block-size   Number of records per input block during partitioning\n", 81);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --partition-task-blocks  Number of input blocks handled by each explicit partition task\n", 90);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --join-task-partitions   Number of partitions handled by each explicit join task\n", 83);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --offset-task-partitions Number of partitions handled by each explicit offset task\n", 85);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --partition-chunk / --join-chunk are accepted for compatibility with the loop benchmark scripts.\n", 99);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:620:18: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (_1175, "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n", 65);
+hashjoin_omp_task_wb.cpp:102:12: missed: not vectorized: statement can throw an exception: std::operator<< <std::char_traits<char> > (_1175, "  --partition-task-grain / --join-task-grain / --offset-task-grain are accepted as legacy aliases.\n");
+hashjoin_omp_task_wb.cpp:102:12: missed: splitting region at dominance boundary bb53
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_726, _728);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 16
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb481
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb691
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_624, _626);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_621, _623);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_618, _620);
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at dominance boundary bb692
+hashjoin_omp_task_wb.cpp:710:5: missed: splitting region at dominance boundary bb696
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_729, _731);
+hashjoin_omp_task_wb.cpp:710:5: missed: not vectorized: statement can throw an exception: resx 11
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb697
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_732, _734);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/iostream:74:25: missed: statement clobbers memory: std::ios_base::Init::Init (&__ioinit);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/iostream:74:25: missed: statement clobbers memory: __cxxabiv1::__cxa_atexit (__dt_comp , &__ioinit, &__dso_handle);
+lib/timing.cpp:9:39: missed: statement clobbers memory: D.25633 = std::chrono::_V2::steady_clock::now ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _17 = std::__cxx11::basic_string<char>::_M_create (this_1(D), &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_29, __s_3(D), __n_5(D));
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:618:28: missed: statement clobbers memory: std::__throw_logic_error ("basic_string: construction from null is not valid");
+lib/results.cpp:15:31: missed: couldn't vectorize loop
+lib/results.cpp:15:31: missed: not vectorized: control flow in loop.
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:2826:28: missed: statement clobbers memory: _12 = std::__cxx11::basic_string<char>::find_first_of (field_7(D), ",\"\n\r", 0, 4);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1528:19: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::_M_mutate (&escaped, prephitmp_130, 0, 0B, 1);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1437:18: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::_M_append (&escaped, "\"\"", 2);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:1528:19: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::_M_mutate (&escaped, _122, 0, 0B, 1);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_99, &escaped.D.32629._M_local_buf, _103);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:393:24: missed: not vectorized: statement can throw an exception: std::__throw_length_error ("basic_string::append");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_29, _31);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _45 = std::__cxx11::basic_string<char>::_M_create (_14(D), &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_157, _10, _8);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:354:7: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (_9, _8);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_4, _7);
+lib/results.cpp:68:9: missed: couldn't vectorize loop
+lib/results.cpp:68:9: missed: not vectorized: control flow in loop.
+lib/results.cpp:57:13: missed: couldn't vectorize loop
+lib/results.cpp:57:13: missed: not vectorized: control flow in loop.
+lib/results.cpp:35:6: missed: splitting region at control altering definition parent = std::filesystem::__cxx11::path::parent_path (&output_path); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.tcc:225:13: missed: statement clobbers memory: _204 = std::__cxx11::basic_string<char>::_M_create (&output_path._M_pathname, &__dnew, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/char_traits.h:431:49: missed: statement clobbers memory: __builtin_memcpy (_5, _189, _188);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:330:70: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::_List::_List (&output_path._M_cmpts);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:331:23: missed: not vectorized: statement can throw an exception: std::filesystem::__cxx11::path::_M_split_cmpts (&output_path);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (&MEM[(struct _Head_base &)&output_path + 32]._M_head_impl, _191);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 52
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_193, _196);
+lib/results.cpp:41:66: missed: not vectorized: statement can throw an exception: parent = std::filesystem::__cxx11::path::parent_path (&output_path); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:617:15: missed: splitting region at control altering definition D.99583 = std::filesystem::status (&output_path);
+lib/results.cpp:43:44: missed: not vectorized: statement can throw an exception: std::filesystem::create_directories (&parent);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_ops.h:134:18: missed: not vectorized: statement can throw an exception: D.99583 = std::filesystem::status (&output_path);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_ops.h:134:18: missed: splitting region at dominance boundary bb28
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_ops.h:134:18: missed: splitting region at control altering definition _30 = std::filesystem::file_size (&output_path);
+lib/results.cpp:47:76: missed: not vectorized: statement can throw an exception: _30 = std::filesystem::file_size (&output_path);
+lib/results.cpp:47:76: missed: splitting region at dominance boundary bb32
+lib/results.cpp:47:47: missed: splitting region at control altering definition _231 = std::basic_filebuf<char>::open (&out._M_filebuf, _27, 17);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:462:59: missed: statement clobbers memory: std::ios_base::ios_base (&MEM[(struct basic_ios *)&out + 248B].D.62711);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:385:19: missed: not vectorized: statement can throw an exception: std::basic_ios<char>::init (_221, 0B);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:797:27: missed: not vectorized: statement can throw an exception: std::basic_filebuf<char>::basic_filebuf (&out._M_filebuf);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:799:12: missed: not vectorized: statement can throw an exception: std::basic_ios<char>::init (&MEM <struct ofstream> [(void *)&out + 248B], &out._M_filebuf.D.86262);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:928:22: missed: not vectorized: statement can throw an exception: _231 = std::basic_filebuf<char>::open (&out._M_filebuf, _27, 17);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:462:2: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:462:2: missed: splitting region at dominance boundary bb37
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:462:2: missed: splitting region at dominance boundary bb44
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:933:15: missed: not vectorized: statement can throw an exception: std::basic_ios<char>::clear (_429, 0);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:158:20: missed: not vectorized: statement can throw an exception: std::basic_ios<char>::clear (_429, _241);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:158:20: missed: splitting region at dominance boundary bb47
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:801:7: missed: statement clobbers memory: std::basic_filebuf<char>::~basic_filebuf (&out._M_filebuf);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 55
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:801:7: missed: splitting region at dominance boundary bb50
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 54
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:93:26: missed: splitting region at dominance boundary bb42
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:282:22: missed: statement clobbers memory: std::ios_base::~ios_base (&MEM[(struct basic_ios *)&out + 248B].D.62711);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 53
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:282:22: missed: splitting region at control altering definition D.90575 = {anonymous}::escape_csv_field (_2); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:527:16: missed: not vectorized: statement can throw an exception: std::basic_ostream<char>::put (&out.D.86624, 44);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:526:25: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&out.D.86624, &__c, 1);
+lib/results.cpp:60:36: missed: not vectorized: statement can throw an exception: D.90575 = {anonymous}::escape_csv_field (_2); [return slot optimization]
+lib/results.cpp:60:36: missed: splitting region at loop 1 exit at bb134
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&out.D.86624, _93, _92);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at dominance boundary bb73
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_124, _126);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 23
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb62
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_95, _97);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:368:30: missed: statement clobbers memory: _94 = std::_Rb_tree_increment (SR.227_259);
+lib/results.cpp:56:34: missed: splitting region at dominance boundary bb81
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:527:16: missed: not vectorized: statement can throw an exception: std::basic_ostream<char>::put (&out.D.86624, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:526:25: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&out.D.86624, &__c, 1);
+lib/results.cpp:63:16: missed: splitting region at control altering definition D.90590 = {anonymous}::escape_csv_field (_3); [return slot optimization]
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:527:16: missed: not vectorized: statement can throw an exception: std::basic_ostream<char>::put (&out.D.86624, 44);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:526:25: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&out.D.86624, &__c, 1);
+lib/results.cpp:71:32: missed: not vectorized: statement can throw an exception: D.90590 = {anonymous}::escape_csv_field (_3); [return slot optimization]
+lib/results.cpp:71:32: missed: splitting region at loop 2 exit at bb138
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&out.D.86624, _102, _101);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3888:30: missed: splitting region at dominance boundary bb93
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_127, _129);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 29
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb82
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_104, _106);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/stl_tree.h:368:30: missed: statement clobbers memory: _103 = std::_Rb_tree_increment (SR.229_321);
+lib/results.cpp:67:30: missed: splitting region at control altering definition _111 = std::__cxx11::basic_string<char>::insert (&D.90591, 0, "Error while writing CSV file: ");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:527:16: missed: not vectorized: statement can throw an exception: std::basic_ostream<char>::put (&out.D.86624, 10);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/ostream:526:25: missed: not vectorized: statement can throw an exception: std::__ostream_insert<char, std::char_traits<char> > (&out.D.86624, &__c, 1);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:254:17: missed: not vectorized: statement can throw an exception: std::basic_filebuf<char>::close (&out._M_filebuf);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:255:2: missed: statement clobbers memory: _300 = __builtin_eh_pointer (57);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:255:2: missed: statement clobbers memory: __cxa_begin_catch (_300);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:255:2: missed: statement clobbers memory: __cxa_end_catch ();
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:257:7: missed: statement clobbers memory: std::__basic_file<char>::~__basic_file (&MEM[(struct basic_filebuf *)&out + 8B]._M_file);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/streambuf:203:9: missed: statement clobbers memory: std::locale::~locale (&MEM[(struct basic_streambuf *)&out + 8B]._M_buf_locale);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_ios.h:282:22: missed: statement clobbers memory: std::ios_base::~ios_base (&MEM[(struct basic_ios *)&out + 248B].D.62711);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (&MEM[(struct _Head_base &)&parent + 32]._M_head_impl, _284);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_286, _289);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/unique_ptr.h:396:17: missed: statement clobbers memory: std::filesystem::__cxx11::path::_List::_Impl_deleter::operator() (&MEM[(struct _Head_base &)&output_path + 32]._M_head_impl, _278);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_280, _283);
+lib/results.cpp:77:89: missed: statement clobbers memory: _49 = __cxa_allocate_exception (16);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1139:58: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .isra (&D.90591, _109, _110);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: not vectorized: statement can throw an exception: _111 = std::__cxx11::basic_string<char>::insert (&D.90591, 0, "Error while writing CSV file: ");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:868:9: optimized: basic block part vectorized using 16 byte vectors
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:868:9: missed: splitting region at dominance boundary bb103
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/fstream:868:9: missed: splitting region at dominance boundary bb147
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:46: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.90592, _111);
+lib/results.cpp:77:9: missed: not vectorized: statement can throw an exception: std::runtime_error::runtime_error (_49, &D.90592);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_115, _117);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_112, _114);
+lib/results.cpp:77:89: missed: not vectorized: statement can throw an exception: __cxa_throw (_49, &_ZTISt13runtime_error, __dt_comp );
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_130, _132);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 37
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb152
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_133, _135);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 36
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb164
+lib/results.cpp:77:89: missed: statement clobbers memory: __cxa_free_exception (_49);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 33
+lib/results.cpp:77:89: missed: splitting region at dominance boundary bb91
+lib/results.cpp:77:89: missed: splitting region at dominance boundary bb165
+lib/results.cpp:77:89: missed: splitting region at dominance boundary bb71
+lib/results.cpp:77:89: missed: splitting region at dominance boundary bb52
+lib/results.cpp:77:89: missed: splitting region at control altering definition _82 = std::__cxx11::basic_string<char>::insert (&D.89514, 0, "Cannot open CSV file for writing: ");
+lib/results.cpp:51:93: missed: statement clobbers memory: _63 = __cxa_allocate_exception (16);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/fs_path.h:1139:58: missed: not vectorized: statement can throw an exception: std::__cxx11::basic_string<char>::__ct_base .isra (&D.89514, _80, _81);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: not vectorized: statement can throw an exception: _82 = std::__cxx11::basic_string<char>::insert (&D.89514, 0, "Cannot open CSV file for writing: ");
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: splitting region at dominance boundary bb54
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:36: missed: splitting region at dominance boundary bb127
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:3541:46: missed: statement clobbers memory: std::__cxx11::basic_string<char>::basic_string (&D.89515, _82);
+lib/results.cpp:51:9: missed: not vectorized: statement can throw an exception: std::runtime_error::runtime_error (_63, &D.89515);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_86, _88);
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_83, _85);
+lib/results.cpp:51:93: missed: not vectorized: statement can throw an exception: __cxa_throw (_63, &_ZTISt13runtime_error, __dt_comp );
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_118, _120);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 11
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb132
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:26: missed: statement clobbers memory: operator delete (_121, _123);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 10
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:795:23: missed: splitting region at dominance boundary bb155
+lib/results.cpp:51:93: missed: statement clobbers memory: __cxa_free_exception (_63);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 7
+lib/results.cpp:51:93: missed: splitting region at dominance boundary bb30
+lib/results.cpp:79:1: missed: statement clobbers memory: std::basic_ofstream<char>::~basic_ofstream (&out);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 6
+lib/results.cpp:79:1: missed: splitting region at dominance boundary bb157
+lib/results.cpp:79:1: missed: splitting region at dominance boundary bb158
+lib/results.cpp:79:1: missed: splitting region at dominance boundary bb160
+lib/results.cpp:79:1: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&parent);
+lib/results.cpp:35:6: missed: not vectorized: statement can throw an exception: resx 5
+lib/results.cpp:79:1: missed: splitting region at dominance boundary bb161
+lib/results.cpp:79:1: missed: splitting region at dominance boundary bb6
+lib/results.cpp:79:1: missed: statement clobbers memory: std::filesystem::__cxx11::path::~path (&output_path);
+lib/results.cpp:79:1: missed: splitting region at dominance boundary bb3
+/opt/ohpc/pub/compiler/gcc/12.2.0/include/c++/12.2.0/bits/basic_string.h:618:28: missed: statement clobbers memory: std::__throw_logic_error ("basic_string: construction from null is not valid");
+lib/results.cpp:37:66: missed: statement clobbers memory: _75 = __cxa_allocate_exception (16);
+lib/results.cpp:37:9: missed: not vectorized: statement can throw an exception: std::invalid_argument::invalid_argument (_75, "results map cannot be empty");
+lib/results.cpp:37:66: missed: statement clobbers memory: __cxa_throw (_75, &_ZTISt16invalid_argument, __dt_comp );
+lib/results.cpp:37:66: missed: statement clobbers memory: __cxa_free_exception (_75);

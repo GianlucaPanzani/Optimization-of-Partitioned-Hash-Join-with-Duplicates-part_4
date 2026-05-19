@@ -1,6 +1,6 @@
-// hashjoin_seq.cpp
+// hashjoin_omp_loop_opt_wb.cpp
 //
-// Sequential reference for Module 2
+// Loop-level OpenMP implementation for Module 3
 // Partitioned Hash Join with Duplicates
 //
 // This code is intentionally written to be simple and readable.
@@ -72,8 +72,8 @@
 //   - two checksums for correctness verification
 //
 
-#include <chrono>
 #include <algorithm>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -87,6 +87,8 @@
 #include <string>
 #include <string_view>
 #include <vector>
+
+#include <omp.h>
 
 #include "lib/timing.hpp"
 #include "lib/results.hpp"
@@ -137,59 +139,99 @@ static void usage(const char* prog) {
     std::cerr
         << "Usage:\n"
         << "  " << prog
-        << " -nr NR -ns NS -seed SEED -max-key K -p P [--dataset-type TYPE] [--mpi-nodes N]\n\n"
+        << " -nr NR -ns NS -seed SEED -max-key K -p P [--partition-threads T] [--join-threads T] [--mpi-nodes N]\n\n"
         << "Parameters:\n"
         << "  -nr         Number of records in relation R\n"
         << "  -ns         Number of records in relation S\n"
         << "  -seed       Deterministic seed\n"
         << "  -max-key    Keys are generated in [0, max-key)\n"
         << "  -p          Number of partitions (power of two required in this reference code)\n"
-        << "  --dataset-type / -dataset-type             uniform|skewed_<record_pct>_<hot_partition_pct>\n"
+        << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
+        << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n"
         << "  --mpi-nodes / -mpi-nodes                   Accepted for launcher compatibility and ignored\n"
         << "  --mpi-partition-strategy / -mpi-partition-strategy  Accepted for launcher compatibility and ignored\n"
-        << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
-        << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n";
+        << "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n";
 }
 static bool is_power_of_two(std::uint32_t x) {
     return x != 0 && (x & (x - 1U)) == 0;
 }
 
-struct DatasetMetadata {
-    std::string dataset = "uniform";
-    double skew_fraction = 0.0;
-    double skew_partition_fraction = 1.0;
+
+// ------------------------------------------------------------
+// OpenMP configuration
+// ------------------------------------------------------------
+//
+// This loop-level OpenMP version is intentionally configurable from the
+// command line, so that a bash script can perform a grid search over thread
+// counts, schedules, chunk sizes, and partitioning block granularity.
+//
+// The implementation uses schedule(runtime) in the OpenMP loops and calls
+// omp_set_schedule(...) immediately before each phase. This avoids relying on
+// one global OMP_SCHEDULE value for all phases: the partitioning and join
+// phases can be tuned independently.
+//
+struct OmpConfig {
+    int partition_threads = 1;
+    int join_threads = 1;
+    omp_sched_t partition_schedule = omp_sched_static;
+    omp_sched_t join_schedule = omp_sched_static;
+    int partition_chunk = 0;
+    int join_chunk = 0;
+    std::size_t partition_block_size = 65536;
+    std::string partition_schedule_name = "static";
+    std::string join_schedule_name = "static";
+    std::string dataset_type_name = "uniform";
 };
 
-static DatasetMetadata dataset_metadata_from_type(const std::string& dataset_type) {
-    DatasetMetadata metadata;
-    if (dataset_type == "uniform") {
-        return metadata;
-    }
-
-    const std::string prefix = "skewed_";
-    if (dataset_type.rfind(prefix, 0) != 0) {
-        metadata.dataset = dataset_type;
-        return metadata;
-    }
-
-    const std::string rest = dataset_type.substr(prefix.size());
-    const std::size_t separator = rest.find('_');
-    if (separator == std::string::npos) {
-        metadata.dataset = "skewed";
-        return metadata;
-    }
-
-    try {
-        metadata.dataset = "skewed";
-        metadata.skew_fraction = static_cast<double>(std::stoul(rest.substr(0, separator))) / 100.0;
-        metadata.skew_partition_fraction = static_cast<double>(std::stoul(rest.substr(separator + 1))) / 100.0;
-    } catch (const std::exception&) {
-        metadata.dataset = "skewed";
-        metadata.skew_fraction = 0.0;
-        metadata.skew_partition_fraction = 1.0;
-    }
-    return metadata;
+static bool parse_omp_schedule_kind(const std::string& s, omp_sched_t& kind) {
+    if (s == "static")  { kind = omp_sched_static;  return true; }
+    if (s == "dynamic") { kind = omp_sched_dynamic; return true; }
+    if (s == "guided")  { kind = omp_sched_guided;  return true; }
+    if (s == "auto")    { kind = omp_sched_auto;    return true; }
+    return false;
 }
+
+static int checked_thread_count(std::uint64_t value, const char* name) {
+    if (value == 0 || value > static_cast<std::uint64_t>(std::numeric_limits<int>::max())) {
+        throw std::runtime_error(std::string("Invalid ") + name + ": must be in [1, INT_MAX]");
+    }
+    return static_cast<int>(value);
+}
+
+static int checked_chunk_size(std::uint64_t value, const char* name) {
+    if (value > static_cast<std::uint64_t>(std::numeric_limits<int>::max())) {
+        throw std::runtime_error(std::string("Invalid ") + name + ": too large");
+    }
+    return static_cast<int>(value); // 0 means runtime/compiler default
+}
+
+
+// ------------------------------------------------------------
+// Deterministic pseudo-random generation
+// ------------------------------------------------------------
+//
+// We use splitmix64 to generate reproducible keys and also for checksum.
+// https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
+//
+// splitmix64_next is used as a deterministic pseudo-random generator step,
+// while splitmix64 is used as a stateless 64-bit mixing function for checksums. 
+//
+static inline std::uint64_t splitmix64_mix(std::uint64_t x) {
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+    x = x ^ (x >> 31);
+    return x;
+}
+static inline std::uint64_t splitmix64(std::uint64_t x) {
+    return splitmix64_mix(x + 0x9e3779b97f4a7c15ULL);
+}
+static inline std::uint64_t splitmix64_next(std::uint64_t& state) {
+    state += 0x9e3779b97f4a7c15ULL;
+    return splitmix64_mix(state);
+}
+
+
+
 
 // ------------------------------------------------------------
 // Dataset distribution configuration
@@ -241,31 +283,6 @@ static bool parse_dataset_type(const std::string& value, DatasetConfig& cfg) {
     } catch (...) {
         return false;
     }
-}
-
-
-// ------------------------------------------------------------
-// Deterministic pseudo-random generation
-// ------------------------------------------------------------
-//
-// We use splitmix64 to generate reproducible keys and also for checksum.
-// https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
-//
-// splitmix64_next is used as a deterministic pseudo-random generator step,
-// while splitmix64 is used as a stateless 64-bit mixing function for checksums. 
-//
-static inline std::uint64_t splitmix64_mix(std::uint64_t x) {
-    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
-    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
-    x = x ^ (x >> 31);
-    return x;
-}
-static inline std::uint64_t splitmix64(std::uint64_t x) {
-    return splitmix64_mix(x + 0x9e3779b97f4a7c15ULL);
-}
-static inline std::uint64_t splitmix64_next(std::uint64_t& state) {
-    state += 0x9e3779b97f4a7c15ULL;
-    return splitmix64_mix(state);
 }
 
 static inline std::uint32_t compute_partition_id(std::uint64_t key, std::uint32_t P);
@@ -344,22 +361,67 @@ static std::vector<std::uint64_t> build_skew_key_pool(std::uint32_t P,
     return pool;
 }
 
-// ------------------------------------------------------------
-// Histogram
-// ------------------------------------------------------------
-//
-// Count how many records go to each partition.
-//
-// hist[pid] = number of records whose key maps to pid
-//
-static std::vector<std::size_t> compute_histogram(const std::vector<Record>& data, std::uint32_t P) {
-    std::vector<std::size_t> hist(P, 0);
 
-    for (const auto& record : data) {
-        const std::uint32_t pid = compute_partition_id(record.key, P);
-        ++hist[pid];
+// ------------------------------------------------------------
+// Blocked histogram for OpenMP partitioning
+// ------------------------------------------------------------
+//
+// A naive parallel scatter with one shared cursor per partition would require
+// an atomic increment for every record. That is correct but usually too costly.
+//
+// Instead, this implementation splits the input into contiguous blocks. For
+// each block we compute a private histogram. Then, for each partition, we prefix
+// the per-block counts to obtain a disjoint output range for every block.
+// The scatter phase can then run in parallel without atomics and without races.
+//
+struct HistogramResult {
+    std::vector<std::size_t> hist;
+    std::vector<std::size_t> block_hist; // flattened: block_hist[block * P + pid]
+    std::size_t num_blocks = 0;
+};
+
+static HistogramResult compute_histogram(const std::vector<Record>& data,
+                                         std::uint32_t P,
+                                         const OmpConfig& cfg) {
+    const std::size_t n = data.size();
+    const std::size_t block_size = cfg.partition_block_size;
+    const std::size_t num_blocks = (n + block_size - 1) / block_size;
+    const std::size_t P_size = static_cast<std::size_t>(P);
+
+    HistogramResult out;
+    out.hist.assign(P_size, 0);
+    out.block_hist.assign(num_blocks * P_size, 0);
+    out.num_blocks = num_blocks;
+
+    omp_set_schedule(cfg.partition_schedule, cfg.partition_chunk);
+
+    #pragma omp parallel num_threads(cfg.partition_threads) default(none) shared(data, out) firstprivate(P, P_size, block_size, num_blocks)
+    {
+        #pragma omp for schedule(runtime)
+        for (std::int64_t b_signed = 0; b_signed < static_cast<std::int64_t>(num_blocks); ++b_signed) {
+            const std::size_t b = static_cast<std::size_t>(b_signed);
+            const std::size_t begin = b * block_size;
+            const std::size_t end = std::min(begin + block_size, data.size());
+            std::size_t* local = out.block_hist.data() + b * P_size;
+
+            for (std::size_t i = begin; i < end; ++i) {
+                const std::uint32_t pid = compute_partition_id(data[i].key, P);
+                ++local[pid];
+            }
+        }
+
+        #pragma omp for schedule(static)
+        for (std::int64_t pid_signed = 0; pid_signed < static_cast<std::int64_t>(P); ++pid_signed) {
+            const std::size_t pid = static_cast<std::size_t>(pid_signed);
+            std::size_t sum = 0;
+            for (std::size_t b = 0; b < num_blocks; ++b) {
+                sum += out.block_hist[b * P_size + pid];
+            }
+            out.hist[pid] = sum;
+        }
     }
-    return hist;
+
+    return out;
 }
 
 // ------------------------------------------------------------
@@ -390,21 +452,51 @@ static std::vector<std::size_t> exclusive_prefix_sum(const std::vector<std::size
 // ------------------------------------------------------------
 //
 // Reorder records so that all records belonging to the same partition become
-// contiguous in memory.
-//
-// We use a write cursor per partition, initialized from the begin offsets.
+// contiguous in memory. This OpenMP version is race-free without atomics:
+// every input block receives a private output interval for each partition.
 //
 static std::vector<Record> scatter_partitioned(const std::vector<Record>& data,
                                                std::uint32_t P,
-                                               const std::vector<std::size_t>& begin) {
+                                               const std::vector<std::size_t>& begin,
+                                               const HistogramResult& hist_result,
+                                               const OmpConfig& cfg) {
     std::vector<Record> out(data.size());
 
-    // Current write position for each partition.
-    std::vector<std::size_t> next = begin;
+    const std::size_t num_blocks = hist_result.num_blocks;
+    const std::size_t block_size = cfg.partition_block_size;
+    const std::size_t P_size = static_cast<std::size_t>(P);
+    std::vector<std::size_t> block_offsets(num_blocks * P_size, 0);
 
-    for (const auto& record : data) {
-        const std::uint32_t pid = compute_partition_id(record.key, P);
-        out[next[pid]++] = record;
+    omp_set_schedule(cfg.partition_schedule, cfg.partition_chunk);
+
+    #pragma omp parallel num_threads(cfg.partition_threads) default(none) shared(data, out, block_offsets, hist_result, begin) firstprivate(P, P_size, block_size, num_blocks)
+    {
+        #pragma omp for schedule(static)
+        for (std::int64_t pid_signed = 0; pid_signed < static_cast<std::int64_t>(P); ++pid_signed) {
+            const std::size_t pid = static_cast<std::size_t>(pid_signed);
+            std::size_t running = begin[pid];
+            for (std::size_t b = 0; b < num_blocks; ++b) {
+                block_offsets[b * P_size + pid] = running;
+                running += hist_result.block_hist[b * P_size + pid];
+            }
+        }
+
+        #pragma omp for schedule(runtime)
+        for (std::int64_t b_signed = 0; b_signed < static_cast<std::int64_t>(num_blocks); ++b_signed) {
+            const std::size_t b = static_cast<std::size_t>(b_signed);
+            const std::size_t in_begin = b * block_size;
+            const std::size_t in_end = std::min(in_begin + block_size, data.size());
+
+            std::vector<std::size_t> next(P_size);
+            for (std::size_t pid = 0; pid < P_size; ++pid) {
+                next[pid] = block_offsets[b * P_size + pid];
+            }
+
+            for (std::size_t i = in_begin; i < in_end; ++i) {
+                const std::uint32_t pid = compute_partition_id(data[i].key, P);
+                out[next[pid]++] = data[i];
+            }
+        }
     }
 
     return out;
@@ -427,6 +519,65 @@ struct PartitionedRelation {
     std::vector<std::size_t> end;
 };
 
+struct JoinWorkItem {
+    std::uint32_t pid = 0;
+    std::size_t s_begin = 0;
+    std::size_t s_end = 0;
+};
+
+static std::vector<JoinWorkItem> build_join_work_items(const PartitionedRelation& Rpart,
+                                                       const PartitionedRelation& Spart,
+                                                       std::uint32_t P,
+                                                       int join_threads) {
+    std::vector<std::uint32_t> order(P);
+    std::vector<std::size_t> partition_work(P, 0);
+    std::size_t total_join_work = 0;
+
+    for (std::uint32_t pid = 0; pid < P; ++pid) {
+        order[pid] = pid;
+        partition_work[pid] = (Rpart.end[pid] - Rpart.begin[pid]) +
+                              (Spart.end[pid] - Spart.begin[pid]);
+        total_join_work += partition_work[pid];
+    }
+
+    std::sort(order.begin(), order.end(), [&](std::uint32_t a, std::uint32_t b) {
+        return partition_work[a] > partition_work[b];
+    });
+
+    // Target amount of work per join thread, measured as records to scan.
+    const std::size_t thread_count = std::max<std::size_t>(1, static_cast<std::size_t>(join_threads));
+    const std::size_t work_per_thread = std::max<std::size_t>(
+        1, (total_join_work + thread_count - 1) / thread_count
+    );
+
+    std::vector<JoinWorkItem> work_items;
+    for (const std::uint32_t pid : order) {
+        const std::size_t r_size = Rpart.end[pid] - Rpart.begin[pid];
+        const std::size_t s_size = Spart.end[pid] - Spart.begin[pid];
+        if (r_size == 0 || s_size == 0) {
+            continue;
+        }
+
+        // Number of join-thread slots assigned to this partition. Large
+        // partitions are split into multiple S subranges; small partitions keep
+        // one slot. The clamp avoids empty subranges and over-assignment.
+        std::size_t threads_for_partition =
+            (partition_work[pid] + work_per_thread - 1) / work_per_thread;
+        threads_for_partition = std::max<std::size_t>(1, threads_for_partition);
+        threads_for_partition = std::min(threads_for_partition, thread_count);
+        threads_for_partition = std::min(threads_for_partition, s_size);
+
+        for (std::size_t part = 0; part < threads_for_partition; ++part) {
+            const std::size_t sub_begin = Spart.begin[pid] + (part * s_size) / threads_for_partition;
+            const std::size_t sub_end = Spart.begin[pid] + ((part + 1) * s_size) / threads_for_partition;
+            work_items.push_back(JoinWorkItem{pid, sub_begin, sub_end});
+        }
+    }
+
+    return work_items;
+}
+
+
 // ------------------------------------------------------------
 // Full partitioning pipeline for one relation
 // ------------------------------------------------------------
@@ -437,14 +588,16 @@ struct PartitionedRelation {
 // After this phase, all records belonging to the same partition
 // are stored contiguously in memory, enabling independent processing.
 //
-static PartitionedRelation partition_relation(const std::vector<Record>& rel, std::uint32_t P) {
-    const auto hist = compute_histogram(rel, P);
-    const auto begin = exclusive_prefix_sum(hist);
-    auto data = scatter_partitioned(rel, P, begin);
+static PartitionedRelation partition_relation(const std::vector<Record>& rel,
+                                              std::uint32_t P,
+                                              const OmpConfig& cfg) {
+    const auto hist_result = compute_histogram(rel, P, cfg);
+    const auto begin = exclusive_prefix_sum(hist_result.hist);
+    auto data = scatter_partitioned(rel, P, begin, hist_result, cfg);
 
     std::vector<std::size_t> end(P, 0);
     for (std::uint32_t pid = 0; pid < P; ++pid) {
-        end[pid] = begin[pid] + hist[pid];
+        end[pid] = begin[pid] + hist_result.hist[pid];
     }
 
     return PartitionedRelation{
@@ -537,31 +690,30 @@ private:
 // Each record in S contributes as many matches as the multiplicity
 // of its key in the corresponding partition of R.
 //
-static JoinResult join_one_partition(const PartitionedRelation& Rpart,
-                                     const PartitionedRelation& Spart,
-                                     std::uint32_t pid) {
+static JoinResult join_one_partition_subrange(const PartitionedRelation& Rpart,
+                                              const PartitionedRelation& Spart,
+                                              std::uint32_t pid,
+                                              std::size_t s_begin,
+                                              std::size_t s_end) {
     JoinResult result{};
 
     const std::size_t r_begin = Rpart.begin[pid];
     const std::size_t r_end = Rpart.end[pid];
-    const std::size_t s_begin = Spart.begin[pid];
-    const std::size_t s_end = Spart.end[pid];
 
-    // Nothing to do if either partition is empty.
+    // Nothing to do if the build side or this assigned probe subrange is empty.
     if (r_begin == r_end || s_begin == s_end) {
         return result;
     }
 
-    // Build phase with a flat open-addressing table.
-    // This reduces pointer chasing versus std::unordered_map.
+    // Each work item builds a private table and writes a private result. The
+    // S subranges are therefore independent and need no mutex in the hot path.
     FlatCountTable countR(r_end - r_begin);
 
     for (std::size_t i = r_begin; i < r_end; ++i) {
         countR.increment(Rpart.data[i].key);
     }
 
-    // Probe phase:
-    // for each key in S_p, if it exists in countR, add countR[key] matches.
+    // Probe only the subrange assigned to this logical join thread.
     for (std::size_t i = s_begin; i < s_end; ++i) {
         const std::uint64_t key = Spart.data[i].key;
         const std::uint32_t multiplicity = countR.find_count(key);
@@ -593,27 +745,36 @@ static JoinResult join_one_partition(const PartitionedRelation& Rpart,
 //
 static JoinResult partitioned_hash_join(const std::vector<Record>& R,
                                         const std::vector<Record>& S,
-                                        std::uint32_t p) {
+                                        std::uint32_t p,
+                                        const OmpConfig& cfg) {
     JoinResult result{};
 
-    // Phase 1: partition both relations
     double t0 = get_time();
-    const PartitionedRelation Rpart = partition_relation(R, p);
-    const PartitionedRelation Spart = partition_relation(S, p);
+    const PartitionedRelation Rpart = partition_relation(R, p, cfg);
+    const PartitionedRelation Spart = partition_relation(S, p, cfg);
     double t1 = get_time();
     result.part_time_sec = t1 - t0;
 
-    // Phase 2 + 3: local joins and global reduction
+    const std::vector<JoinWorkItem> work_items = build_join_work_items(Rpart, Spart, p, cfg.join_threads);
+
     t0 = get_time();
-    for (std::uint32_t pid = 0; pid < p; ++pid) {
-        const JoinResult local = join_one_partition(Rpart, Spart, pid);
+    std::vector<JoinResult> partial(work_items.size());
+    const std::size_t item_count = work_items.size();
+
+    #pragma omp parallel for num_threads(cfg.join_threads) schedule(dynamic, 1) default(none) shared(partial, Rpart, Spart, work_items) firstprivate(item_count)
+    for (std::int64_t idx_signed = 0; idx_signed < static_cast<std::int64_t>(item_count); ++idx_signed) {
+        const std::size_t idx = static_cast<std::size_t>(idx_signed);
+        const JoinWorkItem& item = work_items[idx];
+        partial[idx] = join_one_partition_subrange(Rpart, Spart, item.pid, item.s_begin, item.s_end);
+    }
+
+    for (const JoinResult& local : partial) {
         result.join_count += local.join_count;
         result.checksum1 += local.checksum1;
         result.checksum2 += local.checksum2;
     }
     t1 = get_time();
     result.join_time_sec = t1 - t0;
-
     return result;
 }
 
@@ -645,12 +806,15 @@ static JoinResult naive_join_verifier(const std::vector<Record>& R,
 // ------------------------------------------------------------
 int main(int argc, char** argv) {
     std::uint64_t nr = 0, ns = 0, seed = 0, max_key = 0, p = 0;
-    std::uint64_t part_threads = 1, join_threads = 1;
-    std::uint64_t partition_chunk = 0, join_chunk = 0, partition_block_size = 32768;
-    std::uint64_t partition_task_grain = 1, join_task_grain = 1, offset_task_grain = 1;
+    std::uint64_t part_threads_u64 = static_cast<std::uint64_t>(omp_get_max_threads());
+    std::uint64_t join_threads_u64 = static_cast<std::uint64_t>(omp_get_max_threads());
+    std::uint64_t partition_chunk_u64 = 0;
+    std::uint64_t join_chunk_u64 = 0;
+    std::uint64_t partition_block_size_u64 = 65536;
     std::uint64_t mpi_nodes = 1;
+    std::string partition_schedule_name = "static";
+    std::string join_schedule_name = "static";
     std::string dataset_type_name = "uniform";
-    std::string partition_schedule = "static", join_schedule = "static";
     std::string mpi_partition_strategy = "block";
 
     if (!read_arg_u64(argc, argv, {"-nr"}, nr) ||
@@ -661,28 +825,63 @@ int main(int argc, char** argv) {
         usage(argv[0]);
         return 1;
     }
-    read_arg_string(argc, argv, {"--dataset-type", "-dataset-type", "--dataset", "-dataset"}, dataset_type_name);
-    read_arg_u64(argc, argv, {"--partition-threads", "-partition-threads"}, part_threads);
-    read_arg_u64(argc, argv, {"--join-threads", "-join-threads"}, join_threads);
-    read_arg_string(argc, argv, {"--partition-schedule", "-partition-schedule"}, partition_schedule);
-    read_arg_string(argc, argv, {"--join-schedule", "-join-schedule"}, join_schedule);
-    read_arg_u64(argc, argv, {"--partition-chunk", "-partition-chunk"}, partition_chunk);
-    read_arg_u64(argc, argv, {"--join-chunk", "-join-chunk"}, join_chunk);
-    read_arg_u64(argc, argv, {"--partition-block-size", "-partition-block-size"}, partition_block_size);
-    read_arg_u64(argc, argv, {"--partition-task-grain", "-partition-task-grain"}, partition_task_grain);
-    read_arg_u64(argc, argv, {"--join-task-grain", "-join-task-grain"}, join_task_grain);
-    read_arg_u64(argc, argv, {"--offset-task-grain", "-offset-task-grain"}, offset_task_grain);
+    read_arg_u64(argc, argv, {"--partition-threads", "-partition-threads"}, part_threads_u64);
+    read_arg_u64(argc, argv, {"--join-threads", "-join-threads"}, join_threads_u64);
+    read_arg_u64(argc, argv, {"--partition-chunk", "-partition-chunk"}, partition_chunk_u64);
+    read_arg_u64(argc, argv, {"--join-chunk", "-join-chunk"}, join_chunk_u64);
+    read_arg_u64(argc, argv, {"--partition-block-size", "-partition-block-size"}, partition_block_size_u64);
     read_arg_u64(argc, argv, {"--mpi-nodes", "-mpi-nodes"}, mpi_nodes);
+    read_arg_string(argc, argv, {"--partition-schedule", "-partition-schedule"}, partition_schedule_name);
+    read_arg_string(argc, argv, {"--join-schedule", "-join-schedule"}, join_schedule_name);
+    read_arg_string(argc, argv, {"--dataset-type", "-dataset-type", "--dataset", "-dataset"}, dataset_type_name);
     read_arg_string(argc, argv, {"--mpi-partition-strategy", "-mpi-partition-strategy"}, mpi_partition_strategy);
 
     if (p > std::numeric_limits<std::uint32_t>::max()) {
         std::cerr << "Error: P too large.\n";
         return 1;
     }
-    if (part_threads == 0 || join_threads == 0) {
-        std::cerr << "Error: thread counts must be greater than zero.\n";
+
+    OmpConfig cfg{};
+    try {
+        cfg.partition_threads = checked_thread_count(part_threads_u64, "partition thread count");
+        cfg.join_threads = checked_thread_count(join_threads_u64, "join thread count");
+        cfg.partition_chunk = checked_chunk_size(partition_chunk_u64, "partition chunk size");
+        cfg.join_chunk = checked_chunk_size(join_chunk_u64, "join chunk size");
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
         return 1;
     }
+    if (partition_block_size_u64 == 0) {
+        std::cerr << "Error: partition block size must be greater than zero.\n";
+        return 1;
+    }
+    cfg.partition_block_size = static_cast<std::size_t>(partition_block_size_u64);
+    cfg.partition_schedule_name = partition_schedule_name;
+    cfg.join_schedule_name = join_schedule_name;
+
+    if (!parse_omp_schedule_kind(partition_schedule_name, cfg.partition_schedule)) {
+        std::cerr << "Error: invalid partition schedule '" << partition_schedule_name
+                  << "'. Use static, dynamic, guided, or auto.\n";
+        return 1;
+    }
+    if (!parse_omp_schedule_kind(join_schedule_name, cfg.join_schedule)) {
+        std::cerr << "Error: invalid join schedule '" << join_schedule_name
+                  << "'. Use static, dynamic, guided, or auto.\n";
+        return 1;
+    }
+
+
+
+    DatasetConfig dataset_cfg{};
+    if (!parse_dataset_type(dataset_type_name, dataset_cfg)) {
+        std::cerr << "Error: invalid dataset type '" << dataset_type_name
+                  << "'. Use uniform or skewed_<record_percentage>_<hot_partition_percentage>, e.g. skewed_80_5.\n";
+        return 1;
+    }
+
+    // Keep benchmark runs controlled. Affinity can still be set externally with
+    // OMP_PROC_BIND and OMP_PLACES.
+    omp_set_dynamic(0);
 
     const std::uint32_t P = static_cast<std::uint32_t>(p);
 
@@ -691,13 +890,6 @@ int main(int argc, char** argv) {
 	// function correctly handles arbitrary P
     if (!is_power_of_two(P)) {
         std::cerr << "Error: in this reference implementation, P must be a power of two.\n";
-        return 1;
-    }
-
-    DatasetConfig dataset_cfg;
-    if (!parse_dataset_type(dataset_type_name, dataset_cfg)) {
-        std::cerr << "Error: invalid dataset type '" << dataset_type_name
-                  << "'. Use uniform or skewed_<record_percentage>_<hot_partition_percentage>, e.g. skewed_80_5.\n";
         return 1;
     }
 
@@ -711,14 +903,14 @@ int main(int argc, char** argv) {
 
     // Time only the join pipeline, not input generation.
     double t0 = get_time();
-    const JoinResult result = partitioned_hash_join(R, S, P);
+    const JoinResult result = partitioned_hash_join(R, S, P, cfg);
     double t1 = get_time();
     const double tot_time_sec = t1 - t0;
     bool verified = false;
     
     // Resulted output
     std::cout << "executable=" << std::filesystem::path(argv[0]).stem().string() << "\n";
-    std::cout << "dataset-type=" << dataset_type_name << "\n";
+    std::cout << "dataset-type=" << dataset_cfg.type << "\n";
     std::cout << "join_count=" << result.join_count << "\n";
     std::cout << "checksum1=" << result.checksum1 << "\n";
     std::cout << "checksum2=" << result.checksum2 << "\n";
@@ -744,37 +936,30 @@ int main(int argc, char** argv) {
     const double part_throughput = compute_throughput(total_elements, result.part_time_sec);
     const double join_throughput = compute_throughput(total_elements, result.join_time_sec);
     const double total_throughput = compute_throughput(total_elements, tot_time_sec);
-    const DatasetMetadata dataset_metadata = dataset_metadata_from_type(dataset_type_name);
     const ResultMap results_map = {
         {"checksum1", std::to_string(result.checksum1)},
         {"checksum2", std::to_string(result.checksum2)},
-        {"dataset", dataset_metadata.dataset},
-        {"dataset_type", dataset_type_name},
-        {"join_chunk", std::to_string(join_chunk)},
         {"join_count", std::to_string(result.join_count)},
         {"verified", verified ? "true" : "false"},
-        {"join_schedule", join_schedule},
-        {"join_task_grain", std::to_string(join_task_grain)},
-        {"join_threads", std::to_string(join_threads)},
+        {"dataset_type", dataset_cfg.type},
         {"join_throughput", std::to_string(join_throughput)},
+        {"total_throughput", std::to_string(total_throughput)},
+        {"partition_time", std::to_string(result.part_time_sec)},
+        {"partition_throughput", std::to_string(part_throughput)},
         {"join_time", std::to_string(result.join_time_sec)},
-        {"max_key", std::to_string(max_key)},
+        {"partition_threads", std::to_string(cfg.partition_threads)},
+        {"join_threads", std::to_string(cfg.join_threads)},
+        {"partition_schedule", cfg.partition_schedule_name},
+        {"join_schedule", cfg.join_schedule_name},
+        {"partition_chunk", std::to_string(cfg.partition_chunk)},
+        {"join_chunk", std::to_string(cfg.join_chunk)},
+        {"partition_block_size", std::to_string(cfg.partition_block_size)},
         {"mpi_nodes", std::to_string(mpi_nodes)},
         {"mpi_partition_strategy", mpi_partition_strategy},
+        {"max_key", std::to_string(max_key)},
         {"nr", std::to_string(NR)},
         {"ns", std::to_string(NS)},
-        {"offset_task_grain", std::to_string(offset_task_grain)},
-        {"partition_block_size", std::to_string(partition_block_size)},
-        {"partition_chunk", std::to_string(partition_chunk)},
-        {"partition_schedule", partition_schedule},
-        {"partition_task_grain", std::to_string(partition_task_grain)},
-        {"partition_threads", std::to_string(part_threads)},
-        {"partition_throughput", std::to_string(part_throughput)},
-        {"partition_time", std::to_string(result.part_time_sec)},
-        {"skew_fraction", std::to_string(dataset_metadata.skew_fraction)},
-        {"skew_partition_fraction", std::to_string(dataset_metadata.skew_partition_fraction)},
-        {"time_sec", std::to_string(tot_time_sec)},
-        {"total_throughput", std::to_string(total_throughput)},
+        {"time_sec", std::to_string(tot_time_sec)}
     };
     const std::string filepath = "results/" + std::filesystem::path(argv[0]).stem().string() + ".csv";
     append_to_csv(filepath, results_map);

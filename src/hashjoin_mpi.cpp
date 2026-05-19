@@ -1,6 +1,6 @@
-// hashjoin_seq.cpp
+// hashjoin_mpi.cpp
 //
-// Sequential reference for Module 2
+// MPI implementation for Module 4
 // Partitioned Hash Join with Duplicates
 //
 // This code is intentionally written to be simple and readable.
@@ -72,8 +72,9 @@
 //   - two checksums for correctness verification
 //
 
-#include <chrono>
 #include <algorithm>
+#include <array>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -87,6 +88,8 @@
 #include <string>
 #include <string_view>
 #include <vector>
+
+#include <mpi.h>
 
 #include "lib/timing.hpp"
 #include "lib/results.hpp"
@@ -137,59 +140,87 @@ static void usage(const char* prog) {
     std::cerr
         << "Usage:\n"
         << "  " << prog
-        << " -nr NR -ns NS -seed SEED -max-key K -p P [--dataset-type TYPE] [--mpi-nodes N]\n\n"
+        << " -nr NR -ns NS -seed SEED -max-key K -p P [--mpi-nodes N] [--mpi-partition-strategy block|cyclic]\n\n"
         << "Parameters:\n"
         << "  -nr         Number of records in relation R\n"
         << "  -ns         Number of records in relation S\n"
         << "  -seed       Deterministic seed\n"
         << "  -max-key    Keys are generated in [0, max-key)\n"
         << "  -p          Number of partitions (power of two required in this reference code)\n"
-        << "  --dataset-type / -dataset-type             uniform|skewed_<record_pct>_<hot_partition_pct>\n"
-        << "  --mpi-nodes / -mpi-nodes                   Accepted for launcher compatibility and ignored\n"
-        << "  --mpi-partition-strategy / -mpi-partition-strategy  Accepted for launcher compatibility and ignored\n"
-        << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
-        << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n";
+        << "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n"
+        << "  --mpi-nodes / -mpi-nodes                   Requested MPI nodes/ranks used by the algorithm (1..8)\n"
+        << "  --mpi-partition-strategy / -mpi-partition-strategy  block|cyclic partition ownership\n"
+        << "  --partition-threads / -partition-threads   Accepted for launcher compatibility and ignored\n"
+        << "  --join-threads / -join-threads             Accepted for launcher compatibility and ignored\n";
 }
 static bool is_power_of_two(std::uint32_t x) {
     return x != 0 && (x & (x - 1U)) == 0;
 }
 
-struct DatasetMetadata {
-    std::string dataset = "uniform";
-    double skew_fraction = 0.0;
-    double skew_partition_fraction = 1.0;
+
+// ------------------------------------------------------------
+// MPI configuration
+// ------------------------------------------------------------
+struct MpiConfig {
+    int requested_nodes = 1;
+    int world_rank = 0;
+    int world_size = 1;
+    int active_ranks = 1;
+    std::string partition_strategy = "block";
 };
 
-static DatasetMetadata dataset_metadata_from_type(const std::string& dataset_type) {
-    DatasetMetadata metadata;
-    if (dataset_type == "uniform") {
-        return metadata;
+static int checked_mpi_nodes(std::uint64_t value) {
+    if (value == 0 || value > 8) {
+        throw std::runtime_error("Invalid MPI node count: must be in [1, 8]");
     }
-
-    const std::string prefix = "skewed_";
-    if (dataset_type.rfind(prefix, 0) != 0) {
-        metadata.dataset = dataset_type;
-        return metadata;
-    }
-
-    const std::string rest = dataset_type.substr(prefix.size());
-    const std::size_t separator = rest.find('_');
-    if (separator == std::string::npos) {
-        metadata.dataset = "skewed";
-        return metadata;
-    }
-
-    try {
-        metadata.dataset = "skewed";
-        metadata.skew_fraction = static_cast<double>(std::stoul(rest.substr(0, separator))) / 100.0;
-        metadata.skew_partition_fraction = static_cast<double>(std::stoul(rest.substr(separator + 1))) / 100.0;
-    } catch (const std::exception&) {
-        metadata.dataset = "skewed";
-        metadata.skew_fraction = 0.0;
-        metadata.skew_partition_fraction = 1.0;
-    }
-    return metadata;
+    return static_cast<int>(value);
 }
+
+static bool parse_mpi_partition_strategy(const std::string& value) {
+    return value == "block" || value == "cyclic";
+}
+
+static bool owns_partition(std::uint32_t pid, std::uint32_t P, const MpiConfig& cfg) {
+    if (cfg.world_rank >= cfg.active_ranks) {
+        return false;
+    }
+    if (cfg.partition_strategy == "cyclic") {
+        return static_cast<int>(pid % static_cast<std::uint32_t>(cfg.active_ranks)) == cfg.world_rank;
+    }
+
+    const std::uint32_t active = static_cast<std::uint32_t>(cfg.active_ranks);
+    const std::uint32_t begin = (P * static_cast<std::uint32_t>(cfg.world_rank)) / active;
+    const std::uint32_t end = (P * static_cast<std::uint32_t>(cfg.world_rank + 1)) / active;
+    return pid >= begin && pid < end;
+}
+
+
+// ------------------------------------------------------------
+// Deterministic pseudo-random generation
+// ------------------------------------------------------------
+//
+// We use splitmix64 to generate reproducible keys and also for checksum.
+// https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
+//
+// splitmix64_next is used as a deterministic pseudo-random generator step,
+// while splitmix64 is used as a stateless 64-bit mixing function for checksums. 
+//
+static inline std::uint64_t splitmix64_mix(std::uint64_t x) {
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+    x = x ^ (x >> 31);
+    return x;
+}
+static inline std::uint64_t splitmix64(std::uint64_t x) {
+    return splitmix64_mix(x + 0x9e3779b97f4a7c15ULL);
+}
+static inline std::uint64_t splitmix64_next(std::uint64_t& state) {
+    state += 0x9e3779b97f4a7c15ULL;
+    return splitmix64_mix(state);
+}
+
+
+
 
 // ------------------------------------------------------------
 // Dataset distribution configuration
@@ -241,31 +272,6 @@ static bool parse_dataset_type(const std::string& value, DatasetConfig& cfg) {
     } catch (...) {
         return false;
     }
-}
-
-
-// ------------------------------------------------------------
-// Deterministic pseudo-random generation
-// ------------------------------------------------------------
-//
-// We use splitmix64 to generate reproducible keys and also for checksum.
-// https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
-//
-// splitmix64_next is used as a deterministic pseudo-random generator step,
-// while splitmix64 is used as a stateless 64-bit mixing function for checksums. 
-//
-static inline std::uint64_t splitmix64_mix(std::uint64_t x) {
-    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
-    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
-    x = x ^ (x >> 31);
-    return x;
-}
-static inline std::uint64_t splitmix64(std::uint64_t x) {
-    return splitmix64_mix(x + 0x9e3779b97f4a7c15ULL);
-}
-static inline std::uint64_t splitmix64_next(std::uint64_t& state) {
-    state += 0x9e3779b97f4a7c15ULL;
-    return splitmix64_mix(state);
 }
 
 static inline std::uint32_t compute_partition_id(std::uint64_t key, std::uint32_t P);
@@ -344,14 +350,10 @@ static std::vector<std::uint64_t> build_skew_key_pool(std::uint32_t P,
     return pool;
 }
 
+
 // ------------------------------------------------------------
 // Histogram
 // ------------------------------------------------------------
-//
-// Count how many records go to each partition.
-//
-// hist[pid] = number of records whose key maps to pid
-//
 static std::vector<std::size_t> compute_histogram(const std::vector<Record>& data, std::uint32_t P) {
     std::vector<std::size_t> hist(P, 0);
 
@@ -388,18 +390,10 @@ static std::vector<std::size_t> exclusive_prefix_sum(const std::vector<std::size
 // ------------------------------------------------------------
 // Scatter into a partitioned array
 // ------------------------------------------------------------
-//
-// Reorder records so that all records belonging to the same partition become
-// contiguous in memory.
-//
-// We use a write cursor per partition, initialized from the begin offsets.
-//
 static std::vector<Record> scatter_partitioned(const std::vector<Record>& data,
                                                std::uint32_t P,
                                                const std::vector<std::size_t>& begin) {
     std::vector<Record> out(data.size());
-
-    // Current write position for each partition.
     std::vector<std::size_t> next = begin;
 
     for (const auto& record : data) {
@@ -547,21 +541,17 @@ static JoinResult join_one_partition(const PartitionedRelation& Rpart,
     const std::size_t s_begin = Spart.begin[pid];
     const std::size_t s_end = Spart.end[pid];
 
-    // Nothing to do if either partition is empty.
+    // Nothing to do if the build side or this assigned probe subrange is empty.
     if (r_begin == r_end || s_begin == s_end) {
         return result;
     }
 
-    // Build phase with a flat open-addressing table.
-    // This reduces pointer chasing versus std::unordered_map.
     FlatCountTable countR(r_end - r_begin);
 
     for (std::size_t i = r_begin; i < r_end; ++i) {
         countR.increment(Rpart.data[i].key);
     }
 
-    // Probe phase:
-    // for each key in S_p, if it exists in countR, add countR[key] matches.
     for (std::size_t i = s_begin; i < s_end; ++i) {
         const std::uint64_t key = Spart.data[i].key;
         const std::uint32_t multiplicity = countR.find_count(key);
@@ -593,19 +583,21 @@ static JoinResult join_one_partition(const PartitionedRelation& Rpart,
 //
 static JoinResult partitioned_hash_join(const std::vector<Record>& R,
                                         const std::vector<Record>& S,
-                                        std::uint32_t p) {
+                                        std::uint32_t p,
+                                        const MpiConfig& cfg) {
     JoinResult result{};
 
-    // Phase 1: partition both relations
     double t0 = get_time();
     const PartitionedRelation Rpart = partition_relation(R, p);
     const PartitionedRelation Spart = partition_relation(S, p);
     double t1 = get_time();
     result.part_time_sec = t1 - t0;
 
-    // Phase 2 + 3: local joins and global reduction
     t0 = get_time();
     for (std::uint32_t pid = 0; pid < p; ++pid) {
+        if (!owns_partition(pid, p, cfg)) {
+            continue;
+        }
         const JoinResult local = join_one_partition(Rpart, Spart, pid);
         result.join_count += local.join_count;
         result.checksum1 += local.checksum1;
@@ -613,7 +605,6 @@ static JoinResult partitioned_hash_join(const std::vector<Record>& R,
     }
     t1 = get_time();
     result.join_time_sec = t1 - t0;
-
     return result;
 }
 
@@ -640,17 +631,46 @@ static JoinResult naive_join_verifier(const std::vector<Record>& R,
     return result;
 }
 
+static JoinResult reduce_join_result(const JoinResult& local, MPI_Comm comm) {
+    std::array<unsigned long long, 3> local_counts = {
+        static_cast<unsigned long long>(local.join_count),
+        static_cast<unsigned long long>(local.checksum1),
+        static_cast<unsigned long long>(local.checksum2)
+    };
+    std::array<unsigned long long, 3> global_counts = {0ULL, 0ULL, 0ULL};
+
+    MPI_Reduce(local_counts.data(), global_counts.data(), 3, MPI_UNSIGNED_LONG_LONG, MPI_SUM, 0, comm);
+
+    JoinResult global{};
+    global.join_count = static_cast<std::uint64_t>(global_counts[0]);
+    global.checksum1 = static_cast<std::uint64_t>(global_counts[1]);
+    global.checksum2 = static_cast<std::uint64_t>(global_counts[2]);
+    MPI_Reduce(&local.part_time_sec, &global.part_time_sec, 1, MPI_DOUBLE, MPI_MAX, 0, comm);
+    MPI_Reduce(&local.join_time_sec, &global.join_time_sec, 1, MPI_DOUBLE, MPI_MAX, 0, comm);
+    return global;
+}
+
 // ------------------------------------------------------------
 // Main
 // ------------------------------------------------------------
 int main(int argc, char** argv) {
+    MPI_Init(&argc, &argv);
+
+    int world_rank = 0;
+    int world_size = 1;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
     std::uint64_t nr = 0, ns = 0, seed = 0, max_key = 0, p = 0;
-    std::uint64_t part_threads = 1, join_threads = 1;
-    std::uint64_t partition_chunk = 0, join_chunk = 0, partition_block_size = 32768;
-    std::uint64_t partition_task_grain = 1, join_task_grain = 1, offset_task_grain = 1;
-    std::uint64_t mpi_nodes = 1;
+    std::uint64_t ignored_part_threads = 1;
+    std::uint64_t ignored_join_threads = 1;
+    std::uint64_t ignored_partition_chunk = 0;
+    std::uint64_t ignored_join_chunk = 0;
+    std::uint64_t ignored_partition_block_size = 65536;
+    std::uint64_t mpi_nodes_u64 = static_cast<std::uint64_t>(world_size);
+    std::string partition_schedule_name = "static";
+    std::string join_schedule_name = "static";
     std::string dataset_type_name = "uniform";
-    std::string partition_schedule = "static", join_schedule = "static";
     std::string mpi_partition_strategy = "block";
 
     if (!read_arg_u64(argc, argv, {"-nr"}, nr) ||
@@ -658,29 +678,69 @@ int main(int argc, char** argv) {
         !read_arg_u64(argc, argv, {"-seed"}, seed) ||
         !read_arg_u64(argc, argv, {"-max-key"}, max_key) ||
         !read_arg_u64(argc, argv, {"-p"}, p)) {
-        usage(argv[0]);
+        if (world_rank == 0) {
+            usage(argv[0]);
+        }
+        MPI_Finalize();
         return 1;
     }
+    read_arg_u64(argc, argv, {"--partition-threads", "-partition-threads"}, ignored_part_threads);
+    read_arg_u64(argc, argv, {"--join-threads", "-join-threads"}, ignored_join_threads);
+    read_arg_u64(argc, argv, {"--partition-chunk", "-partition-chunk"}, ignored_partition_chunk);
+    read_arg_u64(argc, argv, {"--join-chunk", "-join-chunk"}, ignored_join_chunk);
+    read_arg_u64(argc, argv, {"--partition-block-size", "-partition-block-size"}, ignored_partition_block_size);
+    read_arg_u64(argc, argv, {"--mpi-nodes", "-mpi-nodes"}, mpi_nodes_u64);
+    read_arg_string(argc, argv, {"--partition-schedule", "-partition-schedule"}, partition_schedule_name);
+    read_arg_string(argc, argv, {"--join-schedule", "-join-schedule"}, join_schedule_name);
     read_arg_string(argc, argv, {"--dataset-type", "-dataset-type", "--dataset", "-dataset"}, dataset_type_name);
-    read_arg_u64(argc, argv, {"--partition-threads", "-partition-threads"}, part_threads);
-    read_arg_u64(argc, argv, {"--join-threads", "-join-threads"}, join_threads);
-    read_arg_string(argc, argv, {"--partition-schedule", "-partition-schedule"}, partition_schedule);
-    read_arg_string(argc, argv, {"--join-schedule", "-join-schedule"}, join_schedule);
-    read_arg_u64(argc, argv, {"--partition-chunk", "-partition-chunk"}, partition_chunk);
-    read_arg_u64(argc, argv, {"--join-chunk", "-join-chunk"}, join_chunk);
-    read_arg_u64(argc, argv, {"--partition-block-size", "-partition-block-size"}, partition_block_size);
-    read_arg_u64(argc, argv, {"--partition-task-grain", "-partition-task-grain"}, partition_task_grain);
-    read_arg_u64(argc, argv, {"--join-task-grain", "-join-task-grain"}, join_task_grain);
-    read_arg_u64(argc, argv, {"--offset-task-grain", "-offset-task-grain"}, offset_task_grain);
-    read_arg_u64(argc, argv, {"--mpi-nodes", "-mpi-nodes"}, mpi_nodes);
     read_arg_string(argc, argv, {"--mpi-partition-strategy", "-mpi-partition-strategy"}, mpi_partition_strategy);
 
+    (void)ignored_part_threads;
+    (void)ignored_join_threads;
+    (void)ignored_partition_chunk;
+    (void)ignored_join_chunk;
+    (void)ignored_partition_block_size;
+    (void)partition_schedule_name;
+    (void)join_schedule_name;
+
     if (p > std::numeric_limits<std::uint32_t>::max()) {
-        std::cerr << "Error: P too large.\n";
+        if (world_rank == 0) {
+            std::cerr << "Error: P too large.\n";
+        }
+        MPI_Finalize();
         return 1;
     }
-    if (part_threads == 0 || join_threads == 0) {
-        std::cerr << "Error: thread counts must be greater than zero.\n";
+
+    MpiConfig cfg{};
+    try {
+        cfg.requested_nodes = checked_mpi_nodes(mpi_nodes_u64);
+    } catch (const std::exception& e) {
+        if (world_rank == 0) {
+            std::cerr << "Error: " << e.what() << "\n";
+        }
+        MPI_Finalize();
+        return 1;
+    }
+    if (!parse_mpi_partition_strategy(mpi_partition_strategy)) {
+        if (world_rank == 0) {
+            std::cerr << "Error: invalid MPI partition strategy '" << mpi_partition_strategy
+                      << "'. Use block or cyclic.\n";
+        }
+        MPI_Finalize();
+        return 1;
+    }
+    cfg.world_rank = world_rank;
+    cfg.world_size = world_size;
+    cfg.active_ranks = std::min(cfg.requested_nodes, world_size);
+    cfg.partition_strategy = mpi_partition_strategy;
+
+    DatasetConfig dataset_cfg{};
+    if (!parse_dataset_type(dataset_type_name, dataset_cfg)) {
+        if (world_rank == 0) {
+            std::cerr << "Error: invalid dataset type '" << dataset_type_name
+                      << "'. Use uniform or skewed_<record_percentage>_<hot_partition_percentage>, e.g. skewed_80_5.\n";
+        }
+        MPI_Finalize();
         return 1;
     }
 
@@ -690,14 +750,10 @@ int main(int argc, char** argv) {
 	// mapping used here. It may be removed if the chosen partition
 	// function correctly handles arbitrary P
     if (!is_power_of_two(P)) {
-        std::cerr << "Error: in this reference implementation, P must be a power of two.\n";
-        return 1;
-    }
-
-    DatasetConfig dataset_cfg;
-    if (!parse_dataset_type(dataset_type_name, dataset_cfg)) {
-        std::cerr << "Error: invalid dataset type '" << dataset_type_name
-                  << "'. Use uniform or skewed_<record_percentage>_<hot_partition_percentage>, e.g. skewed_80_5.\n";
+        if (world_rank == 0) {
+            std::cerr << "Error: in this reference implementation, P must be a power of two.\n";
+        }
+        MPI_Finalize();
         return 1;
     }
 
@@ -710,15 +766,23 @@ int main(int argc, char** argv) {
     const auto S = generate_relation(NS, seed ^ 0xdeadebdecdeedef1ULL, max_key, P, dataset_cfg);
 
     // Time only the join pipeline, not input generation.
+    MPI_Barrier(MPI_COMM_WORLD);
     double t0 = get_time();
-    const JoinResult result = partitioned_hash_join(R, S, P);
+    const JoinResult local_result = partitioned_hash_join(R, S, P, cfg);
+    const JoinResult result = reduce_join_result(local_result, MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
     double t1 = get_time();
     const double tot_time_sec = t1 - t0;
     bool verified = false;
+
+    if (world_rank != 0) {
+        MPI_Finalize();
+        return 0;
+    }
     
     // Resulted output
     std::cout << "executable=" << std::filesystem::path(argv[0]).stem().string() << "\n";
-    std::cout << "dataset-type=" << dataset_type_name << "\n";
+    std::cout << "dataset-type=" << dataset_cfg.type << "\n";
     std::cout << "join_count=" << result.join_count << "\n";
     std::cout << "checksum1=" << result.checksum1 << "\n";
     std::cout << "checksum2=" << result.checksum2 << "\n";
@@ -735,6 +799,7 @@ int main(int argc, char** argv) {
         std::cout << "verified=" << (verified ? "true" : "false") << "\n";
         if (!verified) {
             std::cerr << "Error: naive verifier mismatch.\n";
+            MPI_Finalize();
             return 1;
         }
     }
@@ -744,40 +809,29 @@ int main(int argc, char** argv) {
     const double part_throughput = compute_throughput(total_elements, result.part_time_sec);
     const double join_throughput = compute_throughput(total_elements, result.join_time_sec);
     const double total_throughput = compute_throughput(total_elements, tot_time_sec);
-    const DatasetMetadata dataset_metadata = dataset_metadata_from_type(dataset_type_name);
     const ResultMap results_map = {
         {"checksum1", std::to_string(result.checksum1)},
         {"checksum2", std::to_string(result.checksum2)},
-        {"dataset", dataset_metadata.dataset},
-        {"dataset_type", dataset_type_name},
-        {"join_chunk", std::to_string(join_chunk)},
         {"join_count", std::to_string(result.join_count)},
         {"verified", verified ? "true" : "false"},
-        {"join_schedule", join_schedule},
-        {"join_task_grain", std::to_string(join_task_grain)},
-        {"join_threads", std::to_string(join_threads)},
+        {"dataset_type", dataset_cfg.type},
         {"join_throughput", std::to_string(join_throughput)},
+        {"total_throughput", std::to_string(total_throughput)},
+        {"partition_time", std::to_string(result.part_time_sec)},
+        {"partition_throughput", std::to_string(part_throughput)},
         {"join_time", std::to_string(result.join_time_sec)},
+        {"mpi_nodes", std::to_string(cfg.requested_nodes)},
+        {"mpi_active_ranks", std::to_string(cfg.active_ranks)},
+        {"mpi_world_size", std::to_string(cfg.world_size)},
+        {"mpi_partition_strategy", cfg.partition_strategy},
         {"max_key", std::to_string(max_key)},
-        {"mpi_nodes", std::to_string(mpi_nodes)},
-        {"mpi_partition_strategy", mpi_partition_strategy},
         {"nr", std::to_string(NR)},
         {"ns", std::to_string(NS)},
-        {"offset_task_grain", std::to_string(offset_task_grain)},
-        {"partition_block_size", std::to_string(partition_block_size)},
-        {"partition_chunk", std::to_string(partition_chunk)},
-        {"partition_schedule", partition_schedule},
-        {"partition_task_grain", std::to_string(partition_task_grain)},
-        {"partition_threads", std::to_string(part_threads)},
-        {"partition_throughput", std::to_string(part_throughput)},
-        {"partition_time", std::to_string(result.part_time_sec)},
-        {"skew_fraction", std::to_string(dataset_metadata.skew_fraction)},
-        {"skew_partition_fraction", std::to_string(dataset_metadata.skew_partition_fraction)},
-        {"time_sec", std::to_string(tot_time_sec)},
-        {"total_throughput", std::to_string(total_throughput)},
+        {"time_sec", std::to_string(tot_time_sec)}
     };
     const std::string filepath = "results/" + std::filesystem::path(argv[0]).stem().string() + ".csv";
     append_to_csv(filepath, results_map);
 
+    MPI_Finalize();
     return 0;
 }

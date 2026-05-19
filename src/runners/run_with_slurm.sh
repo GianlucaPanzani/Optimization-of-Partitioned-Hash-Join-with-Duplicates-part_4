@@ -3,34 +3,37 @@
 #SBATCH --time=00:01:00
 #SBATCH --nodes=1
 #SBATCH --partition=normal
-#SBATCH --nodelist=node08
 #SBATCH --output=out/slurm-%j.log
 #SBATCH --error=err/slurm-%j.log
 
 set -euo pipefail
 
-if [ "$#" -ne 17 ]; then
-    echo "Usage: $0 EXECUTABLE NR NS SEED MAX_KEY P DATASET_TYPE PARTITION_THREADS JOIN_THREADS PARTITION_SCHEDULE JOIN_SCHEDULE PARTITION_CHUNK JOIN_CHUNK PARTITION_BLOCK_SIZE PARTITION_PARAM JOIN_PARAM OFFSET_PARAM"
+if [ "$#" -ne 16 ]; then
+    echo "Usage: $0 EXECUTABLE NODE_COUNT NR NS SEED MAX_KEY P DATASET_TYPE PARTITION_THREADS JOIN_THREADS PARTITION_SCHEDULE JOIN_SCHEDULE PARTITION_CHUNK JOIN_CHUNK PARTITION_BLOCK_SIZE MPI_PARTITION_STRATEGY"
     exit 1
 fi
 
 EXECUTABLE="$1"
-NR="$2"
-NS="$3"
-SEED="$4"
-MAX_KEY="$5"
-P="$6"
-DATASET_TYPE="$7"
-PARTITION_THREADS="$8"
-JOIN_THREADS="$9"
-PARTITION_SCHEDULE="${10}"
-JOIN_SCHEDULE="${11}"
-PARTITION_CHUNK="${12}"
-JOIN_CHUNK="${13}"
-PARTITION_BLOCK_SIZE="${14}"
-PARTITION_PARAM="${15:-}"
-JOIN_PARAM="${16:-}"
-OFFSET_PARAM="${17:-}"
+NODE_COUNT="$2"
+NR="$3"
+NS="$4"
+SEED="$5"
+MAX_KEY="$6"
+P="$7"
+DATASET_TYPE="$8"
+PARTITION_THREADS="$9"
+JOIN_THREADS="${10}"
+PARTITION_SCHEDULE="${11}"
+JOIN_SCHEDULE="${12}"
+PARTITION_CHUNK="${13}"
+JOIN_CHUNK="${14}"
+PARTITION_BLOCK_SIZE="${15}"
+MPI_PARTITION_STRATEGY="${16}"
+
+if ! [[ "$NODE_COUNT" =~ ^[0-9]+$ ]] || [ "$NODE_COUNT" -lt 1 ] || [ "$NODE_COUNT" -gt 8 ]; then
+    echo "NODE_COUNT must be an integer in [1, 8], received: $NODE_COUNT"
+    exit 1
+fi
 
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
 cd "$SUBMIT_DIR"
@@ -69,12 +72,15 @@ runner_args=(
     --partition-chunk "$PARTITION_CHUNK"
     --join-chunk "$JOIN_CHUNK"
     --partition-block-size "$PARTITION_BLOCK_SIZE"
-    --partition-task-blocks "$PARTITION_PARAM"
-    --join-task-partitions "$JOIN_PARAM"
-    --offset-task-partitions "$OFFSET_PARAM"
-    --partition-task-grain "$PARTITION_PARAM"
-    --join-task-grain "$JOIN_PARAM"
-    --offset-task-grain "$OFFSET_PARAM"
+    --mpi-nodes "$NODE_COUNT"
+    --mpi-partition-strategy "$MPI_PARTITION_STRATEGY"
 )
 
-"${runner_args[@]}"
+case "$EXECUTABLE_TARGET" in
+    hashjoin_mpi|hashjoin_hybrid)
+        srun --nodes="$NODE_COUNT" --ntasks="$NODE_COUNT" --ntasks-per-node=1 "${runner_args[@]}"
+        ;;
+    *)
+        "${runner_args[@]}"
+        ;;
+esac

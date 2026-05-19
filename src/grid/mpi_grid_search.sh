@@ -1,21 +1,23 @@
 #!/bin/bash
 
 # Static parameters
-NODE_VALUES=(1)
 N_VALUES=(50000000)
 P_VALUES=(256)
 SEED_VALUES=(13)
 MAX_KEY_VALUES=(1000000)
-PARTITION_THREAD_VALUES=(1)
-JOIN_THREAD_VALUES=(1)
 
 # Dataset distributions type (e.g. skewed_80_5 means 80% of records go to 5% of the partitions)
 DATASET_TYPE_VALUES=(uniform skewed_90_5 skewed_90_1)
 
-# --- Unused parameters for the sequential version ---
+# MPI parameters
+NODE_VALUES=(1 2 4 8)
+MPI_PARTITION_STRATEGY_VALUES=(block cyclic)
+
+# Fixed OpenMP parameters accepted by hashjoin_mpi for launcher compatibility and ignored
+PARTITION_THREAD_VALUES=(1)
+JOIN_THREAD_VALUES=(1)
 PARTITION_SCHEDULE_VALUES=(static)
 JOIN_SCHEDULE_VALUES=(static)
 PARTITION_CHUNK_VALUES=(0)
 JOIN_CHUNK_VALUES=(0)
 PARTITION_BLOCK_SIZE_VALUES=(32768)
-MPI_PARTITION_STRATEGY_VALUES=(block)

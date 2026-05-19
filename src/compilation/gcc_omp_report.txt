@@ -1,0 +1,4 @@
+clang++: error: unsupported option '-fopenmp'
+clang++: error: unsupported option '-fopenmp'
+clang++: error: unsupported option '-fopenmp'
+clang++: error: unsupported option '-fopenmp'

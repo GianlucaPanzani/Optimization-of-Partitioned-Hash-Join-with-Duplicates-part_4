@@ -13,9 +13,9 @@ SCALING_TARGETS			= strong_scaling weak_scaling
 EXECUTABLE_TARGETS		= $(CHECKER_TARGETS) $(SEQ_TARGETS) $(OMP_TARGETS) $(MPI_TARGETS) $(HYBRID_TARGETS) $(SCALING_TARGETS)
 
 GCC_SEQ_REPORT  			= compilation/gcc_seq_report.txt
-GCC_OMP_REPORT			= compilation/gcc_omp_report.txt
-GCC_MPI_REPORT			= compilation/gcc_mpi_report.txt
-GCC_HYBRID_REPORT		= compilation/gcc_hybrid_report.txt
+GCC_OMP_REPORT				= compilation/gcc_omp_report.txt
+GCC_MPI_REPORT				= compilation/gcc_mpi_report.txt
+GCC_HYBRID_REPORT			= compilation/gcc_hybrid_report.txt
 GCC_STRONG_SCALING_REPORT	= compilation/gcc_strong_scaling_report.txt
 GCC_WEAK_SCALING_REPORT		= compilation/gcc_weak_scaling_report.txt
 GCC_CHECKER_REPORT			= compilation/gcc_checker_report.txt

@@ -33,6 +33,8 @@ MPI_PARTITION_STRATEGY="${16}"
 if ! [[ "$NODE_COUNT" =~ ^[0-9]+$ ]] || [ "$NODE_COUNT" -lt 1 ] || [ "$NODE_COUNT" -gt 8 ]; then
     echo "NODE_COUNT must be an integer in [1, 8], received: $NODE_COUNT"
     exit 1
+else
+    NODE_COUNT=1
 fi
 
 SUBMIT_DIR="${SLURM_SUBMIT_DIR:-$(pwd)}"
@@ -76,11 +78,4 @@ runner_args=(
     --mpi-partition-strategy "$MPI_PARTITION_STRATEGY"
 )
 
-case "$EXECUTABLE_TARGET" in
-    hashjoin_mpi|hashjoin_hybrid)
-        srun --nodes="$NODE_COUNT" --ntasks="$NODE_COUNT" --ntasks-per-node=1 "${runner_args[@]}"
-        ;;
-    *)
-        "${runner_args[@]}"
-        ;;
-esac
+srun --nodes="$NODE_COUNT" --ntasks="$NODE_COUNT" --ntasks-per-node=1 "${runner_args[@]}"

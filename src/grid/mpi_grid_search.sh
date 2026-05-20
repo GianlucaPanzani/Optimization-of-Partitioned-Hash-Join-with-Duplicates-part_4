@@ -11,6 +11,7 @@ DATASET_TYPE_VALUES=(uniform skewed_90_5 skewed_90_1)
 
 # MPI parameters
 NODE_VALUES=(1 2 4 8)
+MPI_PROCESS_VALUES=(1 2 4 8)
 MPI_PARTITION_STRATEGY_VALUES=(block cyclic)
 
 # Fixed OpenMP parameters accepted by hashjoin_mpi for launcher compatibility and ignored

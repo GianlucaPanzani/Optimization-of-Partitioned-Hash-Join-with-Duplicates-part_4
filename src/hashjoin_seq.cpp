@@ -137,7 +137,7 @@ static void usage(const char* prog) {
     std::cerr
         << "Usage:\n"
         << "  " << prog
-        << " -nr NR -ns NS -seed SEED -max-key K -p P [--dataset-type TYPE] [--mpi-nodes N]\n\n"
+        << " -nr NR -ns NS -seed SEED -max-key K -p P [--dataset-type TYPE] [--mpi-nodes N] [--mpi-processes R]\n\n"
         << "Parameters:\n"
         << "  -nr         Number of records in relation R\n"
         << "  -ns         Number of records in relation S\n"
@@ -146,6 +146,7 @@ static void usage(const char* prog) {
         << "  -p          Number of partitions (power of two required in this reference code)\n"
         << "  --dataset-type / -dataset-type             uniform|skewed_<record_pct>_<hot_partition_pct>\n"
         << "  --mpi-nodes / -mpi-nodes                   Accepted for launcher compatibility and ignored\n"
+        << "  --mpi-processes / -mpi-processes           Accepted for launcher compatibility and ignored\n"
         << "  --mpi-partition-strategy / -mpi-partition-strategy  Accepted for launcher compatibility and ignored\n"
         << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
         << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n";
@@ -649,6 +650,7 @@ int main(int argc, char** argv) {
     std::uint64_t partition_chunk = 0, join_chunk = 0, partition_block_size = 32768;
     std::uint64_t partition_task_grain = 1, join_task_grain = 1, offset_task_grain = 1;
     std::uint64_t mpi_nodes = 1;
+    std::uint64_t mpi_processes = 1;
     std::string dataset_type_name = "uniform";
     std::string partition_schedule = "static", join_schedule = "static";
     std::string mpi_partition_strategy = "block";
@@ -673,6 +675,7 @@ int main(int argc, char** argv) {
     read_arg_u64(argc, argv, {"--join-task-grain", "-join-task-grain"}, join_task_grain);
     read_arg_u64(argc, argv, {"--offset-task-grain", "-offset-task-grain"}, offset_task_grain);
     read_arg_u64(argc, argv, {"--mpi-nodes", "-mpi-nodes"}, mpi_nodes);
+    read_arg_u64(argc, argv, {"--mpi-processes", "-mpi-processes"}, mpi_processes);
     read_arg_string(argc, argv, {"--mpi-partition-strategy", "-mpi-partition-strategy"}, mpi_partition_strategy);
 
     if (p > std::numeric_limits<std::uint32_t>::max()) {
@@ -718,7 +721,7 @@ int main(int argc, char** argv) {
     
     // Resulted output
     std::cout << "executable=" << std::filesystem::path(argv[0]).stem().string() << "\n";
-    std::cout << "dataset-type=" << dataset_type_name << "\n";
+    std::cout << "dataset_type=" << dataset_type_name << "\n";
     std::cout << "join_count=" << result.join_count << "\n";
     std::cout << "checksum1=" << result.checksum1 << "\n";
     std::cout << "checksum2=" << result.checksum2 << "\n";
@@ -760,6 +763,7 @@ int main(int argc, char** argv) {
         {"join_time", std::to_string(result.join_time_sec)},
         {"max_key", std::to_string(max_key)},
         {"mpi_nodes", std::to_string(mpi_nodes)},
+        {"mpi_processes", std::to_string(mpi_processes)},
         {"mpi_partition_strategy", mpi_partition_strategy},
         {"nr", std::to_string(NR)},
         {"ns", std::to_string(NS)},

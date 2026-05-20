@@ -79,8 +79,19 @@ require_non_empty_array() {
     [ "$array_len" -gt 0 ]
 }
 
+valid_mpi_layout() {
+    local nodes="$1"
+    local processes="$2"
+    [[ "$nodes" =~ ^[0-9]+$ ]] || return 1
+    [[ "$processes" =~ ^[0-9]+$ ]] || return 1
+    [ "$nodes" -ge 1 ] || return 1
+    [ "$processes" -ge "$nodes" ] || return 1
+    [ $((processes % nodes)) -eq 0 ] || return 1
+}
+
 REQUIRED_ARRAYS=(
     NODE_VALUES
+    MPI_PROCESS_VALUES
     N_VALUES
     P_VALUES
     SEED_VALUES
@@ -137,8 +148,22 @@ if [ ! -x "$EXECUTABLE" ]; then
     exit 1
 fi
 
+VALID_MPI_LAYOUTS=0
+for NODE_COUNT in "${NODE_VALUES[@]}"; do
+    for MPI_PROCESS_COUNT in "${MPI_PROCESS_VALUES[@]}"; do
+        if valid_mpi_layout "$NODE_COUNT" "$MPI_PROCESS_COUNT"; then
+            VALID_MPI_LAYOUTS=$((VALID_MPI_LAYOUTS + 1))
+        fi
+    done
+done
+
+if [ "$VALID_MPI_LAYOUTS" -eq 0 ]; then
+    echo "No valid MPI layouts. Require processes >= nodes and processes divisible by nodes."
+    exit 1
+fi
+
 TOTAL=$(( \
-    ${#NODE_VALUES[@]} * \
+    VALID_MPI_LAYOUTS * \
     ${#N_VALUES[@]} * \
     ${#P_VALUES[@]} * \
     ${#SEED_VALUES[@]} * \
@@ -161,6 +186,8 @@ echo
 echo "Benchmark executable:        $EXECUTABLE_TARGET"
 echo "Grid source:                 $GRID_CONFIG"
 echo "Node values:                 ${NODE_VALUES[*]}"
+echo "MPI process values:          ${MPI_PROCESS_VALUES[*]}"
+echo "Valid MPI layouts:           $VALID_MPI_LAYOUTS"
 echo "N values:                    ${N_VALUES[*]}"
 echo "P values:                    ${P_VALUES[*]}"
 echo "Seeds:                       ${SEED_VALUES[*]}"
@@ -180,49 +207,56 @@ echo
 
 for ((RUN_INDEX=1; RUN_INDEX<=REPEAT_COUNT; RUN_INDEX++)); do
     for NODE_COUNT in "${NODE_VALUES[@]}"; do
-        for N in "${N_VALUES[@]}"; do
-            for P in "${P_VALUES[@]}"; do
-                for SEED in "${SEED_VALUES[@]}"; do
-                    for MAX_KEY in "${MAX_KEY_VALUES[@]}"; do
-                        for DATASET_TYPE in "${DATASET_TYPE_VALUES[@]}"; do
-                            for PARTITION_THREADS in "${PARTITION_THREAD_VALUES[@]}"; do
-                                for JOIN_THREADS in "${JOIN_THREAD_VALUES[@]}"; do
-                                    for PARTITION_SCHEDULE in "${PARTITION_SCHEDULE_VALUES[@]}"; do
-                                        for JOIN_SCHEDULE in "${JOIN_SCHEDULE_VALUES[@]}"; do
-                                            for PARTITION_CHUNK in "${PARTITION_CHUNK_VALUES[@]}"; do
-                                                for JOIN_CHUNK in "${JOIN_CHUNK_VALUES[@]}"; do
-                                                    for PARTITION_BLOCK_SIZE in "${PARTITION_BLOCK_SIZE_VALUES[@]}"; do
-                                                        for MPI_PARTITION_STRATEGY in "${MPI_PARTITION_STRATEGY_VALUES[@]}"; do
+        for MPI_PROCESS_COUNT in "${MPI_PROCESS_VALUES[@]}"; do
+            if ! valid_mpi_layout "$NODE_COUNT" "$MPI_PROCESS_COUNT"; then
+                continue
+            fi
+            TASKS_PER_NODE=$((MPI_PROCESS_COUNT / NODE_COUNT))
+            for N in "${N_VALUES[@]}"; do
+                for P in "${P_VALUES[@]}"; do
+                    for SEED in "${SEED_VALUES[@]}"; do
+                        for MAX_KEY in "${MAX_KEY_VALUES[@]}"; do
+                            for DATASET_TYPE in "${DATASET_TYPE_VALUES[@]}"; do
+                                for PARTITION_THREADS in "${PARTITION_THREAD_VALUES[@]}"; do
+                                    for JOIN_THREADS in "${JOIN_THREAD_VALUES[@]}"; do
+                                        for PARTITION_SCHEDULE in "${PARTITION_SCHEDULE_VALUES[@]}"; do
+                                            for JOIN_SCHEDULE in "${JOIN_SCHEDULE_VALUES[@]}"; do
+                                                for PARTITION_CHUNK in "${PARTITION_CHUNK_VALUES[@]}"; do
+                                                    for JOIN_CHUNK in "${JOIN_CHUNK_VALUES[@]}"; do
+                                                        for PARTITION_BLOCK_SIZE in "${PARTITION_BLOCK_SIZE_VALUES[@]}"; do
+                                                            for MPI_PARTITION_STRATEGY in "${MPI_PARTITION_STRATEGY_VALUES[@]}"; do
 
-                                                            COUNT=$((COUNT + 1))
+                                                                COUNT=$((COUNT + 1))
 
-                                                            printf "[%d/%d] run=%d/%d nodes=%s N=%s P=%s seed=%s max_key=%s dataset_type=%s p_threads=%s j_threads=%s p_sched=%s j_sched=%s p_chunk=%s j_chunk=%s p_block=%s mpi_strategy=%s --> " \
-                                                                "$COUNT" "$TOTAL" "$RUN_INDEX" "$REPEAT_COUNT" "$NODE_COUNT" "$N" "$P" "$SEED" "$MAX_KEY" "$DATASET_TYPE" \
-                                                                "$PARTITION_THREADS" "$JOIN_THREADS" "$PARTITION_SCHEDULE" "$JOIN_SCHEDULE" \
-                                                                "$PARTITION_CHUNK" "$JOIN_CHUNK" "$PARTITION_BLOCK_SIZE" "$MPI_PARTITION_STRATEGY"
+                                                                printf "[%d/%d] run=%d/%d nodes=%s mpi_processes=%s tasks_per_node=%s N=%s P=%s seed=%s max_key=%s dataset_type=%s p_threads=%s j_threads=%s p_sched=%s j_sched=%s p_chunk=%s j_chunk=%s p_block=%s mpi_strategy=%s --> " \
+                                                                    "$COUNT" "$TOTAL" "$RUN_INDEX" "$REPEAT_COUNT" "$NODE_COUNT" "$MPI_PROCESS_COUNT" "$TASKS_PER_NODE" "$N" "$P" "$SEED" "$MAX_KEY" "$DATASET_TYPE" \
+                                                                    "$PARTITION_THREADS" "$JOIN_THREADS" "$PARTITION_SCHEDULE" "$JOIN_SCHEDULE" \
+                                                                    "$PARTITION_CHUNK" "$JOIN_CHUNK" "$PARTITION_BLOCK_SIZE" "$MPI_PARTITION_STRATEGY"
 
-                                                            runner_args=(
-                                                                "$RUNNER_SCRIPT"
-                                                                "$EXECUTABLE"
-                                                                "$NODE_COUNT"
-                                                                "$N"
-                                                                "$N"
-                                                                "$SEED"
-                                                                "$MAX_KEY"
-                                                                "$P"
-                                                                "$DATASET_TYPE"
-                                                                "$PARTITION_THREADS"
-                                                                "$JOIN_THREADS"
-                                                                "$PARTITION_SCHEDULE"
-                                                                "$JOIN_SCHEDULE"
-                                                                "$PARTITION_CHUNK"
-                                                                "$JOIN_CHUNK"
-                                                                "$PARTITION_BLOCK_SIZE"
-                                                                "$MPI_PARTITION_STRATEGY"
-                                                            )
+                                                                runner_args=(
+                                                                    "$RUNNER_SCRIPT"
+                                                                    "$EXECUTABLE"
+                                                                    "$NODE_COUNT"
+                                                                    "$MPI_PROCESS_COUNT"
+                                                                    "$N"
+                                                                    "$N"
+                                                                    "$SEED"
+                                                                    "$MAX_KEY"
+                                                                    "$P"
+                                                                    "$DATASET_TYPE"
+                                                                    "$PARTITION_THREADS"
+                                                                    "$JOIN_THREADS"
+                                                                    "$PARTITION_SCHEDULE"
+                                                                    "$JOIN_SCHEDULE"
+                                                                    "$PARTITION_CHUNK"
+                                                                    "$JOIN_CHUNK"
+                                                                    "$PARTITION_BLOCK_SIZE"
+                                                                    "$MPI_PARTITION_STRATEGY"
+                                                                )
 
-                                                            sbatch --parsable --wait --nodes="$NODE_COUNT" --ntasks="$NODE_COUNT" --ntasks-per-node=1 "${runner_args[@]}"
+                                                                sbatch --parsable --wait --nodes="$NODE_COUNT" --ntasks="$MPI_PROCESS_COUNT" --ntasks-per-node="$TASKS_PER_NODE" "${runner_args[@]}"
 
+                                                            done
                                                         done
                                                     done
                                                 done

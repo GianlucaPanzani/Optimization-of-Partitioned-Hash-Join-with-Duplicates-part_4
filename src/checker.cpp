@@ -56,22 +56,20 @@ static std::optional<ResultOutput> result_from_content(const std::string& conten
     const auto values = parse_key_values(content);
 
     const auto executable = values.find("executable");
-    const auto dataset_type_dash = values.find("dataset-type");
-    const auto dataset_type_underscore = values.find("dataset_type");
+    const auto dataset_type = values.find("dataset_type");
     const auto join_count = values.find("join_count");
     const auto checksum1 = values.find("checksum1");
     const auto checksum2 = values.find("checksum2");
     const auto verified = values.find("verified");
 
-    const bool has_dataset_type = dataset_type_dash != values.end() || dataset_type_underscore != values.end();
-    if (executable == values.end() || !has_dataset_type ||
+    if (executable == values.end() || !(dataset_type != values.end()) ||
         join_count == values.end() || checksum1 == values.end() || checksum2 == values.end()) {
         return std::nullopt;
     }
 
     return ResultOutput{
         executable->second,
-        (dataset_type_dash != values.end()) ? dataset_type_dash->second : dataset_type_underscore->second,
+        (dataset_type != values.end()) ? dataset_type->second : "",
         join_count->second,
         checksum1->second,
         checksum2->second,
@@ -129,7 +127,7 @@ int main(int argc, char** argv) {
 
         const auto result = result_from_content(content);
         if (!result.has_value() || result->executable.empty() || result->dataset_type.empty()) {
-            std::cerr << "[checker] missing executable/dataset-type/checksum output in: " << file.filename().string() << '\n';
+            std::cerr << "[checker] missing executable/dataset_type/checksum output in: " << file.filename().string() << '\n';
             return 2;
         }
         if (result->has_verified_field && !result->verified) {
@@ -157,7 +155,7 @@ int main(int argc, char** argv) {
         if (unchecked_files.empty()) {
             const auto& reference = dataset_files.front();
             std::cout << "[checker] OK --> executable=" << reference.result.executable
-                      << " dataset-type=" << reference.result.dataset_type
+                      << " dataset_type=" << reference.result.dataset_type
                       << " all " << dataset_files.size()
                       << " output files were already naive-verified\n";
             continue;
@@ -174,7 +172,7 @@ int main(int argc, char** argv) {
                 dataset_equal = false;
                 all_equal = false;
                 std::cout << "[checker] mismatch: executable=" << current.result.executable
-                          << " dataset-type=" << current.result.dataset_type << ' '
+                          << " dataset_type=" << current.result.dataset_type << ' '
                           << current.path.filename().string() << " differs from "
                           << reference.path.filename().string()
                           << " reference=(" << reference.result.join_count << ", "
@@ -186,11 +184,11 @@ int main(int argc, char** argv) {
 
         if (!dataset_equal) {
             std::cout << "[checker] NO --> executable=" << reference.result.executable
-                      << " dataset-type=" << reference.result.dataset_type
+                      << " dataset_type=" << reference.result.dataset_type
                       << " output files do NOT have identical checksums\n";
         } else {
             std::cout << "[checker] OK --> executable=" << reference.result.executable
-                      << " dataset-type=" << reference.result.dataset_type
+                      << " dataset_type=" << reference.result.dataset_type
                       << " all " << unchecked_files.size()
                       << " unchecked output files have identical checksums";
             if (verified_count > 0) {
@@ -201,7 +199,7 @@ int main(int argc, char** argv) {
     }
 
     if (!all_equal) {
-        std::cout << "[checker] NO --> at least one executable/dataset-type group has non-identical checksums\n";
+        std::cout << "[checker] NO --> at least one executable/dataset_type group has non-identical checksums\n";
     }
     return 0;
 }

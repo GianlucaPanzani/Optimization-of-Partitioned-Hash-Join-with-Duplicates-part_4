@@ -139,7 +139,7 @@ static void usage(const char* prog) {
     std::cerr
         << "Usage:\n"
         << "  " << prog
-        << " -nr NR -ns NS -seed SEED -max-key K -p P [--partition-threads T] [--join-threads T] [--mpi-nodes N]\n\n"
+        << " -nr NR -ns NS -seed SEED -max-key K -p P [--partition-threads T] [--join-threads T] [--mpi-nodes N] [--mpi-processes R]\n\n"
         << "Parameters:\n"
         << "  -nr         Number of records in relation R\n"
         << "  -ns         Number of records in relation S\n"
@@ -149,6 +149,7 @@ static void usage(const char* prog) {
         << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
         << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n"
         << "  --mpi-nodes / -mpi-nodes                   Accepted for launcher compatibility and ignored\n"
+        << "  --mpi-processes / -mpi-processes           Accepted for launcher compatibility and ignored\n"
         << "  --mpi-partition-strategy / -mpi-partition-strategy  Accepted for launcher compatibility and ignored\n"
         << "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n";
 }
@@ -812,6 +813,7 @@ int main(int argc, char** argv) {
     std::uint64_t join_chunk_u64 = 0;
     std::uint64_t partition_block_size_u64 = 65536;
     std::uint64_t mpi_nodes = 1;
+    std::uint64_t mpi_processes = 1;
     std::string partition_schedule_name = "static";
     std::string join_schedule_name = "static";
     std::string dataset_type_name = "uniform";
@@ -831,6 +833,7 @@ int main(int argc, char** argv) {
     read_arg_u64(argc, argv, {"--join-chunk", "-join-chunk"}, join_chunk_u64);
     read_arg_u64(argc, argv, {"--partition-block-size", "-partition-block-size"}, partition_block_size_u64);
     read_arg_u64(argc, argv, {"--mpi-nodes", "-mpi-nodes"}, mpi_nodes);
+    read_arg_u64(argc, argv, {"--mpi-processes", "-mpi-processes"}, mpi_processes);
     read_arg_string(argc, argv, {"--partition-schedule", "-partition-schedule"}, partition_schedule_name);
     read_arg_string(argc, argv, {"--join-schedule", "-join-schedule"}, join_schedule_name);
     read_arg_string(argc, argv, {"--dataset-type", "-dataset-type", "--dataset", "-dataset"}, dataset_type_name);
@@ -910,7 +913,7 @@ int main(int argc, char** argv) {
     
     // Resulted output
     std::cout << "executable=" << std::filesystem::path(argv[0]).stem().string() << "\n";
-    std::cout << "dataset-type=" << dataset_cfg.type << "\n";
+    std::cout << "dataset_type=" << dataset_cfg.type << "\n";
     std::cout << "join_count=" << result.join_count << "\n";
     std::cout << "checksum1=" << result.checksum1 << "\n";
     std::cout << "checksum2=" << result.checksum2 << "\n";
@@ -955,6 +958,7 @@ int main(int argc, char** argv) {
         {"join_chunk", std::to_string(cfg.join_chunk)},
         {"partition_block_size", std::to_string(cfg.partition_block_size)},
         {"mpi_nodes", std::to_string(mpi_nodes)},
+        {"mpi_processes", std::to_string(mpi_processes)},
         {"mpi_partition_strategy", mpi_partition_strategy},
         {"max_key", std::to_string(max_key)},
         {"nr", std::to_string(NR)},

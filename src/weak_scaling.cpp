@@ -139,7 +139,7 @@ static void usage(const char* prog) {
     std::cerr
         << "Usage:\n"
         << "  " << prog
-        << " -nr NR -ns NS -seed SEED -max-key K -p P [--partition-threads T] [--join-threads T]\n\n"
+        << " -nr NR -ns NS -seed SEED -max-key K -p P [--partition-threads T] [--join-threads T] [--mpi-nodes N] [--mpi-processes R]\n\n"
         << "Parameters:\n"
         << "  -nr         Number of records in relation R\n"
         << "  -ns         Number of records in relation S\n"
@@ -148,6 +148,9 @@ static void usage(const char* prog) {
         << "  -p          Number of partitions (power of two required in this reference code)\n"
         << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
         << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n"
+        << "  --mpi-nodes / -mpi-nodes                   Accepted for launcher compatibility and ignored\n"
+        << "  --mpi-processes / -mpi-processes           Accepted for launcher compatibility and ignored\n"
+        << "  --mpi-partition-strategy / -mpi-partition-strategy  Accepted for launcher compatibility and ignored\n"
         << "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n";
 }
 static bool is_power_of_two(std::uint32_t x) {
@@ -517,20 +520,58 @@ struct PartitionedRelation {
     std::vector<std::size_t> end;
 };
 
-static std::vector<std::uint32_t> build_partition_order_by_work(const PartitionedRelation& Rpart,
-                                                                 const PartitionedRelation& Spart,
-                                                                 std::uint32_t P) {
+struct JoinWorkItem {
+    std::uint32_t pid = 0;
+    std::size_t s_begin = 0;
+    std::size_t s_end = 0;
+};
+
+static std::vector<JoinWorkItem> build_join_work_items(const PartitionedRelation& Rpart,
+                                                       const PartitionedRelation& Spart,
+                                                       std::uint32_t P,
+                                                       int join_threads) {
     std::vector<std::uint32_t> order(P);
+    std::vector<std::size_t> partition_work(P, 0);
+    std::size_t total_join_work = 0;
+
     for (std::uint32_t pid = 0; pid < P; ++pid) {
         order[pid] = pid;
+        partition_work[pid] = (Rpart.end[pid] - Rpart.begin[pid]) +
+                              (Spart.end[pid] - Spart.begin[pid]);
+        total_join_work += partition_work[pid];
     }
 
     std::sort(order.begin(), order.end(), [&](std::uint32_t a, std::uint32_t b) {
-        const std::size_t work_a = (Rpart.end[a] - Rpart.begin[a]) + (Spart.end[a] - Spart.begin[a]);
-        const std::size_t work_b = (Rpart.end[b] - Rpart.begin[b]) + (Spart.end[b] - Spart.begin[b]);
-        return work_a > work_b;
+        return partition_work[a] > partition_work[b];
     });
-    return order;
+
+    const std::size_t thread_count = std::max<std::size_t>(1, static_cast<std::size_t>(join_threads));
+    const std::size_t work_per_thread = std::max<std::size_t>(
+        1, (total_join_work + thread_count - 1) / thread_count
+    );
+
+    std::vector<JoinWorkItem> work_items;
+    for (const std::uint32_t pid : order) {
+        const std::size_t r_size = Rpart.end[pid] - Rpart.begin[pid];
+        const std::size_t s_size = Spart.end[pid] - Spart.begin[pid];
+        if (r_size == 0 || s_size == 0) {
+            continue;
+        }
+
+        std::size_t threads_for_partition =
+            (partition_work[pid] + work_per_thread - 1) / work_per_thread;
+        threads_for_partition = std::max<std::size_t>(1, threads_for_partition);
+        threads_for_partition = std::min(threads_for_partition, thread_count);
+        threads_for_partition = std::min(threads_for_partition, s_size);
+
+        for (std::size_t part = 0; part < threads_for_partition; ++part) {
+            const std::size_t sub_begin = Spart.begin[pid] + (part * s_size) / threads_for_partition;
+            const std::size_t sub_end = Spart.begin[pid] + ((part + 1) * s_size) / threads_for_partition;
+            work_items.push_back(JoinWorkItem{pid, sub_begin, sub_end});
+        }
+    }
+
+    return work_items;
 }
 
 
@@ -646,31 +687,27 @@ private:
 // Each record in S contributes as many matches as the multiplicity
 // of its key in the corresponding partition of R.
 //
-static JoinResult join_one_partition(const PartitionedRelation& Rpart,
-                                     const PartitionedRelation& Spart,
-                                     std::uint32_t pid) {
+static JoinResult join_one_partition_subrange(const PartitionedRelation& Rpart,
+                                              const PartitionedRelation& Spart,
+                                              std::uint32_t pid,
+                                              std::size_t s_begin,
+                                              std::size_t s_end) {
     JoinResult result{};
 
     const std::size_t r_begin = Rpart.begin[pid];
     const std::size_t r_end = Rpart.end[pid];
-    const std::size_t s_begin = Spart.begin[pid];
-    const std::size_t s_end = Spart.end[pid];
 
-    // Nothing to do if either partition is empty.
+    // Nothing to do if the build side or this assigned probe subrange is empty.
     if (r_begin == r_end || s_begin == s_end) {
         return result;
     }
 
-    // Build phase with a flat open-addressing table.
-    // This reduces pointer chasing versus std::unordered_map.
     FlatCountTable countR(r_end - r_begin);
 
     for (std::size_t i = r_begin; i < r_end; ++i) {
         countR.increment(Rpart.data[i].key);
     }
 
-    // Probe phase:
-    // for each key in S_p, if it exists in countR, add countR[key] matches.
     for (std::size_t i = s_begin; i < s_end; ++i) {
         const std::uint64_t key = Spart.data[i].key;
         const std::uint32_t multiplicity = countR.find_count(key);
@@ -712,25 +749,24 @@ static JoinResult partitioned_hash_join(const std::vector<Record>& R,
     double t1 = get_time();
     result.part_time_sec = t1 - t0;
 
-    const std::vector<std::uint32_t> order = build_partition_order_by_work(Rpart, Spart, p);
+    const std::vector<JoinWorkItem> work_items = build_join_work_items(Rpart, Spart, p, cfg.join_threads);
 
     t0 = get_time();
-    std::uint64_t join_count = 0;
-    std::uint64_t checksum1 = 0;
-    std::uint64_t checksum2 = 0;
+    std::vector<JoinResult> partial(work_items.size());
+    const std::size_t item_count = work_items.size();
 
-    #pragma omp parallel for num_threads(cfg.join_threads) schedule(dynamic, 1) default(none) shared(Rpart, Spart, order, p) reduction(+: join_count, checksum1, checksum2)
-    for (std::int64_t idx_signed = 0; idx_signed < static_cast<std::int64_t>(p); ++idx_signed) {
-        const std::uint32_t pid = order[static_cast<std::size_t>(idx_signed)];
-        const JoinResult local = join_one_partition(Rpart, Spart, pid);
-        join_count += local.join_count;
-        checksum1 += local.checksum1;
-        checksum2 += local.checksum2;
+    #pragma omp parallel for num_threads(cfg.join_threads) schedule(dynamic, 1) default(none) shared(partial, Rpart, Spart, work_items) firstprivate(item_count)
+    for (std::int64_t idx_signed = 0; idx_signed < static_cast<std::int64_t>(item_count); ++idx_signed) {
+        const std::size_t idx = static_cast<std::size_t>(idx_signed);
+        const JoinWorkItem& item = work_items[idx];
+        partial[idx] = join_one_partition_subrange(Rpart, Spart, item.pid, item.s_begin, item.s_end);
     }
 
-    result.join_count = join_count;
-    result.checksum1 = checksum1;
-    result.checksum2 = checksum2;
+    for (const JoinResult& local : partial) {
+        result.join_count += local.join_count;
+        result.checksum1 += local.checksum1;
+        result.checksum2 += local.checksum2;
+    }
     t1 = get_time();
     result.join_time_sec = t1 - t0;
     return result;
@@ -782,6 +818,9 @@ int main(int argc, char** argv) {
     const std::uint64_t seed = 13;
     const std::uint64_t max_key = 1000000;
     const std::uint32_t P = 256;
+    const std::uint64_t mpi_nodes = 1;
+    const std::uint64_t mpi_processes = 1;
+    const std::string mpi_partition_strategy = "block";
     const std::vector<std::string> dataset_type_names = {
         "uniform",
         "skewed_90_5",
@@ -854,6 +893,9 @@ int main(int argc, char** argv) {
                     {"join_throughput", std::to_string(join_throughput)},
                     {"join_time", std::to_string(result.join_time_sec)},
                     {"max_key", std::to_string(max_key)},
+                    {"mpi_nodes", std::to_string(mpi_nodes)},
+                    {"mpi_partition_strategy", mpi_partition_strategy},
+                    {"mpi_processes", std::to_string(mpi_processes)},
                     {"nr", std::to_string(NR)},
                     {"ns", std::to_string(NS)},
                     {"partition_block_size", std::to_string(cfg.partition_block_size)},
@@ -864,7 +906,8 @@ int main(int argc, char** argv) {
                     {"partition_time", std::to_string(result.part_time_sec)},
                     {"scaling_type", "weak"},
                     {"time_sec", std::to_string(tot_time_sec)},
-                    {"total_throughput", std::to_string(total_throughput)}
+                    {"total_throughput", std::to_string(total_throughput)},
+                    {"verified", "false"}
                 };
                 append_to_csv(filepath, results_map);
             }

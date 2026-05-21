@@ -212,7 +212,7 @@ require_case_values() {
     fi
 }
 
-default_output_csv="results/${EXECUTABLE_TARGET}_${grid_stem}.csv"
+default_output_csv="results/${grid_stem}.csv"
 rm -f "$default_output_csv"
 
 total=$(( ${#SCALING_CASES[@]} * ${#DATASET_TYPE_VALUES[@]} * REPEAT_COUNT ))

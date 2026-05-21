@@ -153,7 +153,8 @@ static void usage(const char* prog) {
         << "  --mpi-nodes / -mpi-nodes                   Requested MPI nodes allocated by SLURM (1..8)\n"
         << "  --mpi-processes / -mpi-processes           Requested total MPI ranks used by the algorithm\n"
         << "  --mpi-partition-strategy / -mpi-partition-strategy  block|cyclic partition ownership\n"
-        << "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n";
+        << "  --dataset-type uniform|skewed_<record_pct>_<hot_partition_pct>\n"
+        << "  --output-csv / -output-csv                 Output CSV path (default: results/<executable>.csv)\n";
 }
 static bool is_power_of_two(std::uint32_t x) {
     return x != 0 && (x & (x - 1U)) == 0;
@@ -1012,6 +1013,7 @@ int main(int argc, char** argv) {
     std::string join_schedule_name = "static";
     std::string dataset_type_name = "uniform";
     std::string mpi_partition_strategy = "block";
+    std::string output_csv_path;
 
     if (!read_arg_u64(argc, argv, {"-nr"}, nr) ||
         !read_arg_u64(argc, argv, {"-ns"}, ns) ||
@@ -1035,6 +1037,7 @@ int main(int argc, char** argv) {
     read_arg_string(argc, argv, {"--join-schedule", "-join-schedule"}, join_schedule_name);
     read_arg_string(argc, argv, {"--dataset-type", "-dataset-type", "--dataset", "-dataset"}, dataset_type_name);
     read_arg_string(argc, argv, {"--mpi-partition-strategy", "-mpi-partition-strategy"}, mpi_partition_strategy);
+    read_arg_string(argc, argv, {"--output-csv", "-output-csv", "--csv", "-csv"}, output_csv_path);
 
     if (p > std::numeric_limits<std::uint32_t>::max()) {
         if (world_rank == 0) {
@@ -1229,7 +1232,9 @@ int main(int argc, char** argv) {
         {"ns", std::to_string(NS)},
         {"time_sec", std::to_string(tot_time_sec)}
     };
-    const std::string filepath = "results/" + std::filesystem::path(argv[0]).stem().string() + ".csv";
+    const std::string filepath = output_csv_path.empty()
+        ? "results/" + std::filesystem::path(argv[0]).stem().string() + ".csv"
+        : output_csv_path;
     append_to_csv(filepath, results_map);
 
     MPI_Type_free(&record_type);

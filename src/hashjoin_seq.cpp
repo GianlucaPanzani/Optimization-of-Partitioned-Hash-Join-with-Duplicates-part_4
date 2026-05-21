@@ -149,7 +149,8 @@ static void usage(const char* prog) {
         << "  --mpi-processes / -mpi-processes           Accepted for launcher compatibility and ignored\n"
         << "  --mpi-partition-strategy / -mpi-partition-strategy  Accepted for launcher compatibility and ignored\n"
         << "  --partition-threads / -partition-threads   Number of threads for partition phase (reserved)\n"
-        << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n";
+        << "  --join-threads / -join-threads             Number of threads for join phase (reserved)\n"
+        << "  --output-csv / -output-csv                 Output CSV path (default: results/<executable>.csv)\n";
 }
 static bool is_power_of_two(std::uint32_t x) {
     return x != 0 && (x & (x - 1U)) == 0;
@@ -654,6 +655,7 @@ int main(int argc, char** argv) {
     std::string dataset_type_name = "uniform";
     std::string partition_schedule = "static", join_schedule = "static";
     std::string mpi_partition_strategy = "block";
+    std::string output_csv_path;
 
     if (!read_arg_u64(argc, argv, {"-nr"}, nr) ||
         !read_arg_u64(argc, argv, {"-ns"}, ns) ||
@@ -677,6 +679,7 @@ int main(int argc, char** argv) {
     read_arg_u64(argc, argv, {"--mpi-nodes", "-mpi-nodes"}, mpi_nodes);
     read_arg_u64(argc, argv, {"--mpi-processes", "-mpi-processes"}, mpi_processes);
     read_arg_string(argc, argv, {"--mpi-partition-strategy", "-mpi-partition-strategy"}, mpi_partition_strategy);
+    read_arg_string(argc, argv, {"--output-csv", "-output-csv", "--csv", "-csv"}, output_csv_path);
 
     if (p > std::numeric_limits<std::uint32_t>::max()) {
         std::cerr << "Error: P too large.\n";
@@ -780,7 +783,9 @@ int main(int argc, char** argv) {
         {"time_sec", std::to_string(tot_time_sec)},
         {"total_throughput", std::to_string(total_throughput)},
     };
-    const std::string filepath = "results/" + std::filesystem::path(argv[0]).stem().string() + ".csv";
+    const std::string filepath = output_csv_path.empty()
+        ? "results/" + std::filesystem::path(argv[0]).stem().string() + ".csv"
+        : output_csv_path;
     append_to_csv(filepath, results_map);
 
     return 0;

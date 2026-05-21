@@ -55,6 +55,7 @@ source "$GRID_CONFIG"
 
 grid_name="$(basename "$GRID_CONFIG")"
 grid_stem="${grid_name%.sh}"
+grid_stem="${grid_stem%_grid_search}"
 if [[ "$grid_stem" == *weak* ]]; then
     SCALING_KIND="weak"
 elif [[ "$grid_stem" == *strong* ]]; then

@@ -67,11 +67,13 @@ fi
 
 # Shared/fixed scaling parameters. Keep the grids focused only on the values
 # that differ between strong and weak scaling cases.
-NODE_COUNT=1
-MPI_PROCESS_COUNT=1
+DEFAULT_NODE_COUNT=1
+DEFAULT_MPI_PROCESS_COUNT=1
 SEED=13
 MAX_KEY=1000000
 P=256
+PARTITION_THREADS=16
+JOIN_THREADS=16
 PARTITION_SCHEDULE=guided
 JOIN_SCHEDULE=guided
 PARTITION_CHUNK=8
@@ -125,8 +127,8 @@ valid_mpi_layout() {
 reset_case_values() {
     NR=""
     NS=""
-    PARTITION_THREADS=""
-    JOIN_THREADS=""
+    CASE_NODE_COUNT=""
+    CASE_MPI_PROCESS_COUNT=""
     OUTPUT_CSV=""
 }
 
@@ -145,12 +147,12 @@ parse_case() {
         case "$key" in
             NR) NR="$value" ;;
             NS) NS="$value" ;;
-            PARTITION_THREADS) PARTITION_THREADS="$value" ;;
-            JOIN_THREADS) JOIN_THREADS="$value" ;;
+            MPI_NODES) CASE_NODE_COUNT="$value" ;;
+            MPI_PROCESSES|MPI_PROCESS_COUNT) CASE_MPI_PROCESS_COUNT="$value" ;;
             OUTPUT_CSV) OUTPUT_CSV="$value" ;;
             *)
                 echo "Unknown or shared case key '$key' in: $case_entry"
-                echo "Only NR, NS, PARTITION_THREADS, JOIN_THREADS, and OUTPUT_CSV are accepted in scaling grids."
+                echo "Only NR, NS, MPI_NODES, MPI_PROCESSES, and OUTPUT_CSV are accepted in scaling grids."
                 return 1
                 ;;
         esac
@@ -160,11 +162,6 @@ parse_case() {
 require_case_values() {
     local missing=()
     local name
-    for name in PARTITION_THREADS JOIN_THREADS; do
-        if [ -z "${!name}" ]; then
-            missing+=("$name")
-        fi
-    done
     if [ "$SCALING_KIND" = "weak" ]; then
         for name in NR NS; do
             if [ -z "${!name}" ]; then
@@ -190,8 +187,27 @@ require_case_values() {
         fi
     done
 
+    if [ -n "$CASE_NODE_COUNT" ] && ! is_positive_int "$CASE_NODE_COUNT"; then
+        echo "MPI_NODES must be a positive integer, received: $CASE_NODE_COUNT"
+        return 1
+    fi
+
+    if [ -n "$CASE_MPI_PROCESS_COUNT" ] && ! is_positive_int "$CASE_MPI_PROCESS_COUNT"; then
+        echo "MPI_PROCESSES must be a positive integer, received: $CASE_MPI_PROCESS_COUNT"
+        return 1
+    fi
+
+    NODE_COUNT="${CASE_NODE_COUNT:-$DEFAULT_NODE_COUNT}"
+    if [ -n "$CASE_MPI_PROCESS_COUNT" ]; then
+        MPI_PROCESS_COUNT="$CASE_MPI_PROCESS_COUNT"
+    elif [ -n "$CASE_NODE_COUNT" ]; then
+        MPI_PROCESS_COUNT="$CASE_NODE_COUNT"
+    else
+        MPI_PROCESS_COUNT="$DEFAULT_MPI_PROCESS_COUNT"
+    fi
+
     if ! valid_mpi_layout "$NODE_COUNT" "$MPI_PROCESS_COUNT"; then
-        echo "Invalid MPI layout: NODE_COUNT=$NODE_COUNT MPI_PROCESS_COUNT=$MPI_PROCESS_COUNT"
+        echo "Invalid MPI layout: MPI_NODES=$NODE_COUNT MPI_PROCESSES=$MPI_PROCESS_COUNT"
         return 1
     fi
 }
@@ -209,8 +225,9 @@ echo "Scaling kind:                 $SCALING_KIND"
 echo "Cases:                        ${#SCALING_CASES[@]}"
 echo "Dataset-type values:          ${DATASET_TYPE_VALUES[*]}"
 echo "Fixed P/seed/max-key:         P=$P seed=$SEED max_key=$MAX_KEY"
+echo "Fixed OpenMP threads:         partition=$PARTITION_THREADS join=$JOIN_THREADS"
 echo "Fixed schedules/chunks:       partition=$PARTITION_SCHEDULE/$PARTITION_CHUNK join=$JOIN_SCHEDULE/$JOIN_CHUNK block_size=$PARTITION_BLOCK_SIZE"
-echo "Fixed MPI layout:             nodes=$NODE_COUNT mpi_processes=$MPI_PROCESS_COUNT strategy=$MPI_PARTITION_STRATEGY"
+echo "Default MPI layout:           nodes=$DEFAULT_NODE_COUNT mpi_processes=$DEFAULT_MPI_PROCESS_COUNT strategy=$MPI_PARTITION_STRATEGY"
 echo "Repeat count:                 $REPEAT_COUNT"
 echo "Default output CSV:           $default_output_csv"
 echo "Total srun calls:             $total"
@@ -232,12 +249,7 @@ for ((run_index=1; run_index<=REPEAT_COUNT; run_index++)); do
             fi
 
             tasks_per_node=$((MPI_PROCESS_COUNT / NODE_COUNT))
-            max_threads="$PARTITION_THREADS"
-            if [ "$JOIN_THREADS" -gt "$max_threads" ]; then
-                max_threads="$JOIN_THREADS"
-            fi
-
-            export OMP_NUM_THREADS="$max_threads"
+            export OMP_NUM_THREADS="$PARTITION_THREADS"
             export OMP_DISPLAY_ENV="${OMP_DISPLAY_ENV:-false}"
 
             count=$((count + 1))
@@ -272,4 +284,4 @@ for ((run_index=1; run_index<=REPEAT_COUNT; run_index++)); do
 done
 
 echo
-echo "Scaling benchmark completed. Results appended to $default_output_csv unless overridden per case."
+make clean

@@ -1,7 +1,0 @@
-executable=hashjoin_mpi
-dataset_type=skewed_90_5
-mpi_nodes=4
-mpi_processes=4
-join_count=40578723119
-checksum1=12610816366499644757
-checksum2=12079717592018431889

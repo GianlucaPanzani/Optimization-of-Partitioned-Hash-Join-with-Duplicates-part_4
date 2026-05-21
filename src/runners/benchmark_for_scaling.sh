@@ -53,6 +53,41 @@ fi
 
 source "$GRID_CONFIG"
 
+grid_name="$(basename "$GRID_CONFIG")"
+grid_stem="${grid_name%.sh}"
+if [[ "$grid_stem" == *weak* ]]; then
+    SCALING_KIND="weak"
+elif [[ "$grid_stem" == *strong* ]]; then
+    SCALING_KIND="strong"
+else
+    echo "Cannot infer scaling kind from grid path: $GRID_CONFIG"
+    echo "Use a grid filename containing 'weak' or 'strong'."
+    exit 1
+fi
+
+# Shared/fixed scaling parameters. Keep the grids focused only on the values
+# that differ between strong and weak scaling cases.
+NODE_COUNT=1
+MPI_PROCESS_COUNT=1
+SEED=13
+MAX_KEY=1000000
+P=256
+PARTITION_SCHEDULE=guided
+JOIN_SCHEDULE=guided
+PARTITION_CHUNK=8
+JOIN_CHUNK=8
+PARTITION_BLOCK_SIZE=32768
+MPI_PARTITION_STRATEGY=block
+
+STRONG_NR=50000000
+STRONG_NS=50000000
+
+DATASET_TYPE_VALUES=(
+    uniform
+    skewed_90_5
+    skewed_90_1
+)
+
 if ! declare -p SCALING_CASES >/dev/null 2>&1; then
     echo "Grid configuration must define SCALING_CASES as a non-empty array"
     exit 1
@@ -74,10 +109,6 @@ if [ ! -x "$EXECUTABLE" ]; then
     exit 1
 fi
 
-is_nonnegative_int() {
-    [[ "$1" =~ ^[0-9]+$ ]]
-}
-
 is_positive_int() {
     [[ "$1" =~ ^[0-9]+$ ]] && [ "$1" -gt 0 ]
 }
@@ -92,22 +123,10 @@ valid_mpi_layout() {
 }
 
 reset_case_values() {
-    NODE_COUNT=""
-    MPI_PROCESS_COUNT=""
     NR=""
     NS=""
-    SEED=""
-    MAX_KEY=""
-    P=""
-    DATASET_TYPE=""
     PARTITION_THREADS=""
     JOIN_THREADS=""
-    PARTITION_SCHEDULE=""
-    JOIN_SCHEDULE=""
-    PARTITION_CHUNK=""
-    JOIN_CHUNK=""
-    PARTITION_BLOCK_SIZE=""
-    MPI_PARTITION_STRATEGY=""
     OUTPUT_CSV=""
 }
 
@@ -124,25 +143,14 @@ parse_case() {
         key="${pair%%=*}"
         value="${pair#*=}"
         case "$key" in
-            NODE_COUNT) NODE_COUNT="$value" ;;
-            MPI_PROCESS_COUNT) MPI_PROCESS_COUNT="$value" ;;
             NR) NR="$value" ;;
             NS) NS="$value" ;;
-            SEED) SEED="$value" ;;
-            MAX_KEY) MAX_KEY="$value" ;;
-            P) P="$value" ;;
-            DATASET_TYPE) DATASET_TYPE="$value" ;;
             PARTITION_THREADS) PARTITION_THREADS="$value" ;;
             JOIN_THREADS) JOIN_THREADS="$value" ;;
-            PARTITION_SCHEDULE) PARTITION_SCHEDULE="$value" ;;
-            JOIN_SCHEDULE) JOIN_SCHEDULE="$value" ;;
-            PARTITION_CHUNK) PARTITION_CHUNK="$value" ;;
-            JOIN_CHUNK) JOIN_CHUNK="$value" ;;
-            PARTITION_BLOCK_SIZE) PARTITION_BLOCK_SIZE="$value" ;;
-            MPI_PARTITION_STRATEGY) MPI_PARTITION_STRATEGY="$value" ;;
             OUTPUT_CSV) OUTPUT_CSV="$value" ;;
             *)
-                echo "Unknown case key '$key' in: $case_entry"
+                echo "Unknown or shared case key '$key' in: $case_entry"
+                echo "Only NR, NS, PARTITION_THREADS, JOIN_THREADS, and OUTPUT_CSV are accepted in scaling grids."
                 return 1
                 ;;
         esac
@@ -152,30 +160,32 @@ parse_case() {
 require_case_values() {
     local missing=()
     local name
-    for name in \
-        NODE_COUNT MPI_PROCESS_COUNT NR NS SEED MAX_KEY P DATASET_TYPE \
-        PARTITION_THREADS JOIN_THREADS PARTITION_SCHEDULE JOIN_SCHEDULE \
-        PARTITION_CHUNK JOIN_CHUNK PARTITION_BLOCK_SIZE MPI_PARTITION_STRATEGY; do
+    for name in PARTITION_THREADS JOIN_THREADS; do
         if [ -z "${!name}" ]; then
             missing+=("$name")
         fi
     done
+    if [ "$SCALING_KIND" = "weak" ]; then
+        for name in NR NS; do
+            if [ -z "${!name}" ]; then
+                missing+=("$name")
+            fi
+        done
+    fi
 
     if [ "${#missing[@]}" -gt 0 ]; then
         echo "Scaling case is missing required keys: ${missing[*]}"
         return 1
     fi
 
-    for name in NODE_COUNT MPI_PROCESS_COUNT NR NS SEED MAX_KEY P PARTITION_THREADS JOIN_THREADS PARTITION_BLOCK_SIZE; do
+    if [ "$SCALING_KIND" = "strong" ]; then
+        NR="$STRONG_NR"
+        NS="$STRONG_NS"
+    fi
+
+    for name in NR NS PARTITION_THREADS JOIN_THREADS; do
         if ! is_positive_int "${!name}"; then
             echo "$name must be a positive integer, received: ${!name}"
-            return 1
-        fi
-    done
-
-    for name in PARTITION_CHUNK JOIN_CHUNK; do
-        if ! is_nonnegative_int "${!name}"; then
-            echo "$name must be a non-negative integer, received: ${!name}"
             return 1
         fi
     done
@@ -186,18 +196,21 @@ require_case_values() {
     fi
 }
 
-grid_name="$(basename "$GRID_CONFIG")"
-grid_stem="${grid_name%.sh}"
 default_output_csv="results/${EXECUTABLE_TARGET}_${grid_stem}.csv"
 rm -f "$default_output_csv"
 
-total=$(( ${#SCALING_CASES[@]} * REPEAT_COUNT ))
+total=$(( ${#SCALING_CASES[@]} * ${#DATASET_TYPE_VALUES[@]} * REPEAT_COUNT ))
 count=0
 
 echo
 echo "Scaling benchmark executable: $EXECUTABLE_TARGET"
 echo "Grid source:                  $GRID_CONFIG"
+echo "Scaling kind:                 $SCALING_KIND"
 echo "Cases:                        ${#SCALING_CASES[@]}"
+echo "Dataset-type values:          ${DATASET_TYPE_VALUES[*]}"
+echo "Fixed P/seed/max-key:         P=$P seed=$SEED max_key=$MAX_KEY"
+echo "Fixed schedules/chunks:       partition=$PARTITION_SCHEDULE/$PARTITION_CHUNK join=$JOIN_SCHEDULE/$JOIN_CHUNK block_size=$PARTITION_BLOCK_SIZE"
+echo "Fixed MPI layout:             nodes=$NODE_COUNT mpi_processes=$MPI_PROCESS_COUNT strategy=$MPI_PARTITION_STRATEGY"
 echo "Repeat count:                 $REPEAT_COUNT"
 echo "Default output CSV:           $default_output_csv"
 echo "Total srun calls:             $total"
@@ -208,50 +221,53 @@ for ((run_index=1; run_index<=REPEAT_COUNT; run_index++)); do
         parse_case "${SCALING_CASES[$case_index]}"
         require_case_values
 
-        if [ -z "$OUTPUT_CSV" ]; then
-            OUTPUT_CSV="$default_output_csv"
-        fi
-        if [[ "$OUTPUT_CSV" != *.csv ]]; then
-            echo "OUTPUT_CSV must end with .csv, received: $OUTPUT_CSV"
-            exit 1
-        fi
+        for DATASET_TYPE in "${DATASET_TYPE_VALUES[@]}"; do
+            current_output_csv="$OUTPUT_CSV"
+            if [ -z "$current_output_csv" ]; then
+                current_output_csv="$default_output_csv"
+            fi
+            if [[ "$current_output_csv" != *.csv ]]; then
+                echo "OUTPUT_CSV must end with .csv, received: $current_output_csv"
+                exit 1
+            fi
 
-        tasks_per_node=$((MPI_PROCESS_COUNT / NODE_COUNT))
-        max_threads="$PARTITION_THREADS"
-        if [ "$JOIN_THREADS" -gt "$max_threads" ]; then
-            max_threads="$JOIN_THREADS"
-        fi
+            tasks_per_node=$((MPI_PROCESS_COUNT / NODE_COUNT))
+            max_threads="$PARTITION_THREADS"
+            if [ "$JOIN_THREADS" -gt "$max_threads" ]; then
+                max_threads="$JOIN_THREADS"
+            fi
 
-        export OMP_NUM_THREADS="$max_threads"
-        export OMP_DISPLAY_ENV="${OMP_DISPLAY_ENV:-false}"
+            export OMP_NUM_THREADS="$max_threads"
+            export OMP_DISPLAY_ENV="${OMP_DISPLAY_ENV:-false}"
 
-        count=$((count + 1))
-        printf "[%d/%d] run=%d/%d case=%d/%d target=%s nodes=%s mpi_processes=%s N=(%s,%s) P=%s dataset_type=%s p_threads=%s j_threads=%s output=%s --> " \
-            "$count" "$total" "$run_index" "$REPEAT_COUNT" "$((case_index + 1))" "${#SCALING_CASES[@]}" "$EXECUTABLE_TARGET" \
-            "$NODE_COUNT" "$MPI_PROCESS_COUNT" "$NR" "$NS" "$P" "$DATASET_TYPE" "$PARTITION_THREADS" "$JOIN_THREADS" "$OUTPUT_CSV"
+            count=$((count + 1))
+            printf "[%d/%d] run=%d/%d case=%d/%d target=%s nodes=%s mpi_processes=%s N=(%s,%s) P=%s dataset_type=%s p_threads=%s j_threads=%s output=%s --> " \
+                "$count" "$total" "$run_index" "$REPEAT_COUNT" "$((case_index + 1))" "${#SCALING_CASES[@]}" "$EXECUTABLE_TARGET" \
+                "$NODE_COUNT" "$MPI_PROCESS_COUNT" "$NR" "$NS" "$P" "$DATASET_TYPE" "$PARTITION_THREADS" "$JOIN_THREADS" "$current_output_csv"
 
-        runner_args=(
-            "$EXECUTABLE"
-            -nr "$NR"
-            -ns "$NS"
-            -seed "$SEED"
-            -max-key "$MAX_KEY"
-            -p "$P"
-            --dataset-type "$DATASET_TYPE"
-            --partition-threads "$PARTITION_THREADS"
-            --join-threads "$JOIN_THREADS"
-            --partition-schedule "$PARTITION_SCHEDULE"
-            --join-schedule "$JOIN_SCHEDULE"
-            --partition-chunk "$PARTITION_CHUNK"
-            --join-chunk "$JOIN_CHUNK"
-            --partition-block-size "$PARTITION_BLOCK_SIZE"
-            --mpi-nodes "$NODE_COUNT"
-            --mpi-processes "$MPI_PROCESS_COUNT"
-            --mpi-partition-strategy "$MPI_PARTITION_STRATEGY"
-            --output-csv "$OUTPUT_CSV"
-        )
+            runner_args=(
+                "$EXECUTABLE"
+                -nr "$NR"
+                -ns "$NS"
+                -seed "$SEED"
+                -max-key "$MAX_KEY"
+                -p "$P"
+                --dataset-type "$DATASET_TYPE"
+                --partition-threads "$PARTITION_THREADS"
+                --join-threads "$JOIN_THREADS"
+                --partition-schedule "$PARTITION_SCHEDULE"
+                --join-schedule "$JOIN_SCHEDULE"
+                --partition-chunk "$PARTITION_CHUNK"
+                --join-chunk "$JOIN_CHUNK"
+                --partition-block-size "$PARTITION_BLOCK_SIZE"
+                --mpi-nodes "$NODE_COUNT"
+                --mpi-processes "$MPI_PROCESS_COUNT"
+                --mpi-partition-strategy "$MPI_PARTITION_STRATEGY"
+                --output-csv "$current_output_csv"
+            )
 
-        srun --mpi=pmix --nodes="$NODE_COUNT" --ntasks="$MPI_PROCESS_COUNT" --ntasks-per-node="$tasks_per_node" "${runner_args[@]}"
+            srun --mpi=pmix --nodes="$NODE_COUNT" --ntasks="$MPI_PROCESS_COUNT" --ntasks-per-node="$tasks_per_node" "${runner_args[@]}"
+        done
     done
 done
 

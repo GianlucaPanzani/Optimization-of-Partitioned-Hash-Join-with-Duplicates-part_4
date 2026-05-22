@@ -768,7 +768,6 @@ struct JoinResult {
     std::uint64_t join_count = 0;
     std::uint64_t checksum1 = 0;
     std::uint64_t checksum2 = 0;
-    double redistribution_time_sec = 0.0; // local packing + MPI_Alltoall/MPI_Alltoallv redistribution
     double part_time_sec = 0.0; // local OpenMP partitioning after redistribution
     double join_time_sec = 0.0; // local OpenMP join phase
 };
@@ -907,16 +906,13 @@ static JoinResult partitioned_hash_join(const std::vector<Record>& local_R,
                                         MPI_Comm comm) {
     JoinResult result{};
 
-    double t0 = get_time();
     const std::vector<Record> redistributed_R = redistribute_relation_alltoallv(local_R, p, mpi_cfg, record_type, comm);
     const std::vector<Record> redistributed_S = redistribute_relation_alltoallv(local_S, p, mpi_cfg, record_type, comm);
-    double t1 = get_time();
-    result.redistribution_time_sec = t1 - t0;
 
-    t0 = get_time();
+    double t0 = get_time();
     const PartitionedRelation Rpart = partition_relation(redistributed_R, p, cfg);
     const PartitionedRelation Spart = partition_relation(redistributed_S, p, cfg);
-    t1 = get_time();
+    double t1 = get_time();
     result.part_time_sec = t1 - t0;
 
     const std::vector<JoinWorkItem> work_items = build_join_work_items(Rpart, Spart, p, cfg.join_threads);
@@ -982,7 +978,6 @@ static JoinResult reduce_join_result(const JoinResult& local, MPI_Comm comm) {
     global.join_count = static_cast<std::uint64_t>(global_counts[0]);
     global.checksum1 = static_cast<std::uint64_t>(global_counts[1]);
     global.checksum2 = static_cast<std::uint64_t>(global_counts[2]);
-    MPI_Reduce(&local.redistribution_time_sec, &global.redistribution_time_sec, 1, MPI_DOUBLE, MPI_MAX, 0, comm);
     MPI_Reduce(&local.part_time_sec, &global.part_time_sec, 1, MPI_DOUBLE, MPI_MAX, 0, comm);
     MPI_Reduce(&local.join_time_sec, &global.join_time_sec, 1, MPI_DOUBLE, MPI_MAX, 0, comm);
     return global;
@@ -1198,7 +1193,6 @@ int main(int argc, char** argv) {
 
     // Append results to csv file
     const std::uint64_t total_elements = NR + NS;
-    const double redistribution_throughput = compute_throughput(total_elements, result.redistribution_time_sec);
     const double part_throughput = compute_throughput(total_elements, result.part_time_sec);
     const double join_throughput = compute_throughput(total_elements, result.join_time_sec);
     const double total_throughput = compute_throughput(total_elements, tot_time_sec);
@@ -1210,8 +1204,6 @@ int main(int argc, char** argv) {
         {"dataset_type", dataset_cfg.type},
         {"join_throughput", std::to_string(join_throughput)},
         {"total_throughput", std::to_string(total_throughput)},
-        {"redistribution_time", std::to_string(result.redistribution_time_sec)},
-        {"redistribution_throughput", std::to_string(redistribution_throughput)},
         {"partition_time", std::to_string(result.part_time_sec)},
         {"partition_throughput", std::to_string(part_throughput)},
         {"join_time", std::to_string(result.join_time_sec)},

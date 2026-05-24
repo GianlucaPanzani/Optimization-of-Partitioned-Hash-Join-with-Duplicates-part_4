@@ -150,6 +150,9 @@ if [ ! -x "$EXECUTABLE" ]; then
     exit 1
 fi
 
+OUTPUT_CSV="results/${EXECUTABLE_TARGET}.csv"
+rm -f "$OUTPUT_CSV"
+
 VALID_MPI_LAYOUTS=0
 for NODE_COUNT in "${NODE_VALUES[@]}"; do
     for MPI_PROCESS_COUNT in "${MPI_PROCESS_VALUES[@]}"; do
@@ -188,6 +191,7 @@ echo
 echo "Benchmark target:            $EXECUTABLE_TARGET"
 echo "Compiled executable:         $MAKE_TARGET"
 echo "Grid source:                 $GRID_CONFIG"
+echo "Output CSV:                  $OUTPUT_CSV"
 echo "Node values:                 ${NODE_VALUES[*]}"
 echo "MPI process values:          ${MPI_PROCESS_VALUES[*]}"
 echo "Valid MPI layouts:           $VALID_MPI_LAYOUTS"
@@ -255,6 +259,7 @@ for ((RUN_INDEX=1; RUN_INDEX<=REPEAT_COUNT; RUN_INDEX++)); do
                                                                     "$JOIN_CHUNK"
                                                                     "$PARTITION_BLOCK_SIZE"
                                                                     "$MPI_PARTITION_STRATEGY"
+                                                                    "$OUTPUT_CSV"
                                                                 )
 
                                                                 sbatch --parsable --wait --nodes="$NODE_COUNT" --ntasks="$MPI_PROCESS_COUNT" --ntasks-per-node="$TASKS_PER_NODE" "${runner_args[@]}"

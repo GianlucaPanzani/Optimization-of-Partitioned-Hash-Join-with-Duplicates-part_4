@@ -8,8 +8,8 @@
 
 set -euo pipefail
 
-if [ "$#" -ne 17 ]; then
-    echo "Usage: $0 EXECUTABLE NODE_COUNT MPI_PROCESS_COUNT NR NS SEED MAX_KEY P DATASET_TYPE PARTITION_THREADS JOIN_THREADS PARTITION_SCHEDULE JOIN_SCHEDULE PARTITION_CHUNK JOIN_CHUNK PARTITION_BLOCK_SIZE MPI_PARTITION_STRATEGY"
+if [ "$#" -lt 17 ] || [ "$#" -gt 18 ]; then
+    echo "Usage: $0 EXECUTABLE NODE_COUNT MPI_PROCESS_COUNT NR NS SEED MAX_KEY P DATASET_TYPE PARTITION_THREADS JOIN_THREADS PARTITION_SCHEDULE JOIN_SCHEDULE PARTITION_CHUNK JOIN_CHUNK PARTITION_BLOCK_SIZE MPI_PARTITION_STRATEGY [OUTPUT_CSV]"
     exit 1
 fi
 
@@ -30,6 +30,7 @@ PARTITION_CHUNK="${14}"
 JOIN_CHUNK="${15}"
 PARTITION_BLOCK_SIZE="${16}"
 MPI_PARTITION_STRATEGY="${17}"
+OUTPUT_CSV="${18:-}"
 
 if ! [[ "$NODE_COUNT" =~ ^[0-9]+$ ]] || [ "$NODE_COUNT" -lt 1 ] || [ "$NODE_COUNT" -gt 8 ]; then
     echo "NODE_COUNT must be an integer in [1, 8], received: $NODE_COUNT"
@@ -92,5 +93,9 @@ runner_args=(
     --mpi-processes "$MPI_PROCESS_COUNT"
     --mpi-partition-strategy "$MPI_PARTITION_STRATEGY"
 )
+
+if [ -n "$OUTPUT_CSV" ]; then
+    runner_args+=(--output-csv "$OUTPUT_CSV")
+fi
 
 srun --mpi=pmix --nodes="$NODE_COUNT" --ntasks="$MPI_PROCESS_COUNT" --ntasks-per-node="$TASKS_PER_NODE" "${runner_args[@]}"

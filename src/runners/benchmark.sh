@@ -19,6 +19,7 @@ fi
 
 EXECUTABLE_INPUT="$1"
 EXECUTABLE_TARGET="$(basename "$EXECUTABLE_INPUT")"
+MAKE_TARGET="$EXECUTABLE_TARGET"
 GRID_CONFIG="$EXE_DIR/grid/omp_grid_search.sh"
 REPEAT_COUNT="1"
 
@@ -124,16 +125,8 @@ case "$EXECUTABLE_TARGET" in
     hashjoin_mpi)
         make cleanall_mpi
         ;;
-    hashjoin_hybrid_uniform)
-        make cleanall_hybrid
-        ;;
-    hashjoin_hybrid_skew1)
-        make cleanall_hybrid
-        ;;
-    hashjoin_hybrid_skew2)
-        make cleanall_hybrid
-        ;;
-    hashjoin_hybrid)
+    hashjoin_hybrid|hashjoin_hybrid_uniform|hashjoin_hybrid_skew1|hashjoin_hybrid_skew2)
+        MAKE_TARGET="hashjoin_hybrid"
         make cleanall_hybrid
         ;;
     *)
@@ -145,12 +138,12 @@ esac
 
 mkdir -p compilation
 
-if ! make -B "$EXECUTABLE_TARGET"; then
-    echo "Compilation failed or unknown make target: $EXECUTABLE_TARGET"
+if ! make -B "$MAKE_TARGET"; then
+    echo "Compilation failed or unknown make target: $MAKE_TARGET"
     exit 1
 fi
 
-EXECUTABLE="$EXE_DIR/$EXECUTABLE_TARGET"
+EXECUTABLE="$EXE_DIR/$MAKE_TARGET"
 
 if [ ! -x "$EXECUTABLE" ]; then
     echo "Compiled executable not found or not executable: $EXECUTABLE"
@@ -192,7 +185,8 @@ TOTAL=$(( \
 COUNT=0
 
 echo
-echo "Benchmark executable:        $EXECUTABLE_TARGET"
+echo "Benchmark target:            $EXECUTABLE_TARGET"
+echo "Compiled executable:         $MAKE_TARGET"
 echo "Grid source:                 $GRID_CONFIG"
 echo "Node values:                 ${NODE_VALUES[*]}"
 echo "MPI process values:          ${MPI_PROCESS_VALUES[*]}"

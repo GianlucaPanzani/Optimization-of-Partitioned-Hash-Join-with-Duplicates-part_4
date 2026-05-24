@@ -124,6 +124,15 @@ case "$EXECUTABLE_TARGET" in
     hashjoin_mpi)
         make cleanall_mpi
         ;;
+    hashjoin_hybrid_uniform)
+        make cleanall_hybrid
+        ;;
+    hashjoin_hybrid_skew1)
+        make cleanall_hybrid
+        ;;
+    hashjoin_hybrid_skew2)
+        make cleanall_hybrid
+        ;;
     hashjoin_hybrid)
         make cleanall_hybrid
         ;;

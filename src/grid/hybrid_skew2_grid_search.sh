@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Static parameters
+N_VALUES=(50000000)
+P_VALUES=(256)
+SEED_VALUES=(13)
+MAX_KEY_VALUES=(1000000)
+
+# Dataset distributions type (e.g. skewed_80_5 means 80% of records go to 5% of the partitions)
+DATASET_TYPE_VALUES=(skewed_90_5)
+
+# MPI parameters
+NODE_VALUES=(1 4 8)
+MPI_PROCESS_VALUES=(1 4 8)
+MPI_PARTITION_STRATEGY_VALUES=(block cyclic)
+
+# OpenMP parameters
+PARTITION_THREAD_VALUES=(4 16)
+JOIN_THREAD_VALUES=(4 16)
+PARTITION_SCHEDULE_VALUES=(guided)
+JOIN_SCHEDULE_VALUES=(guided)
+PARTITION_CHUNK_VALUES=(4)
+JOIN_CHUNK_VALUES=(4)
+PARTITION_BLOCK_SIZE_VALUES=(16384)

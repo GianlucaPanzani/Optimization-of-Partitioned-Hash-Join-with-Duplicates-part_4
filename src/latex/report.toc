@@ -1,0 +1,15 @@
+\contentsline {section}{\numberline {1}Implementation}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Executable Variants}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Parameters}{1}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Distributed Strategy}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}MPI Redistribution}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Local Partition and Join}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Measured Phase Times}{2}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Averaged Results}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Uniform dataset}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Skewed dataset}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Scalability Analysis}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Weak Scalability}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Strong Scalability}{4}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Correctness Validation}{5}{section.5}%
+\contentsline {section}{\numberline {6}Conclusions}{5}{section.6}%

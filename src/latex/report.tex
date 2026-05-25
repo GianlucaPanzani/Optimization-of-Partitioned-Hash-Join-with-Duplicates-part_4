@@ -49,7 +49,10 @@
 \newpage
 \pagenumbering{arabic}
 
+
 \section{Implementation}
+
+The implementation keeps the partitioned hash join structure from the previous modules and changes only how the work is placed on the available hardware.  Records are generated deterministically, mapped to one of the \(P=256\) partitions.  In the distributed versions, MPI is responsible for moving records to the rank that owns their final partition, so each rank can complete its assigned joins independently.  The hybrid version adds OpenMP inside each rank to accelerate the local partitioning and joining work after the MPI redistribution has completed.
 
 \subsection{Executable Variants}
 
@@ -64,27 +67,49 @@ The \texttt{hashjoin\_hybrid} executable uses the same ownership and redistribut
 
 The main benchmark campaign uses \(N_R=N_S=50\,000\,000\), \(P=256\), \texttt{seed=13}, \texttt{max\_key=1\,000\,000}, and three datasets: \texttt{uniform}, \texttt{skewed\_90\_5}, and \texttt{skewed\_90\_1}.  The two skewed datasets concentrate 90\% of the records in the keys mapped to a small subset of partitions, respectively about 5\% and 1\% of the total partition space.
 
-The main comparison selects the best averaged record for each execution type and dataset, so some MPI records may use multiple ranks on the same node when this is faster.  The dedicated scaling campaign is instead restricted to one active MPI rank per node: strong scaling keeps \(N_R=N_S=50\,000\,000\) fixed, while weak scaling increases the input size proportionally to the number of ranks.
+The main comparison reports the best averaged configuration found by the grid search for each execution variant and dataset type. Each reported value is averaged over five repetitions.
+
 
 \section{Distributed Strategy}
 
 \subsection{MPI Redistribution}
 
-The global algorithm remains the same as in the previous modules: records are assigned to partitions with the same mapping function, records belonging to the same partition are brought together, and each partition pair \((R_p,S_p)\) is joined independently.  The difference is that the owner of a partition is now an MPI rank.
+The global algorithm follows the same partitioned hash join structure used in the previous modules: each record is assigned to a partition with the same mapping function, records belonging to the same partition are grouped together, and each partition pair \((R_p,S_p)\) is joined independently. In the MPI version, however, partitions are not processed by threads in a shared-memory space, but are assigned to MPI ranks. Therefore, before the local join can start, records must be redistributed so that each rank receives the records of the partitions it owns.
 
-Each rank first scans its locally generated records and computes the destination rank for each record.  Three ownership policies are implemented: \texttt{block}, where contiguous ranges of partitions are assigned to ranks; \texttt{cyclic}, where partition \(p\) is assigned to rank \(p \bmod R\); and \texttt{balanced}, where partition weights are estimated and assigned greedily to reduce rank imbalance.  The selected best records in this campaign use \texttt{cyclic}, which is simple and effective for the tested skewed distributions because it spreads hot partition ids across ranks better than block ownership.
+Each rank first generates only a disjoint slice of the global input relations and scans its local records to compute their destination rank. Two ownership policies are implemented:
+\begin{itemize}
+    \item \texttt{block}: contiguous ranges of partition ids are assigned to ranks;
+    \item \texttt{cyclic}: partition \(p\) is assigned to rank \(p \bmod N_{\mathrm{ranks}}\), where \(N_{\mathrm{ranks}}\) is the number of MPI processes;
+\end{itemize}
 
-The redistribution itself is performed twice, once for \(R\) and once for \(S\).  First, \texttt{MPI\_Alltoall} exchanges only the number of records that every rank will receive from every other rank.  These counts are then used to allocate receive buffers and compute displacements.  Then \texttt{MPI\_Alltoallv} exchanges the actual records, allowing each sender-destination pair to use a different message size.  This variable-size all-to-all exchange is necessary because the number of records mapped to each owner rank is not uniform, especially on skewed datasets.
+The redistribution phase is performed separately for \(R\) and \(S\). For each relation, every rank groups its local records by destination rank. Before exchanging the actual records, each rank must know how many records it will receive from every other rank, in order to allocate the receive buffer and compute the receive displacements. For this reason, the first communication step uses \texttt{MPI\_Alltoall}: each rank sends exactly one integer count to every other rank, representing the number of records that will be sent to that destination.
+
+After the count exchange, each rank knows the size of all incoming messages. The actual records are then exchanged with \texttt{MPI\_Alltoallv}. The variable-size version is required because the number of records sent from rank \(i\) to rank \(j\) is not constant: it depends on the partition ownership policy and on the input distribution. This is particularly important for skewed datasets, where some partitions receive many more records than others. A regular \texttt{MPI\_Alltoall} would require all sender-destination pairs to exchange blocks of the same size, forcing padding and wasting memory bandwidth. Instead, \texttt{MPI\_Alltoallv} allows each pair of ranks to exchange a different number of records, making it the natural choice for this redistribution step.
+
+After redistribution, each rank owns all records belonging to its assigned partitions. The local partition and join phases can then be executed independently on each rank, and the final \texttt{join\_count}, \texttt{checksum1}, and \texttt{checksum2} are aggregated with \texttt{MPI\_Reduce}.
 
 \subsection{Local Partition and Join}
 
-After redistribution, each rank owns complete global partitions.  It locally partitions the received \(R\) and \(S\) records into the same \(P=256\) partition layout used by the sequential implementation.  In the hybrid executable, this local partitioning uses the OpenMP blocked histogram/scatter implementation to reduce per-rank computation time.
+After the MPI redistribution, each rank has received all records whose partition ids are assigned to it. In other words, a rank does not own the whole dataset, but it owns the complete global content of its assigned partitions: for every partition \(p\) owned by rank \(r\), all records belonging to \(R_p\) and \(S_p\) have been moved to rank \(r\).
 
-The join phase is local after redistribution.  Rank \(r\) scans only the partitions owned by \(r\), builds a private flat count table for \(R_p\), probes \(S_p\), and accumulates a local \texttt{join\_count}, \texttt{checksum1}, and \texttt{checksum2}.  In the hybrid executable, large local partitions can be split into independent probe subranges using the workload-balanced OpenMP join decomposition from Module 3.  Finally, \texttt{MPI\_Reduce} sums the local outputs into the final global result on rank 0.
+The received records are then locally reorganized according to the same \(P=256\) partition layout used by the sequential implementation. This local partitioning step is still useful because the records received through \texttt{MPI\_Alltoallv} are grouped by source and destination rank, but not necessarily stored in the exact contiguous partition layout required by the local join kernel. Therefore, each rank rebuilds the local partition offsets for its received \(R\) and \(S\) records. In the hybrid executable, this local partitioning phase is parallelized with the OpenMP blocked histogram/scatter implementation used in the previous module.
+
+Once this local layout has been built, the join phase is completely local. Rank \(r\) processes only the partition ids assigned to it. For each owned partition \(p\), it builds a private flat count table from \(R_p\), probes the corresponding records in \(S_p\), and accumulates the local contribution to \texttt{join\_count}, \texttt{checksum1}, and \texttt{checksum2}.
+
+In the hybrid executable, the local join phase is further parallelized with OpenMP. Large local partitions can be split into independent probe subranges using the workload-balanced join decomposition introduced in Module 3. Each subrange computes a private partial result, avoiding synchronization in the hot path.
+
+Finally, the local outputs produced by all ranks are summed with \texttt{MPI\_Reduce}, obtaining the final global \texttt{join\_count}, \texttt{checksum1}, and \texttt{checksum2} on rank 0.
 
 \subsection{Measured Phase Times}
 
-The reported MPI and hybrid phase times are rank-level maxima, not rank-level averages.  This is intentional: the wall-clock runtime is determined by the slowest rank.  The measured local phases are \texttt{partition\_time} and \texttt{join\_time}.  The redistribution/residual component includes the \texttt{MPI\_Alltoall} and \texttt{MPI\_Alltoallv} exchanges, reductions, barriers, and other synchronization overhead.  Therefore, for MPI and hybrid runs, this component approximates the communication cost that must be paid before the local join can complete.
+The reported MPI and hybrid partition and join phase times are rank-level maxima.  This is intentional because the wall-clock runtime is determined by the slowest rank due to barriers and synchronization.  The measured local phases are \texttt{partition\_time} and \texttt{join\_time}.  The redistribution/residual component includes the \texttt{MPI\_Alltoall} and \texttt{MPI\_Alltoallv} exchanges, reductions, barriers, and other synchronization overhead.  Therefore, for MPI and hybrid runs, this component approximates the communication cost that must be paid before the local join can complete. The final tables and plots report the average of these per-run rank-level maxima over the five repetitions.
+
+
+\section{Averaged Results}
+
+As already mentioned, each average is computed over five repetitions.  The got speedup is relative to the sequential baseline with the same dataset type.  For sequential and OpenMP records, the MPI-related columns are only used to keep the table format uniform.
+
+Figure~\ref{fig:phase-components} and Figure~\ref{fig:best-total-time} show the phase breakdown and total time for the selected records. Instead, Table~\ref{tab:best-configs} reports the best averaged total time and speedup for each execution variant and dataset type, and Table~\ref{tab:phase-breakdown} the corresponding phase breakdown. Note that, since Table~\ref{tab:best-configs} reports the best configuration found for each execution type, the MPI and hybrid rows are not runs with the same node placement. The exact rank/node configuration is reported explicitly in the table.
 
 \begin{figure}[H]
 \centering
@@ -93,40 +118,43 @@ The reported MPI and hybrid phase times are rank-level maxima, not rank-level av
 \label{fig:phase-components}
 \end{figure}
 
-\section{Averaged Results}
-
-Table~\ref{tab:best-configs} reports the best averaged total time per execution type and dataset.  Each average is computed over five repetitions.  The speedup is relative to the sequential baseline with the same dataset type.  For sequential and OpenMP records, the MPI-related columns are only used to keep the table format uniform.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{001_selected_best_tot_sec_50000000_50000000_1000000.png}
+\caption{Best averaged total time for the main \(50M+50M\) benchmark.}
+\label{fig:best-total-time}
+\end{figure}
 
 \subsection{Uniform dataset}
 
-On the uniform dataset, OpenMP remains the fastest model.  It reaches 0.568 s and 6.03$\times$ speedup because all communication is avoided and the partition/join work is still regular enough for a shared-memory implementation.  Pure MPI and hybrid reduce the local computation substantially, but their communication and synchronization costs dominate the final runtime.  For example, pure MPI spends only 0.095 s in local partitioning and 0.246 s in local joining, but the redistribution/residual component is 0.681 s, which is already larger than the full OpenMP execution.
+On the uniform dataset, OpenMP remains the fastest model.  It reaches 0.568 s and 6.03$\times$ speedup because the overhead introduced by communication is avoided and the partition/join work is still regular enough for a shared-memory implementation.  Pure MPI and hybrid reduce the local computation substantially, but their communication and synchronization costs dominate the final runtime.  For example, pure MPI spends only 0.095 s in local partitioning and 0.246 s in local joining, but the redistribution/residual component is 0.681 s, which is already larger than the full OpenMP execution.
+
+The hybrid version makes this trade-off even clearer.  On uniform data it reduces local partitioning to 0.050 s and local joining to 0.036 s, but its total time remains 0.784 s because the residual cost is 0.698 s.  This means that, for this input size, adding OpenMP inside each MPI rank improves the local phases but cannot remove the communication overhead.
 
 \subsection{Skewed dataset}
 
-The hybrid version makes this trade-off even clearer.  On uniform data it reduces local partitioning to 0.050 s and local joining to 0.036 s, but its total remains 0.784 s because the residual cost is 0.698 s.  This means that, for this input size, adding OpenMP inside each MPI rank improves the local phases but cannot remove the all-to-all cost.
-
-The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is still best: it takes 0.768 s, while MPI and hybrid take 1.101 s and 0.885 s.  The new hybrid record narrows the gap substantially by using only 4 join threads per rank, reducing the local join to 0.108 s, but the 0.723 s residual component still prevents it from beating OpenMP.  In \texttt{skewed\_90\_1}, the join becomes much heavier: OpenMP spends 1.326 s in the join phase, while hybrid reduces the local join to 0.558 s and obtains the best total time among the parallel versions, 1.522 s.  Therefore the hybrid approach becomes useful when the local join is expensive enough to compensate for part of the communication cost.
+The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is still best: it takes 0.768 s, while MPI and hybrid take 1.101 s and 0.885 s.  The new hybrid record narrows the gap substantially by using only 4 join threads per rank, reducing the local join to 0.108 s, but the 0.723 s residual component still prevents it from beating OpenMP.  In \texttt{skewed\_90\_1}, the join becomes much heavier: OpenMP spends 1.326 s in the join phase, for a total time of 1.664 s, while hybrid reduces the local join to 0.558 s obtaining the best total time among the parallel versions, 1.522 s (Figure~\ref{fig:best-total-time}).  Therefore the hybrid approach becomes useful when the local join is expensive enough to compensate for part of the communication cost.
 
 \begin{table}[H]
 \centering
 \scriptsize
 \resizebox{\textwidth}{!}{
-\begin{tabular}{llrrrrlrr}
+\begin{tabular}{llrrrrrrlrr}
 \toprule
-Dataset & Exec. & Nodes & MPI proc. & Ranks/node & Threads/rank & Strategy & Avg total [s] & Speedup \\
+Dataset & Exec. & Nodes & MPI proc. & Ranks/node & P-threads & J-threads & Strategy & Avg total [s] & Speedup \\
 \midrule
-\texttt{uniform} & seq & 1 & 1 & 1 & 1 & block & 3.422 & 1.00$\times$ \\
-\texttt{uniform} & omp & 1 & 1 & 1 & 32 & block & 0.568 & 6.03$\times$ \\
-\texttt{uniform} & mpi & 8 & 8 & 1 & 1 & cyclic & 1.022 & 3.35$\times$ \\
-\texttt{uniform} & hybrid & 8 & 8 & 1 & 16/16 & cyclic & 0.784 & 4.36$\times$ \\
-\texttt{skewed\_90\_5} & seq & 1 & 1 & 1 & 1 & block & 2.788 & 1.00$\times$ \\
-\texttt{skewed\_90\_5} & omp & 1 & 1 & 1 & 32 & block & 0.768 & 3.63$\times$ \\
-\texttt{skewed\_90\_5} & mpi & 1 & 8 & 8 & 1 & cyclic & 1.101 & 2.53$\times$ \\
-\texttt{skewed\_90\_5} & hybrid & 8 & 8 & 1 & 16/4 & cyclic & 0.885 & 3.15$\times$ \\
-\texttt{skewed\_90\_1} & seq & 1 & 1 & 1 & 1 & block & 3.092 & 1.00$\times$ \\
-\texttt{skewed\_90\_1} & omp & 1 & 1 & 1 & 32 & block & 1.664 & 1.86$\times$ \\
-\texttt{skewed\_90\_1} & mpi & 1 & 8 & 8 & 1 & cyclic & 1.839 & 1.68$\times$ \\
-\texttt{skewed\_90\_1} & hybrid & 8 & 8 & 1 & 16/4 & cyclic & 1.522 & 2.03$\times$ \\
+\texttt{uniform} & seq & 1 & 1 & 1 & -- & -- & -- & 3.422 & 1.00$\times$ \\
+\texttt{uniform} & omp & 1 & 1 & 1 & 32 & 32 & -- & 0.568 & 6.03$\times$ \\
+\texttt{uniform} & mpi & 8 & 8 & 1 & -- & -- & cyclic & 1.022 & 3.35$\times$ \\
+\texttt{uniform} & hybrid & 8 & 8 & 1 & 16 & 16 & cyclic & 0.784 & 4.36$\times$ \\
+\texttt{skewed\_90\_5} & seq & 1 & 1 & 1 & -- & -- & -- & 2.788 & 1.00$\times$ \\
+\texttt{skewed\_90\_5} & omp & 1 & 1 & 1 & 32 & 32 & -- & 0.768 & 3.63$\times$ \\
+\texttt{skewed\_90\_5} & mpi & 1 & 8 & 8 & -- & -- & cyclic & 1.101 & 2.53$\times$ \\
+\texttt{skewed\_90\_5} & hybrid & 8 & 8 & 1 & 16 & 4 & cyclic & 0.885 & 3.15$\times$ \\
+\texttt{skewed\_90\_1} & seq & 1 & 1 & 1 & -- & -- & -- & 3.092 & 1.00$\times$ \\
+\texttt{skewed\_90\_1} & omp & 1 & 1 & 1 & 32 & 32 & -- & 1.664 & 1.86$\times$ \\
+\texttt{skewed\_90\_1} & mpi & 1 & 8 & 8 & -- & -- & cyclic & 1.839 & 1.68$\times$ \\
+\texttt{skewed\_90\_1} & hybrid & 8 & 8 & 1 & 16 & 4 & cyclic & 1.522 & 2.03$\times$ \\
 \bottomrule
 \end{tabular}}
 \caption{Best averaged records by execution type.}
@@ -159,22 +187,16 @@ Dataset & Exec. & Total [s] & Local partition [s] & Local join [s] & Redistribut
 \label{tab:phase-breakdown}
 \end{table}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{001_selected_best_tot_sec_50000000_50000000_1000000.png}
-\caption{Best averaged total time for the main \(50M+50M\) benchmark.}
-\label{fig:best-total-time}
-\end{figure}
 
 \section{Scalability Analysis}
 
-The scaling campaign uses the pure MPI implementation with one active rank per node.  Weak scaling uses \(10M+10M\), \(20M+20M\), \(40M+40M\), and \(80M+80M\) records as the run grows from 1 to 8 ranks.  Strong scaling keeps \(N_R=N_S=50\,000\,000\) fixed and varies the allocation from 1 to 8 nodes/ranks.
+The scaling campaign uses the pure MPI implementation with one active rank per node.  Weak scaling increases the input size proportionally to the number of MPI ranks: both \(N_R\) and \(N_S\) are set to \(10M\), \(20M\), \(40M\), and \(80M\) records when the number of ranks increases from \(1\) to \(2\), \(4\), and \(8\), respectively.  Strong scaling, instead, keeps \(N_R=N_S=50M\) fixed and varies the allocation from 1 to 8 nodes/ranks.
 
 \subsection{Weak Scalability}
 
-Weak scaling is best on the uniform dataset.  The scaled speedup reaches about 8.1$\times$ at 8 nodes, because the input per rank remains almost constant while memory capacity and memory bandwidth grow with the number of nodes.  This is the case where distributed memory is most effective: the all-to-all exchange is present, but it does not dominate enough to destroy scaling.
+Weak scaling is best on the uniform dataset.  The scaled speedup reaches about 8.1$\times$ at 8 nodes, because the input per rank remains almost constant while memory capacity and memory bandwidth grow with the number of nodes.  This is the case where distributed memory is most effective: although records still have to be exchanged through the all-to-all redistribution, the communication cost remains smaller than the gain obtained by using multiple nodes.
 
-The skewed datasets scale much less.  With \texttt{skewed\_90\_5}, the 8-node scaled speedup is about 2.2$\times$; with \texttt{skewed\_90\_1}, it is about 1.9$\times$.  Even though the input size per rank is constant, increasing the global input also increases the absolute number of hot records and duplicate matches.  This creates both more join work on hot partitions and a less balanced all-to-all exchange.
+As we can observe in Figure~\ref{fig:scalability-speedup}, the skewed datasets scale much less.  With \texttt{skewed\_90\_5}, the 8-node scaled speedup is about 2.2$\times$; with \texttt{skewed\_90\_1}, it is about 1.9$\times$.  Even though the input size per rank is constant, increasing the global input also increases the absolute number of hot records and duplicate matches.  This creates both more join work on hot partitions and a less balanced all-to-all exchange.
 
 Compared with the Module 3 OpenMP weak-scaling campaign, MPI is clearly better on uniform data: the previous workload-balanced OpenMP curve stayed near 3$\times$ at large thread counts, while the distributed run reaches about 8.1$\times$ at 8 nodes.  On skewed data the advantage is smaller.  For \texttt{skewed\_90\_5}, the MPI result is close to the previous OpenMP peak; for \texttt{skewed\_90\_1}, MPI improves the largest configuration but still remains far from ideal because the hot partitions dominate the computation and communication pattern.
 
@@ -182,9 +204,9 @@ Compared with the Module 3 OpenMP weak-scaling campaign, MPI is clearly better o
 
 Strong scaling is also good on uniform data.  The speedup reaches about 8.1$\times$ at 8 nodes, slightly above the ideal 8-rank line in the averaged data.  This superlinear behavior is plausible for a memory-bound workload: when the input is split among more ranks, each rank handles smaller buffers and hash tables, which can improve cache behavior and reduce local memory pressure.  The result should therefore be interpreted as a combination of parallelism and better locality, not as zero communication cost.
 
-For skewed inputs, strong scaling is limited by hot partitions.  \texttt{skewed\_90\_5} reaches about 2.5$\times$, while \texttt{skewed\_90\_1} reaches about 2.2$\times$ at 8 ranks.  Cyclic ownership helps by spreading hot partition ids across ranks, but the pure MPI version still assigns each complete partition to a single rank.  If one or a few partitions contain most of the duplicate-heavy work, adding more ranks cannot split that work further.
+For skewed inputs, strong scaling is limited by hot partitions.  \texttt{skewed\_90\_5} and \texttt{skewed\_90\_1} reach about 2.5$\times$ and 2.2$\times$, respectively, at 8 ranks.  Cyclic ownership helps by spreading hot partition ids across ranks, but the pure MPI version still assigns each complete partition to a single rank.  If one or a few partitions contain most of the duplicate-heavy work, adding more ranks cannot split that work further.
 
-The comparison with Module 3 explains the difference between shared-memory and distributed-memory scaling.  On uniform data, MPI scales better because it distributes both memory footprint and bandwidth demand across nodes.  On skewed data, the previous OpenMP workload-balanced join could split hot local work without paying an all-to-all redistribution cost, while MPI must first move records to partition owners.  As a result, MPI is strongest on uniform data and less competitive on skewed inputs unless the local join is heavy enough for the hybrid version to compensate for part of the communication overhead.
+The comparison with Module 3 explains again the difference between shared-memory and distributed-memory scaling.  On uniform data, MPI scales better because it distributes both memory footprint and bandwidth demand across nodes.  On skewed data, the previous OpenMP workload-balanced join could split hot local work without paying an all-to-all redistribution cost, while MPI must first move records to partition owners.  As a result, MPI is strongest on uniform data and less competitive on skewed inputs unless the local join is heavy enough for the hybrid version to compensate for part of the communication overhead.
 
 \begin{figure}[H]
 \centering
@@ -202,16 +224,24 @@ The comparison with Module 3 explains the difference between shared-memory and d
 \label{fig:scalability-speedup}
 \end{figure}
 
+
 \section{Correctness Validation}
 
-Correctness is checked at two levels.  For small inputs, the implementations can compare their optimized output with a naive \(O(N_RN_S)\) verifier.  For benchmark-size inputs, where the naive verifier is too expensive, the checker compares the aggregated \texttt{join\_count}, \texttt{checksum1}, and \texttt{checksum2} values across repeated runs and compatible implementations.  The MPI and hybrid implementations use \texttt{MPI\_Reduce} to aggregate exactly these three quantities, so the final output has the same form as the sequential baseline.
+Correctness is validated at two levels. For small inputs, each implementation can compare its optimized output against a naive \(O(N_RN_S)\) reference verifier. For benchmark-size inputs, where the naive verifier is not practical, the checker compares the final aggregated \texttt{join\_count}, \texttt{checksum1}, and \texttt{checksum2} across repeated runs and compatible implementations.
 
-A benchmark record is accepted only if the three final values are consistent for the same dataset and configuration family.  This keeps the validation step outside the measured region and avoids including checker overhead in the reported runtimes.
+The MPI and hybrid versions compute local values on each rank and then use \texttt{MPI\_Reduce} to obtain the same three global quantities produced by the sequential baseline. The validation is implemented outside the measured region (not in the executable variants themselves) but in the \texttt{checker.cpp} file, so its overhead is not included in the reported runtimes.
+
 
 \section{Conclusions}
 
-The MPI implementation preserves the original partitioned hash join structure while making the cost of distributed memory explicit.  The main trade-off is clear: adding ranks reduces local partition and join work, but the all-to-all redistribution becomes a large fixed component of the runtime.  On uniform data, OpenMP is still the fastest solution for the main \(50M+50M\) benchmark because it avoids communication, while pure MPI is best in the dedicated scalability plots because it distributes memory traffic across nodes.
+This module shows that the best execution model depends strongly on the workload and on the target scale. The shared-memory OpenMP version remains the most effective choice for medium-sized inputs that fit comfortably on one node, especially when the dataset is uniform. In this case, the workload is already well balanced and avoiding MPI communication is more important than distributing the data.
 
-Skewness changes the conclusion.  Moderate skew still favors OpenMP in the main averaged benchmark, but the updated hybrid result is much closer than the pure MPI result because the local join work is reduced more aggressively.  Strong skew increases the local join cost enough for the hybrid version to become the best parallel record among the compared implementations.  The hybrid design is therefore the most promising distributed variant: MPI provides distributed memory capacity and partition ownership, while OpenMP reduces the cost of the local work assigned to each rank.  The remaining limitation is that very hot partitions are still hard to balance perfectly, especially when redistribution and synchronization are on the critical path.
+The pure MPI version becomes more interesting when the input size grows or when the goal is to exploit multiple nodes. With many ranks and few or no threads per rank, the input data, memory footprint, and memory-bandwidth pressure are distributed across the cluster. This configuration works particularly well on uniform data, where partitions have similar sizes and the cost of redistribution is compensated by the reduction of local work.
+
+The main limitation of pure MPI appears on skewed datasets. Since each complete partition is assigned to one rank, hot partitions can create imbalance: some ranks receive much more work than others. Cyclic ownership reduces this problem by spreading partition ids across ranks, but it cannot split a single very expensive partition.
+
+The hybrid MPI+OpenMP version is useful when each rank receives enough local work to justify using several threads. This is especially true for skewed workloads, where hot partitions make the local join phase expensive. In this case, fewer MPI ranks with more OpenMP threads per rank can be preferable, because OpenMP can parallelize the heavy local work without introducing additional inter-node communication.
+
+
 
 \end{document}

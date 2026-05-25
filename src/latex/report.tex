@@ -22,7 +22,7 @@
     Module 4 - Report
 }
 \author{Gianluca Panzani}
-\date{May 23, 2026}
+\date{May 25, 2026}
 
 \begin{document}
 
@@ -127,13 +127,13 @@ Figure~\ref{fig:phase-components} and Figure~\ref{fig:best-total-time} show the 
 
 \subsection{Uniform dataset}
 
-On the uniform dataset, OpenMP remains the fastest model.  It reaches 0.568 s and 6.03$\times$ speedup because the overhead introduced by communication is avoided and the partition/join work is still regular enough for a shared-memory implementation.  Pure MPI and hybrid reduce the local computation substantially, but their communication and synchronization costs dominate the final runtime.  For example, pure MPI spends only 0.095 s in local partitioning and 0.246 s in local joining, but the redistribution/residual component is 0.681 s, which is already larger than the full OpenMP execution.
+On the uniform dataset, OpenMP remains the fastest model.  It reaches 0.567 s and 6.03$\times$ speedup because the overhead introduced by communication is avoided and the partition/join work is still regular enough for a shared-memory implementation.  Pure MPI and hybrid reduce the local computation substantially, but their communication and synchronization costs dominate the final runtime.  For example, pure MPI spends only 0.094 s in local partitioning and 0.242 s in local joining, but the redistribution/residual component is 0.720 s, which is already larger than the full OpenMP execution.
 
 The hybrid version makes this trade-off even clearer.  On uniform data it reduces local partitioning to 0.050 s and local joining to 0.036 s, but its total time remains 0.784 s because the residual cost is 0.698 s.  This means that, for this input size, adding OpenMP inside each MPI rank improves the local phases but cannot remove the communication overhead.
 
 \subsection{Skewed dataset}
 
-The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is still best: it takes 0.768 s, while MPI and hybrid take 1.101 s and 0.885 s.  The new hybrid record narrows the gap substantially by using only 4 join threads per rank, reducing the local join to 0.108 s, but the 0.723 s residual component still prevents it from beating OpenMP.  In \texttt{skewed\_90\_1}, the join becomes much heavier: OpenMP spends 1.326 s in the join phase, for a total time of 1.664 s, while hybrid reduces the local join to 0.558 s obtaining the best total time among the parallel versions, 1.522 s (Figure~\ref{fig:best-total-time}).  Therefore the hybrid approach becomes useful when the local join is expensive enough to compensate for part of the communication cost.
+The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is still best: it takes 0.762 s, while MPI and hybrid take 1.106 s and 0.885 s.  The new hybrid record narrows the gap substantially by using only 4 join threads per rank, reducing the local join to 0.108 s, but the 0.723 s residual component still prevents it from beating OpenMP.  In \texttt{skewed\_90\_1}, the join becomes much heavier: OpenMP spends 1.330 s in the join phase, for a total time of 1.667 s, while hybrid reduces the local join to 0.558 s obtaining the best total time among the parallel versions, 1.522 s (Figure~\ref{fig:best-total-time}).  Therefore the hybrid approach becomes useful when the local join is expensive enough to compensate for part of the communication cost.
 
 \begin{table}[H]
 \centering
@@ -144,16 +144,16 @@ The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is st
 Dataset & Exec. & Nodes & MPI proc. & Ranks/node & P-threads & J-threads & Strategy & Avg total [s] & Speedup \\
 \midrule
 \texttt{uniform} & seq & 1 & 1 & 1 & -- & -- & -- & 3.422 & 1.00$\times$ \\
-\texttt{uniform} & omp & 1 & 1 & 1 & 32 & 32 & -- & 0.568 & 6.03$\times$ \\
-\texttt{uniform} & mpi & 8 & 8 & 1 & -- & -- & cyclic & 1.022 & 3.35$\times$ \\
+\texttt{uniform} & omp & 1 & 1 & 1 & 32 & 32 & -- & 0.567 & 6.03$\times$ \\
+\texttt{uniform} & mpi & 8 & 8 & 1 & -- & -- & cyclic & 1.056 & 3.24$\times$ \\
 \texttt{uniform} & hybrid & 8 & 8 & 1 & 16 & 16 & cyclic & 0.784 & 4.36$\times$ \\
 \texttt{skewed\_90\_5} & seq & 1 & 1 & 1 & -- & -- & -- & 2.788 & 1.00$\times$ \\
-\texttt{skewed\_90\_5} & omp & 1 & 1 & 1 & 32 & 32 & -- & 0.768 & 3.63$\times$ \\
-\texttt{skewed\_90\_5} & mpi & 1 & 8 & 8 & -- & -- & cyclic & 1.101 & 2.53$\times$ \\
+\texttt{skewed\_90\_5} & omp & 1 & 1 & 1 & 32 & 32 & -- & 0.762 & 3.66$\times$ \\
+\texttt{skewed\_90\_5} & mpi & 1 & 8 & 8 & -- & -- & cyclic & 1.106 & 2.52$\times$ \\
 \texttt{skewed\_90\_5} & hybrid & 8 & 8 & 1 & 16 & 4 & cyclic & 0.885 & 3.15$\times$ \\
 \texttt{skewed\_90\_1} & seq & 1 & 1 & 1 & -- & -- & -- & 3.092 & 1.00$\times$ \\
-\texttt{skewed\_90\_1} & omp & 1 & 1 & 1 & 32 & 32 & -- & 1.664 & 1.86$\times$ \\
-\texttt{skewed\_90\_1} & mpi & 1 & 8 & 8 & -- & -- & cyclic & 1.839 & 1.68$\times$ \\
+\texttt{skewed\_90\_1} & omp & 1 & 1 & 1 & 32 & 32 & -- & 1.667 & 1.85$\times$ \\
+\texttt{skewed\_90\_1} & mpi & 1 & 8 & 8 & -- & -- & cyclic & 1.838 & 1.68$\times$ \\
 \texttt{skewed\_90\_1} & hybrid & 8 & 8 & 1 & 16 & 4 & cyclic & 1.522 & 2.03$\times$ \\
 \bottomrule
 \end{tabular}}
@@ -170,16 +170,16 @@ Dataset & Exec. & Nodes & MPI proc. & Ranks/node & P-threads & J-threads & Strat
 Dataset & Exec. & Total [s] & Local partition [s] & Local join [s] & Redistribution/residual [s] \\
 \midrule
 \texttt{uniform} & seq & 3.422 & 1.939 & 1.480 & 0.002 \\
-\texttt{uniform} & omp & 0.568 & 0.363 & 0.201 & 0.003 \\
-\texttt{uniform} & mpi & 1.022 & 0.095 & 0.246 & 0.681 \\
+\texttt{uniform} & omp & 0.567 & 0.361 & 0.203 & 0.003 \\
+\texttt{uniform} & mpi & 1.056 & 0.094 & 0.242 & 0.720 \\
 \texttt{uniform} & hybrid & 0.784 & 0.050 & 0.036 & 0.698 \\
 \texttt{skewed\_90\_5} & seq & 2.788 & 1.125 & 1.660 & 0.003 \\
-\texttt{skewed\_90\_5} & omp & 0.768 & 0.353 & 0.412 & 0.003 \\
-\texttt{skewed\_90\_5} & mpi & 1.101 & 0.124 & 0.284 & 0.693 \\
+\texttt{skewed\_90\_5} & omp & 0.762 & 0.352 & 0.406 & 0.003 \\
+\texttt{skewed\_90\_5} & mpi & 1.106 & 0.124 & 0.285 & 0.696 \\
 \texttt{skewed\_90\_5} & hybrid & 0.885 & 0.055 & 0.108 & 0.723 \\
 \texttt{skewed\_90\_1} & seq & 3.092 & 0.796 & 2.294 & 0.002 \\
-\texttt{skewed\_90\_1} & omp & 1.664 & 0.335 & 1.326 & 0.003 \\
-\texttt{skewed\_90\_1} & mpi & 1.839 & 0.259 & 0.824 & 0.755 \\
+\texttt{skewed\_90\_1} & omp & 1.667 & 0.334 & 1.330 & 0.003 \\
+\texttt{skewed\_90\_1} & mpi & 1.838 & 0.257 & 0.814 & 0.766 \\
 \texttt{skewed\_90\_1} & hybrid & 1.522 & 0.106 & 0.558 & 0.858 \\
 \bottomrule
 \end{tabular}}

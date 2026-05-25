@@ -51,13 +51,14 @@
 
 \section{Implementation}
 
-This module extends the partitioned hash join with duplicates to a distributed-memory setting.  The main executable is \texttt{hashjoin\_mpi}; \texttt{hashjoin\_hybrid} keeps the same MPI redistribution phase but uses OpenMP inside each rank for the local partition and join phases.  The sequential and OpenMP implementations from the previous modules are kept as baselines, so every speedup is computed against the sequential execution with the same dataset type.
-
 \subsection{Executable Variants}
 
-The sequential executable \texttt{hashjoin\_seq} is the correctness reference and the baseline for speedup.  The OpenMP executable \texttt{hashjoin\_omp} is the workload-balanced loop implementation from Module 3: in the selected records it uses 32 threads for the partition phase and 32 threads for the join phase, with guided scheduling.
+This module extends the partitioned hash join with duplicates to a distributed-memory setting.  The sequential \texttt{hashjoin\_seq} implementation from the previous module is kept as baseline, so every speedup is computed against the sequential execution with the same dataset type.
 
-The \texttt{hashjoin\_mpi} executable follows a pure distributed-memory design.  Each MPI rank generates a disjoint slice of the two input relations, redistributes its local records to the ranks that own the corresponding partitions, and then joins only the partitions assigned to it.  The \texttt{hashjoin\_hybrid} executable uses the same ownership and redistribution logic, but the local phases are parallelized with OpenMP.  In the measured hybrid grid, the best records use 16 partition threads and 16 join threads per rank, guided scheduling, chunk size 4, and block size 32768.
+The OpenMP executable \texttt{hashjoin\_omp} is the workload-balanced loop implementation from Module 3 and is included in the comparison to show the cost of distributed memory and the potential of hybrid parallelism.  In the selected records it uses 32 threads for the partition phase and 32 threads for the join phase, with guided scheduling.
+
+The \texttt{hashjoin\_mpi} executable follows a pure distributed-memory design.  Each MPI rank generates a disjoint slice of the two input relations, redistributes its local records to the ranks that own the corresponding partitions, and then joins only the partitions assigned to it.
+The \texttt{hashjoin\_hybrid} executable uses the same ownership and redistribution logic, but the local phases are parallelized with OpenMP.  In the measured hybrid grid, the best records use 16 partition threads per rank; the best join-thread count is 16 on uniform data and 4 on both skewed datasets.  All selected hybrid records use guided scheduling, chunk size 4, and block size 32768.
 
 \subsection{Parameters}
 
@@ -102,9 +103,9 @@ On the uniform dataset, OpenMP remains the fastest model.  It reaches 0.568 s an
 
 \subsection{Skewed dataset}
 
-The hybrid version makes this trade-off even clearer.  On uniform data it reduces local partitioning to 0.052 s and local joining to 0.035 s, but its total remains 0.822 s because the residual cost is 0.735 s.  This means that, for this input size, adding OpenMP inside each MPI rank improves the local phases but cannot remove the all-to-all cost.
+The hybrid version makes this trade-off even clearer.  On uniform data it reduces local partitioning to 0.050 s and local joining to 0.036 s, but its total remains 0.784 s because the residual cost is 0.698 s.  This means that, for this input size, adding OpenMP inside each MPI rank improves the local phases but cannot remove the all-to-all cost.
 
-The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is still best: it takes 0.768 s, while MPI and hybrid take 1.101 s and 1.019 s.  The local distributed join is faster, but not enough to amortize redistribution.  In \texttt{skewed\_90\_1}, the join becomes much heavier: OpenMP spends 1.326 s in the join phase, while hybrid reduces the local join to 0.569 s and obtains the best total time among the parallel versions, 1.555 s.  Therefore the hybrid approach becomes useful when the local join is expensive enough to compensate for part of the communication cost.
+The skewed datasets change the balance.  In \texttt{skewed\_90\_5}, OpenMP is still best: it takes 0.768 s, while MPI and hybrid take 1.101 s and 0.885 s.  The new hybrid record narrows the gap substantially by using only 4 join threads per rank, reducing the local join to 0.108 s, but the 0.723 s residual component still prevents it from beating OpenMP.  In \texttt{skewed\_90\_1}, the join becomes much heavier: OpenMP spends 1.326 s in the join phase, while hybrid reduces the local join to 0.558 s and obtains the best total time among the parallel versions, 1.522 s.  Therefore the hybrid approach becomes useful when the local join is expensive enough to compensate for part of the communication cost.
 
 \begin{table}[H]
 \centering
@@ -117,15 +118,15 @@ Dataset & Exec. & Nodes & MPI proc. & Ranks/node & Threads/rank & Strategy & Avg
 \texttt{uniform} & seq & 1 & 1 & 1 & 1 & block & 3.422 & 1.00$\times$ \\
 \texttt{uniform} & omp & 1 & 1 & 1 & 32 & block & 0.568 & 6.03$\times$ \\
 \texttt{uniform} & mpi & 8 & 8 & 1 & 1 & cyclic & 1.022 & 3.35$\times$ \\
-\texttt{uniform} & hybrid & 8 & 8 & 1 & 16 & cyclic & 0.822 & 4.16$\times$ \\
+\texttt{uniform} & hybrid & 8 & 8 & 1 & 16/16 & cyclic & 0.784 & 4.36$\times$ \\
 \texttt{skewed\_90\_5} & seq & 1 & 1 & 1 & 1 & block & 2.788 & 1.00$\times$ \\
 \texttt{skewed\_90\_5} & omp & 1 & 1 & 1 & 32 & block & 0.768 & 3.63$\times$ \\
 \texttt{skewed\_90\_5} & mpi & 1 & 8 & 8 & 1 & cyclic & 1.101 & 2.53$\times$ \\
-\texttt{skewed\_90\_5} & hybrid & 8 & 8 & 1 & 16 & cyclic & 1.019 & 2.74$\times$ \\
+\texttt{skewed\_90\_5} & hybrid & 8 & 8 & 1 & 16/4 & cyclic & 0.885 & 3.15$\times$ \\
 \texttt{skewed\_90\_1} & seq & 1 & 1 & 1 & 1 & block & 3.092 & 1.00$\times$ \\
 \texttt{skewed\_90\_1} & omp & 1 & 1 & 1 & 32 & block & 1.664 & 1.86$\times$ \\
 \texttt{skewed\_90\_1} & mpi & 1 & 8 & 8 & 1 & cyclic & 1.839 & 1.68$\times$ \\
-\texttt{skewed\_90\_1} & hybrid & 8 & 8 & 1 & 16 & cyclic & 1.555 & 1.99$\times$ \\
+\texttt{skewed\_90\_1} & hybrid & 8 & 8 & 1 & 16/4 & cyclic & 1.522 & 2.03$\times$ \\
 \bottomrule
 \end{tabular}}
 \caption{Best averaged records by execution type.}
@@ -143,15 +144,15 @@ Dataset & Exec. & Total [s] & Local partition [s] & Local join [s] & Redistribut
 \texttt{uniform} & seq & 3.422 & 1.939 & 1.480 & 0.002 \\
 \texttt{uniform} & omp & 0.568 & 0.363 & 0.201 & 0.003 \\
 \texttt{uniform} & mpi & 1.022 & 0.095 & 0.246 & 0.681 \\
-\texttt{uniform} & hybrid & 0.822 & 0.052 & 0.035 & 0.735 \\
+\texttt{uniform} & hybrid & 0.784 & 0.050 & 0.036 & 0.698 \\
 \texttt{skewed\_90\_5} & seq & 2.788 & 1.125 & 1.660 & 0.003 \\
 \texttt{skewed\_90\_5} & omp & 0.768 & 0.353 & 0.412 & 0.003 \\
 \texttt{skewed\_90\_5} & mpi & 1.101 & 0.124 & 0.284 & 0.693 \\
-\texttt{skewed\_90\_5} & hybrid & 1.019 & 0.055 & 0.155 & 0.809 \\
+\texttt{skewed\_90\_5} & hybrid & 0.885 & 0.055 & 0.108 & 0.723 \\
 \texttt{skewed\_90\_1} & seq & 3.092 & 0.796 & 2.294 & 0.002 \\
 \texttt{skewed\_90\_1} & omp & 1.664 & 0.335 & 1.326 & 0.003 \\
 \texttt{skewed\_90\_1} & mpi & 1.839 & 0.259 & 0.824 & 0.755 \\
-\texttt{skewed\_90\_1} & hybrid & 1.555 & 0.105 & 0.569 & 0.881 \\
+\texttt{skewed\_90\_1} & hybrid & 1.522 & 0.106 & 0.558 & 0.858 \\
 \bottomrule
 \end{tabular}}
 \caption{Phase breakdown for the same selected records of Table~\ref{tab:best-configs}.}
@@ -211,6 +212,6 @@ A benchmark record is accepted only if the three final values are consistent for
 
 The MPI implementation preserves the original partitioned hash join structure while making the cost of distributed memory explicit.  The main trade-off is clear: adding ranks reduces local partition and join work, but the all-to-all redistribution becomes a large fixed component of the runtime.  On uniform data, OpenMP is still the fastest solution for the main \(50M+50M\) benchmark because it avoids communication, while pure MPI is best in the dedicated scalability plots because it distributes memory traffic across nodes.
 
-Skewness changes the conclusion.  Moderate skew still favors OpenMP in the main averaged benchmark, because communication is not amortized.  Strong skew increases the local join cost enough for the hybrid version to become the best parallel record among the compared implementations.  The hybrid design is therefore the most promising distributed variant: MPI provides distributed memory capacity and partition ownership, while OpenMP reduces the cost of the local work assigned to each rank.  The remaining limitation is that very hot partitions are still hard to balance perfectly, especially when redistribution and synchronization are on the critical path.
+Skewness changes the conclusion.  Moderate skew still favors OpenMP in the main averaged benchmark, but the updated hybrid result is much closer than the pure MPI result because the local join work is reduced more aggressively.  Strong skew increases the local join cost enough for the hybrid version to become the best parallel record among the compared implementations.  The hybrid design is therefore the most promising distributed variant: MPI provides distributed memory capacity and partition ownership, while OpenMP reduces the cost of the local work assigned to each rank.  The remaining limitation is that very hot partitions are still hard to balance perfectly, especially when redistribution and synchronization are on the critical path.
 
 \end{document}

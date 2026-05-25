@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.28)  24 MAY 2026 11:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.28)  25 MAY 2026 09:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -382,23 +382,23 @@ File: ../img/006_selected_best_phase_components_50000000_50000000_1000000.png G
 raphic file (type png)
 <use ../img/006_selected_best_phase_components_50000000_50000000_1000000.png>
 Package pdftex.def Info: ../img/006_selected_best_phase_components_50000000_500
-00000_1000000.png  used on input line 90.
+00000_1000000.png  used on input line 91.
 (pdftex.def)             Requested size: 405.9674pt x 218.03796pt.
 
 
 [2 <../img/006_selected_best_phase_components_50000000_50000000_1000000.png>]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 130.
+(Font)              <5> on input line 131.
 <../img/001_selected_best_tot_sec_50000000_50000000_1000000.png, id=113, 945.93
 4pt x 368.577pt>
 File: ../img/001_selected_best_tot_sec_50000000_50000000_1000000.png Graphic fi
 le (type png)
 <use ../img/001_selected_best_tot_sec_50000000_50000000_1000000.png>
 Package pdftex.def Info: ../img/001_selected_best_tot_sec_50000000_50000000_100
-0000.png  used on input line 163.
+0000.png  used on input line 164.
 (pdftex.def)             Requested size: 371.30833pt x 144.67802pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 164.
+(Font)              <7> on input line 165.
 
 
 [3]
@@ -408,7 +408,7 @@ File: ../img/010_weak_scalability_scaled_speedup_by_dataset.png Graphic file (t
 ype png)
 <use ../img/010_weak_scalability_scaled_speedup_by_dataset.png>
 Package pdftex.def Info: ../img/010_weak_scalability_scaled_speedup_by_dataset.
-png  used on input line 192.
+png  used on input line 193.
 (pdftex.def)             Requested size: 242.59084pt x 158.68884pt.
 <../img/008_strong_scalability_speedup_by_dataset.png, id=123, 533.995pt x 349.
 305pt>
@@ -416,7 +416,7 @@ File: ../img/008_strong_scalability_speedup_by_dataset.png Graphic file (type p
 ng)
 <use ../img/008_strong_scalability_speedup_by_dataset.png>
 Package pdftex.def Info: ../img/008_strong_scalability_speedup_by_dataset.png  
-used on input line 197.
+used on input line 198.
 (pdftex.def)             Requested size: 242.59084pt x 158.68884pt.
 
 
@@ -438,7 +438,7 @@ Here is how much of TeX's memory you used:
  33677 multiletter control sequences out of 15000+600000
  564036 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,79p,692b,468s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,10n,79p,780b,468s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
@@ -450,7 +450,7 @@ l/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local
 /texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/t
 exlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/te
 xlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on report.pdf (7 pages, 403030 bytes).
+Output written on report.pdf (7 pages, 403345 bytes).
 PDF statistics:
  194 PDF objects out of 1000 (max. 8388607)
  152 compressed objects within 2 object streams

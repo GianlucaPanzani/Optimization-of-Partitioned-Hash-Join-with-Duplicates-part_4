@@ -195,18 +195,11 @@ static int partition_owner(std::uint32_t pid, std::uint32_t P, const MpiConfig& 
         return static_cast<int>(pid % active);
     }
 
-    // Inverse of the block interval assignment used in owns_partition().
+    // Inverse of the block interval assignment.
     const std::uint32_t owner = static_cast<std::uint32_t>(
         ((static_cast<std::uint64_t>(pid) + 1ULL) * active - 1ULL) / P
     );
     return static_cast<int>(std::min<std::uint32_t>(owner, active - 1U));
-}
-
-static bool owns_partition(std::uint32_t pid, std::uint32_t P, const MpiConfig& cfg) {
-    if (cfg.world_rank >= cfg.active_ranks) {
-        return false;
-    }
-    return partition_owner(pid, P, cfg) == cfg.world_rank;
 }
 
 static std::pair<std::size_t, std::size_t> local_range_for_rank(std::size_t n, const MpiConfig& cfg) {
@@ -721,9 +714,6 @@ static JoinResult partitioned_hash_join(const std::vector<Record>& local_R,
 
     t0 = get_time();
     for (std::uint32_t pid = 0; pid < p; ++pid) {
-        if (!owns_partition(pid, p, cfg)) {
-            continue;
-        }
         const JoinResult local = join_one_partition(Rpart, Spart, pid);
         result.join_count += local.join_count;
         result.checksum1 += local.checksum1;

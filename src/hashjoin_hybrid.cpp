@@ -248,13 +248,6 @@ static int partition_owner(std::uint32_t pid, std::uint32_t P, const MpiConfig& 
     return static_cast<int>(std::min<std::uint32_t>(owner, active - 1U));
 }
 
-static bool owns_partition(std::uint32_t pid, std::uint32_t P, const MpiConfig& cfg) {
-    if (cfg.world_rank >= cfg.active_ranks) {
-        return false;
-    }
-    return partition_owner(pid, P, cfg) == cfg.world_rank;
-}
-
 static std::pair<std::size_t, std::size_t> local_range_for_rank(std::size_t n, const MpiConfig& cfg) {
     if (cfg.world_rank >= cfg.active_ranks) {
         return {0, 0};
@@ -921,13 +914,10 @@ static JoinResult partitioned_hash_join(const std::vector<Record>& local_R,
     std::vector<JoinResult> partial(work_items.size());
     const std::size_t item_count = work_items.size();
 
-    #pragma omp parallel for num_threads(cfg.join_threads) schedule(dynamic, 1) default(none) shared(partial, Rpart, Spart, work_items, mpi_cfg) firstprivate(item_count)
+    #pragma omp parallel for num_threads(cfg.join_threads) schedule(dynamic, 1) default(none) shared(partial, Rpart, Spart, work_items) firstprivate(item_count)
     for (std::int64_t idx_signed = 0; idx_signed < static_cast<std::int64_t>(item_count); ++idx_signed) {
         const std::size_t idx = static_cast<std::size_t>(idx_signed);
         const JoinWorkItem& item = work_items[idx];
-        if (!owns_partition(item.pid, static_cast<std::uint32_t>(Rpart.begin.size()), mpi_cfg)) {
-            continue;
-        }
         partial[idx] = join_one_partition_subrange(Rpart, Spart, item.pid, item.s_begin, item.s_end);
     }
 

@@ -1,7 +1,8 @@
-# Optimization of Partitioned Hash Join with Duplicates - Module 3
+# Optimization of Partitioned Hash Join with Duplicates - Module 4
 
-This repository contains a sequential partitioned hash join baseline, several
-OpenMP implementations, and Slurm runners used to benchmark them.
+This repository contains a sequential partitioned hash join baseline, OpenMP,
+MPI, and hybrid MPI+OpenMP implementations, plus Slurm runners used to benchmark
+them.
 
 ## Layout
 
@@ -25,14 +26,9 @@ Available targets:
 
 ```bash
 make hashjoin_seq
-make hashjoin_omp_loop
-make hashjoin_omp_loop_wb
-make hashjoin_omp_task
-make hashjoin_omp_task_wb
-make hashjoin_omp_taskloop
-make hashjoin_omp_taskloop_wb
-make strong_scaling
-make weak_scaling
+make hashjoin_omp
+make hashjoin_mpi
+make hashjoin_hybrid
 make checker
 ```
 
@@ -49,11 +45,11 @@ Minimal sequential example:
 ./hashjoin_seq -nr 1000000 -ns 1000000 -seed 13 -max-key 1000000 -p 256 --dataset-type uniform
 ```
 
-OpenMP loop example:
+OpenMP example:
 
 ```bash
 export OMP_NUM_THREADS=32
-./hashjoin_omp_loop \
+./hashjoin_omp \
   -nr 1000000 -ns 1000000 -seed 13 -max-key 1000000 -p 256 \
   --dataset-type uniform \
   --partition-threads 32 --join-threads 32 \
@@ -62,37 +58,35 @@ export OMP_NUM_THREADS=32
   --partition-block-size 32768
 ```
 
-OpenMP task example:
+MPI example:
 
 ```bash
-export OMP_NUM_THREADS=32
-./hashjoin_omp_task \
+srun --mpi=pmix --nodes=1 --ntasks=4 --ntasks-per-node=4 \
+  ./hashjoin_mpi \
   -nr 1000000 -ns 1000000 -seed 13 -max-key 1000000 -p 256 \
   --dataset-type uniform \
-  --partition-threads 32 --join-threads 32 \
-  --partition-block-size 32768 \
-  --partition-task-blocks 2 \
-  --join-task-partitions 4 \
-  --offset-task-partitions 2
+  --mpi-nodes 1 --mpi-processes 4 \
+  --mpi-partition-strategy cyclic
 ```
 
-OpenMP taskloop example:
+Hybrid MPI+OpenMP example:
 
 ```bash
-export OMP_NUM_THREADS=32
-./hashjoin_omp_taskloop \
+export OMP_NUM_THREADS=16
+srun --mpi=pmix --nodes=1 --ntasks=4 --ntasks-per-node=4 \
+  ./hashjoin_hybrid \
   -nr 1000000 -ns 1000000 -seed 13 -max-key 1000000 -p 256 \
   --dataset-type uniform \
-  --partition-threads 32 --join-threads 32 \
+  --partition-threads 16 --join-threads 16 \
+  --partition-schedule guided --join-schedule guided \
+  --partition-chunk 4 --join-chunk 4 \
   --partition-block-size 32768 \
-  --partition-task-grain 2 \
-  --join-task-grain 4 \
-  --offset-task-grain 2
+  --mpi-nodes 1 --mpi-processes 4 \
+  --mpi-partition-strategy cyclic
 ```
 
-The `_wb` executables use the same command-line options as their non-`_wb`
-counterparts. Each run prints the checksums and appends one row to
-`results/<executable>.csv`.
+Each run prints the checksums and appends one row to
+`results/<executable>.csv`, unless `--output-csv` is provided.
 
 Supported dataset types are `uniform` and skewed distributions such as
 `skewed_90_5` or `skewed_90_1`.
@@ -114,23 +108,24 @@ Examples:
 ```bash
 cd src/runners
 ./benchmark.sh hashjoin_seq grid/seq_grid_search.sh 5
-./benchmark.sh hashjoin_omp_loop grid/omp_loop_grid_search.sh 5
-./benchmark.sh hashjoin_omp_loop_wb grid/omp_loop_grid_search.sh 5
-./benchmark.sh hashjoin_omp_task grid/omp_task_grid_search.sh 5
-./benchmark.sh hashjoin_omp_task_wb grid/omp_task_grid_search.sh 5
-./benchmark.sh hashjoin_omp_taskloop grid/omp_taskloop_grid_search.sh 5
-./benchmark.sh hashjoin_omp_taskloop_wb grid/omp_taskloop_grid_search.sh 5
+./benchmark.sh hashjoin_omp grid/omp_grid_search.sh 5
+./benchmark.sh hashjoin_mpi grid/mpi_grid_search.sh 5
+./benchmark.sh hashjoin_hybrid_uniform grid/hybrid_uniform_grid_search.sh 5
+./benchmark.sh hashjoin_hybrid_skew1 grid/hybrid_skew1_grid_search.sh 5
+./benchmark.sh hashjoin_hybrid_skew2 grid/hybrid_skew2_grid_search.sh 5
 ```
 
-Scaling jobs are separate Slurm scripts with hardcoded datasets and thread
-counts:
+Scaling jobs use `benchmark_for_scaling.sh`, which compiles the selected
+executable and runs the cases defined in the scaling grid with `srun`:
 
 ```bash
-sbatch run_strong_scaling.sh
-sbatch run_weak_scaling.sh
+cd src/runners
+./benchmark_for_scaling.sh hashjoin_mpi grid/strong_scaling_grid_search.sh 5
+./benchmark_for_scaling.sh hashjoin_mpi grid/weak_scaling_grid_search.sh 5
 ```
 
-To launch the whole benchmark suite, run `run_all.sh` from the runners folder:
+To launch the benchmark suite configured in `run_all.sh`, run it from the
+runners folder:
 
 ```bash
 ./run_all.sh
@@ -145,12 +140,7 @@ make clean
 make cleanlogs
 make cleanall
 make cleanall_seq
-make cleanall_omp_loop
-make cleanall_omp_loop_wb
-make cleanall_omp_task
-make cleanall_omp_task_wb
-make cleanall_omp_taskloop
-make cleanall_omp_taskloop_wb
-make cleanall_strong_scaling
-make cleanall_weak_scaling
+make cleanall_omp
+make cleanall_mpi
+make cleanall_hybrid
 ```
